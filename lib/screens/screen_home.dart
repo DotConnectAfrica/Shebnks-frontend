@@ -625,7 +625,9 @@ class _HomescreenState extends State<Homescreen> {
         } else if (index == 3) {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (BuildContext context) => ScreenSheIq(),
+              builder: (BuildContext context) => SheIq(token: widget.token,
+                fName: widget.fName,
+                userId: widget.userId,),
             ),
           );
         } else if (index == 4) {

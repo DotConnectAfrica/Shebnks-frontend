@@ -148,21 +148,8 @@ class _HealtResourceState extends State<ScreenNews> {
                         children: [
                           Expanded(
                             child: Text(
-                              news.title!,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
                               '${news.body!}',
+                              // "body",
                               style: TextStyle(fontSize: 13),
                               maxLines: 3,
                               overflow: TextOverflow.ellipsis,
@@ -220,21 +207,8 @@ class _HealtResourceState extends State<ScreenNews> {
                           children: [
                             Expanded(
                               child: Text(
-                                news.title!,
-                                style: TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
                                 '${news.body}',
+                                // "body",
                                 style: TextStyle(fontSize: 11),
                                 maxLines: 3,
                                 overflow: TextOverflow.ellipsis,
@@ -259,49 +233,48 @@ class _HealtResourceState extends State<ScreenNews> {
 
     try {
       final response = await http.Client()
-          // .get(Uri.parse("https://shebnks.mobi/blogs/"));
-          .get(Uri.parse("https://missdotafrica.digital/category/top-news/"));
+          .get(Uri.parse("https://shebnks.mobi/blogs/"));
+          // .get(Uri.parse("https://missdotafrica.digital/category/top-news/"));
 
       debugPrint('Response......${response.body}');
 
       if (response.statusCode == 200) {
 
         var document = parse(response.body);
-        var newsUnfiltered = document.getElementsByClassName('blog-post');
+        var newsUnfiltered = document.getElementsByClassName('rt-col-md-4');
 
         for (var element in newsUnfiltered) {
-          var body = element.getElementsByClassName('post-excerpt').first.text;
-          var duration =
-              element.getElementsByClassName('post-read-time').first.text;
-          var date = element.getElementsByClassName('entry-date').first.text;
-          var title = element
-              .getElementsByClassName('entry-title')
-              .first
-              .children
-              .first
-              .text;
+          var body = element.getElementsByClassName('tpg-excerpt').first.text;
+          // var duration =
+          //     element.getElementsByClassName('post-read-time').first.text;
+          // var date = element.getElementsByClassName('entry-date').first.text;
+          // var title = element
+          //     .getElementsByClassName('entry-title')
+          //     .first
+          //     .children
+          //     .first
+          //     .text;
           var image = element
-              .getElementsByClassName('inhype-post-image')
+              .getElementsByClassName('rt-img-responsive')
               .first
-              .attributes['data-style']
-              .toString();
-          var link = element
-              .getElementsByClassName('inhype-post-image-wrapper')
-              .first
-              .children
-              .first
-              .attributes['href']
-              .toString();
+              .attributes['data-src'];
+          // var link = element
+          //     .getElementsByClassName('inhype-post-image-wrapper')
+          //     .first
+          //     .children
+          //     .first
+          //     .attributes['href']
+          //     .toString();
 
-          var refineImage = image.substring(22, image.length - 2);
+          // var refineImage = image.substring(22, image.length - 2);
 
           Map<String, dynamic> data = {
-            "image": refineImage,
-            "title": title,
-            "date": date,
-            "duration": duration,
+            "image": image,
+            // "title": title,
+            // "date": date,
+            // "duration": duration,
             "body": body,
-            "link": link
+            // "link": link
           };
 
           ModelNews news = ModelNews(data);

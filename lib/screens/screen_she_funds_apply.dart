@@ -163,7 +163,7 @@ class _AddSeedState extends State<AddSeed> {
                                     height: 10,
                                   ),
                                   Text(
-                                    "* Required",
+                                    "* Means the field is Required",
                                     style: Theme.of(context)
                                         .textTheme
                                         .subtitle2!
@@ -209,7 +209,7 @@ class _AddSeedState extends State<AddSeed> {
                                           .subtitle2!
                                           .copyWith(),
                                       text:
-                                          "Tell us about your organization or Project (Applicant expected to give the name, size, current residence and any other information)",
+                                          "1. Tell us about your organization or Project (Applicant expected to give the name, size, current residence and any other information)",
                                       children: <TextSpan>[
                                         TextSpan(
                                             text: '*',
@@ -251,7 +251,7 @@ class _AddSeedState extends State<AddSeed> {
                                           .subtitle2!
                                           .copyWith(),
                                       text:
-                                          "Who is the trusted founder(s) or Leader? (Please include phone number and email address and separate eact founder by comma)",
+                                          "2. Who is the trusted founder(s) or Leader? (Please include phone number and email address and separate eact founder by comma)",
                                       children: <TextSpan>[
                                         TextSpan(
                                             text: '*',
@@ -269,7 +269,7 @@ class _AddSeedState extends State<AddSeed> {
                                         : null,
                                     decoration: const InputDecoration(
                                         hintText:
-                                            "Who is the trusted founder(s) or Leader? (Please include phone number and email address)"),
+                                            " Who is the trusted founder(s) or Leader? (Please include phone number and email address)"),
                                   )
                                 ],
                               ),
@@ -294,7 +294,7 @@ class _AddSeedState extends State<AddSeed> {
                                           .subtitle2!
                                           .copyWith(),
                                       text:
-                                          "Which sector does your business operate in(Please fill multiple if necessary) ?",
+                                          "3. Which sector does your business operate in(Please fill multiple if necessary) ?",
                                       children: <TextSpan>[
                                         TextSpan(
                                             text: '*',
@@ -505,7 +505,7 @@ class _AddSeedState extends State<AddSeed> {
                                   Row(
                                     children: [
                                       Text(
-                                        "Women owned? ",
+                                        "4. Women owned? ",
                                         style: Theme.of(context)
                                             .textTheme
                                             .subtitle2!
@@ -580,7 +580,7 @@ class _AddSeedState extends State<AddSeed> {
                                           .subtitle2!
                                           .copyWith(),
                                       text:
-                                          "How is your business/project involved in bridging the gender gap of women in STEM?",
+                                          "5. How is your business/project involved in bridging the gender gap of women in STEM?",
                                       children: <TextSpan>[
                                         TextSpan(
                                             text: '*',
@@ -619,7 +619,7 @@ class _AddSeedState extends State<AddSeed> {
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          "What problem/community need are you addressing?",
+                                          "6. What problem/community need are you addressing?",
                                           style: Theme.of(context)
                                               .textTheme
                                               .subtitle2!
@@ -662,7 +662,7 @@ class _AddSeedState extends State<AddSeed> {
                                   Row(
                                     children: [
                                       Text(
-                                        "How will you measure impact?",
+                                        "7. How will you measure impact?",
                                         style: Theme.of(context)
                                             .textTheme
                                             .subtitle2!
@@ -688,7 +688,7 @@ class _AddSeedState extends State<AddSeed> {
                                 ],
                               ),
                             )),
-                        //okay7
+
                         Card(
                             margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                             elevation: 0.9,
@@ -708,317 +708,7 @@ class _AddSeedState extends State<AddSeed> {
                                           .subtitle2!
                                           .copyWith(),
                                       text:
-                                          "Which SDGs are you primarily targeting? (Please fill multiple if necessary) ?",
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                            text: '*',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .subtitle2!
-                                                .copyWith(color: Colors.red)),
-                                      ],
-                                    ),
-                                  ),
-                                  CheckboxListTile(
-                                    title: const Text('No poverty'),
-                                    value: selectedCategories2
-                                        .contains("No poverty"),
-                                    activeColor: const Color(0xffed39ca),
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        if (value!) {
-                                          selectedCategories2.add("No poverty");
-                                        } else {
-                                          selectedCategories2
-                                              .remove("No poverty");
-                                        }
-                                      });
-                                    },
-                                  ),
-                                  CheckboxListTile(
-                                    title: const Text('Zero Hunger'),
-                                    value: selectedCategories2
-                                        .contains("Zero Hunger"),
-                                    activeColor: const Color(0xffed39ca),
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        if (value!) {
-                                          selectedCategories2
-                                              .add("Zero Hunger");
-                                        } else {
-                                          selectedCategories2
-                                              .remove("Zero Hunger");
-                                        }
-                                      });
-                                    },
-                                  ),
-                                  CheckboxListTile(
-                                    title: const Text('Good health and wellbeing'),
-                                    value: selectedCategories2
-                                        .contains("Good health and wellbeing"),
-                                    activeColor: const Color(0xffed39ca),
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        if (value!) {
-                                          selectedCategories2
-                                              .add("Good health and wellbeing");
-                                        } else {
-                                          selectedCategories2.remove(
-                                              "Good health and wellbeing");
-                                        }
-                                      });
-                                    },
-                                  ),
-                                  CheckboxListTile(
-                                    title: const Text('Quality Education'),
-                                    value: selectedCategories2
-                                        .contains("Quality Education"),
-                                    activeColor: const Color(0xffed39ca),
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        if (value!) {
-                                          selectedCategories2
-                                              .add("Quality Education");
-                                        } else {
-                                          selectedCategories2
-                                              .remove("Quality Education");
-                                        }
-                                      });
-                                    },
-                                  ),
-                                  CheckboxListTile(
-                                    title: const Text('Gender Equality'),
-                                    value: selectedCategories2
-                                        .contains("Gender Equality"),
-                                    activeColor: const Color(0xffed39ca),
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        if (value!) {
-                                          selectedCategories2
-                                              .add("Gender Equality");
-                                        } else {
-                                          selectedCategories2
-                                              .remove("Gender Equality");
-                                        }
-                                      });
-                                    },
-                                  ),
-                                  CheckboxListTile(
-                                    title: const Text('Clean water and Sanitation'),
-                                    value: selectedCategories2
-                                        .contains("Clean water and Sanitation"),
-                                    activeColor: const Color(0xffed39ca),
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        if (value!) {
-                                          selectedCategories2.add(
-                                              "Clean water and Sanitation");
-                                        } else {
-                                          selectedCategories2.remove(
-                                              "Clean water and Sanitation");
-                                        }
-                                      });
-                                    },
-                                  ),
-                                  CheckboxListTile(
-                                    title: const Text('Affordable and Clean energy'),
-                                    value: selectedCategories2.contains(
-                                        "Affordable and Clean energy"),
-                                    activeColor: const Color(0xffed39ca),
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        if (value!) {
-                                          selectedCategories2.add(
-                                              "Affordable and Clean energy");
-                                        } else {
-                                          selectedCategories2.remove(
-                                              "Affordable and Clean energy");
-                                        }
-                                      });
-                                    },
-                                  ),
-                                  CheckboxListTile(
-                                    title:
-                                        const Text('Decent work and Economic growth'),
-                                    value: selectedCategories2.contains(
-                                        "Decent work and Economic growth"),
-                                    activeColor: const Color(0xffed39ca),
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        if (value!) {
-                                          selectedCategories2.add(
-                                              "Decent work and Economic growth");
-                                        } else {
-                                          selectedCategories2.remove(
-                                              "Decent work and Economic growth");
-                                        }
-                                      });
-                                    },
-                                  ),
-                                  CheckboxListTile(
-                                    title: const Text(
-                                        'Industry,Innovation and Infrastructure'),
-                                    value: selectedCategories2.contains(
-                                        "Industry,Innovation and Infrastructure"),
-                                    activeColor: const Color(0xffed39ca),
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        if (value!) {
-                                          selectedCategories2.add(
-                                              "Industry,Innovation and Infrastructure");
-                                        } else {
-                                          selectedCategories2.remove(
-                                              "Industry,Innovation and Infrastructure");
-                                        }
-                                      });
-                                    },
-                                  ),
-                                  CheckboxListTile(
-                                    title: const Text('Reduced Inequalities'),
-                                    value: selectedCategories2
-                                        .contains("Reduced Inequalities"),
-                                    activeColor: const Color(0xffed39ca),
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        if (value!) {
-                                          selectedCategories2
-                                              .add("Reduced Inequalities");
-                                        } else {
-                                          selectedCategories2
-                                              .remove("Reduced Inequalities");
-                                        }
-                                      });
-                                    },
-                                  ),
-                                  CheckboxListTile(
-                                    title: const Text(
-                                        'Sustainable cities and Communities'),
-                                    value: selectedCategories2.contains(
-                                        "Sustainable cities and Communities"),
-                                    activeColor: const Color(0xffed39ca),
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        if (value!) {
-                                          selectedCategories2.add(
-                                              "Sustainable cities and Communities");
-                                        } else {
-                                          selectedCategories2.remove(
-                                              "Sustainable cities and Communities");
-                                        }
-                                      });
-                                    },
-                                  ),
-                                  CheckboxListTile(
-                                    title: const Text(
-                                        'Responsible Consumption and Production'),
-                                    value: selectedCategories2.contains(
-                                        "Responsible Consumption and Production"),
-                                    activeColor: const Color(0xffed39ca),
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        if (value!) {
-                                          selectedCategories2.add(
-                                              "Responsible Consumption and Production");
-                                        } else {
-                                          selectedCategories2.remove(
-                                              "Responsible Consumption and Production");
-                                        }
-                                      });
-                                    },
-                                  ),
-                                  CheckboxListTile(
-                                    title: const Text('Climate Action'),
-                                    value: selectedCategories2
-                                        .contains("Climate Action"),
-                                    activeColor: const Color(0xffed39ca),
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        if (value!) {
-                                          selectedCategories2
-                                              .add("Climate Action");
-                                        } else {
-                                          selectedCategories2
-                                              .remove("Climate Action");
-                                        }
-                                      });
-                                    },
-                                  ),
-                                  CheckboxListTile(
-                                    title: const Text(
-                                        'Peace,Justice and Strong Institutions'),
-                                    value: selectedCategories2.contains(
-                                        "Peace,Justice and Strong Institutions"),
-                                    activeColor: const Color(0xffed39ca),
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        if (value!) {
-                                          selectedCategories2.add(
-                                              "Peace,Justice and Strong Institutions");
-                                        } else {
-                                          selectedCategories2.remove(
-                                              "Peace,Justice and Strong Institutions");
-                                        }
-                                      });
-                                    },
-                                  ),
-                                  CheckboxListTile(
-                                    controlAffinity:
-                                        ListTileControlAffinity.trailing,
-                                    title: const Text('Others'),
-                                    value: isOtherEnabled2,
-                                    activeColor:const Color(0xffed39ca),
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        isOtherEnabled2 = value!;
-                                      });
-                                    },
-                                  ),
-                                  Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 20, right: 20),
-                                      child: TextFormField(
-                                        controller: sdgController,
-                                        validator: (value) => isOtherEnabled2
-                                            ? value!.isEmpty
-                                                ? "this field is required"
-                                                : null
-                                            : null,
-                                        enabled: isOtherEnabled,
-                                        decoration: const InputDecoration(
-                                          labelText: 'Enter others here',
-                                          labelStyle: TextStyle(
-                                            color: Colors.black,
-                                          ),
-                                          enabledBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Color(0xFF6200EE)),
-                                          ),
-                                        ),
-                                      ))
-                                ],
-                              ),
-                            )),
-                        //okay8 not complete
-                        Card(
-                            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            elevation: 0.9,
-                            shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 20, right: 20, top: 30, bottom: 30),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text.rich(
-                                    TextSpan(
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2!
-                                          .copyWith(),
-                                      text:
-                                          "How does your business/project market or plan to market its products and services?",
+                                          "8. How does your business/project market or plan to market its products and services?",
                                       children: <TextSpan>[
                                         TextSpan(
                                             text: '*',
@@ -1057,7 +747,7 @@ class _AddSeedState extends State<AddSeed> {
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          "Any major STEM initiative milestones achieved?",
+                                          "9. Any major STEM initiative milestones achieved?",
                                           style: Theme.of(context)
                                               .textTheme
                                               .subtitle2!
@@ -1104,7 +794,7 @@ class _AddSeedState extends State<AddSeed> {
                                           .subtitle2!
                                           .copyWith(),
                                       text:
-                                          "Do you have a proven traction? (Some customers, generating revenue, app downloads etc)",
+                                          "10. Do you have a proven traction? (Some customers, generating revenue, app downloads etc)",
                                       children: <TextSpan>[
                                         TextSpan(
                                             text: '*',
@@ -1142,7 +832,7 @@ class _AddSeedState extends State<AddSeed> {
                                   Row(
                                     children: [
                                       Text(
-                                        "Fundraised before? ",
+                                        "11. Fundraised before? ",
                                         style: Theme.of(context)
                                             .textTheme
                                             .subtitle2!
@@ -1211,7 +901,7 @@ class _AddSeedState extends State<AddSeed> {
                                   Row(
                                     children: [
                                       Text(
-                                        "Tell us why we should fund you.",
+                                        "12. Tell us why we should fund you.",
                                         overflow: TextOverflow.ellipsis,
                                         style: Theme.of(context)
                                             .textTheme
@@ -1244,15 +934,15 @@ class _AddSeedState extends State<AddSeed> {
                                 key: _formKey1,
                                 child: Column(
                                   children: [
-                                    const Text('Attach the following documents either as .docx, pdf,  or png'),
-                                    FormBuilderTextField(
-                                      name: 'businessPlan',
-                                      decoration: const InputDecoration(labelText: 'Business Plan'),
-                                      // validator: FormBuilderValidators.required(context),
-                                    ),
+                                    const Text('13. Attach the following documents either as .docx, pdf,  or png'),
+                                    // FormBuilderTextField(
+                                    //   name: 'businessPlan',
+                                    //   decoration: const InputDecoration(labelText: ''),
+                                    //   // validator: FormBuilderValidators.required(context),
+                                    // ),
                                     FormBuilderFilePicker(
                                       name: 'businessPlan',
-                                      decoration: const InputDecoration(labelText: 'Business plan'),
+                                      decoration: const InputDecoration(labelText: 'Business plan' ),
                                       // maxFiles: 3, // Maximum number of attachments allowed
                                       previewImages: true, // Display image previews
                                       onChanged: (value) {
@@ -1260,11 +950,11 @@ class _AddSeedState extends State<AddSeed> {
                                       },
                                       // selectorButtonOnErrorText: 'Add attachments',
                                     ),
-                                    FormBuilderTextField(
-                                      name: 'financialStatement',
-                                      decoration: const InputDecoration(labelText: 'Financial Statement'),
-                                      // validator: FormBuilderValidators.required(context),
-                                    ),
+                                    // FormBuilderTextField(
+                                    //   name: 'financialStatement',
+                                    //   decoration: const InputDecoration(labelText: 'Financial Statement'),
+                                    //   // validator: FormBuilderValidators.required(context),
+                                    // ),
                                     FormBuilderFilePicker(
                                       name: 'financialStatement',
                                       decoration: const InputDecoration(labelText: 'Financial Statement'),
@@ -1275,11 +965,11 @@ class _AddSeedState extends State<AddSeed> {
                                       },
                                       // selectorButtonOnErrorText: 'Add attachments',
                                     ),
-                                    FormBuilderTextField(
-                                      name: 'taxAdminCertificate',
-                                      decoration: const InputDecoration(labelText: 'Tax Compliance Certificate'),
-                                      // validator: FormBuilderValidators.required(context),
-                                    ),
+                                    // FormBuilderTextField(
+                                    //   name: 'taxAdminCertificate',
+                                    //   decoration: const InputDecoration(labelText: 'Tax Compliance Certificate'),
+                                    //   // validator: FormBuilderValidators.required(context),
+                                    // ),
                                     FormBuilderFilePicker(
                                       name: 'taxAdminCertificate',
                                       decoration: const InputDecoration(labelText: 'Tax Compliance Certificate'),
@@ -1290,11 +980,11 @@ class _AddSeedState extends State<AddSeed> {
                                       },
                                       // selectorButtonOnErrorText: 'Add attachments',
                                     ),
-                                    FormBuilderTextField(
-                                      name: 'applicantCoinvestorStmt',
-                                      decoration: const InputDecoration(labelText: 'Applicant Coinvester Statement'),
-                                      // validator: FormBuilderValidators.required(context),
-                                    ),
+                                    // FormBuilderTextField(
+                                    //   name: 'applicantCoinvestorStmt',
+                                    //   decoration: const InputDecoration(labelText: 'Applicant Coinvester Statement'),
+                                    //   // validator: FormBuilderValidators.required(context),
+                                    // ),
                                     FormBuilderFilePicker(
                                       name: 'applicantCoinvestorStmt',
                                       decoration: const InputDecoration(labelText: 'Applicant Coinvester Statement'),
@@ -1378,7 +1068,7 @@ class _AddSeedState extends State<AddSeed> {
                                   Row(
                                     children: [
                                       Text(
-                                        "Any other information",
+                                        "14. Any other information",
                                         overflow: TextOverflow.ellipsis,
                                         style: Theme.of(context)
                                             .textTheme

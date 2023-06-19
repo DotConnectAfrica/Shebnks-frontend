@@ -214,7 +214,7 @@ class _MyAccountState extends State<ScreenMyAccount> {
                                 ),
                               );
                             },
-                            child: const Row(
+                            child: Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 SizedBox(
@@ -253,7 +253,7 @@ class _MyAccountState extends State<ScreenMyAccount> {
                               //   ),
                               // );
                             },
-                            child: const Row(
+                            child:  Row(
                               children: [
                                 SizedBox(
                                   width: 8,
@@ -289,7 +289,7 @@ class _MyAccountState extends State<ScreenMyAccount> {
                                 ),
                               );
                             },
-                            child: const Row(
+                            child:  Row(
                               children: [
                                 SizedBox(
                                   width: 8,
@@ -324,7 +324,7 @@ class _MyAccountState extends State<ScreenMyAccount> {
                                 ),
                               );
                             },
-                            child: const Row(
+                            child:  Row(
                               children: [
                                 SizedBox(
                                   width: 8,
@@ -355,7 +355,7 @@ class _MyAccountState extends State<ScreenMyAccount> {
                             onTap: () {
                               Get.to(()=>ChangePassword(fName: widget.fName, email: widget.email, lName: widget.lName, userId: widget.userId));
                             },
-                            child: const Row(
+                            child:  Row(
                               children: [
                                 SizedBox(
                                   width: 8,
@@ -387,7 +387,7 @@ class _MyAccountState extends State<ScreenMyAccount> {
                             onTap: () {
                               _log_out(context);
                             },
-                            child: const Row(
+                            child:  Row(
                               children: [
                                 SizedBox(
                                   width: 8,

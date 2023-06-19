@@ -33,6 +33,13 @@ class _PasswordForgotState extends State<PasswordForgot> {
   // final TextEditingController controller_email = TextEditingController();
   // final TextEditingController controller_id_number = TextEditingController();
 
+  bool containsNumber(String password) {
+    return password.contains(RegExp(r'\d'));
+  }
+
+  bool containsLetter(String password) {
+    return password.contains(RegExp(r'[a-zA-Z]'));
+  }
 
   getToken() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
@@ -153,7 +160,7 @@ class _PasswordForgotState extends State<PasswordForgot> {
                 obscureText: true,
                 controller: newPassword,
                 decoration: InputDecoration(
-                  hintText: 'Password',
+                  hintText: 'New Password',
                   contentPadding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
                   hintStyle: const TextStyle(fontSize: 13, color: Colors.grey),
                   focusedBorder: OutlineInputBorder(
@@ -197,7 +204,7 @@ class _PasswordForgotState extends State<PasswordForgot> {
                 obscureText: true,
                 controller: cnfNewPassword,
                 decoration: InputDecoration(
-                  hintText: 'New Password',
+                  hintText: 'Confirm New Password',
                   contentPadding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
 
                   hintStyle: const TextStyle(fontSize: 13, color: Colors.grey),
@@ -278,6 +285,14 @@ class _PasswordForgotState extends State<PasswordForgot> {
     if (newPass.isEmpty) {
       FocusScope.of(context).unfocus();
       UniversalMethods.show_toast('New Password is required', context);
+      return;
+    } else if(!containsNumber(newPass) || !containsLetter(newPass)){
+      FocusScope.of(context).unfocus();
+      UniversalMethods.show_toast('Password must include both numbers and letters', context);
+      return;
+    } else if(newPass.length < 6){
+      FocusScope.of(context).unfocus();
+      UniversalMethods.show_toast('Password must be more than 6 characters', context);
       return;
     }
     if (cnfNew.isEmpty) {

@@ -35,6 +35,13 @@ class _ChangePasswordState extends State<ChangePassword> {
   // final TextEditingController controller_email = TextEditingController();
   // final TextEditingController controller_id_number = TextEditingController();
 
+  bool containsNumber(String password) {
+    return password.contains(RegExp(r'\d'));
+  }
+
+  bool containsLetter(String password) {
+    return password.contains(RegExp(r'[a-zA-Z]'));
+  }
 
   getToken() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
@@ -220,9 +227,12 @@ class _ChangePasswordState extends State<ChangePassword> {
                 validator: (val) {
                   if (val!.length == 0) {
                     return "New Password cannot be empty";
+                  } else if (!containsNumber(val) || !containsLetter(val)) {
+                    return "New Password must contain both numbers and letters";
                   } else {
                     return null;
                   }
+
                 },
                 keyboardType: TextInputType.text,
                 style: TextStyle(
@@ -243,7 +253,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 obscureText: true,
                 controller: cnfNewPassword,
                 decoration: InputDecoration(
-                  hintText: 'New Password',
+                  hintText: 'Confirm New Password',
                   contentPadding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
 
                   hintStyle: const TextStyle(fontSize: 13, color: Colors.grey),
@@ -325,6 +335,14 @@ class _ChangePasswordState extends State<ChangePassword> {
       FocusScope.of(context).unfocus();
       UniversalMethods.show_toast('New Password is required', context);
       return;
+    } else if(!containsNumber(newPass) || !containsLetter(newPass)){
+      FocusScope.of(context).unfocus();
+      UniversalMethods.show_toast('Password must include both numbers and letters', context);
+      return;
+    } else if(newPass.length < 6){
+      FocusScope.of(context).unfocus();
+      UniversalMethods.show_toast('Password must be more than 6 characters', context);
+      return;
     }
     if (cnfNew.isEmpty) {
       FocusScope.of(context).unfocus();
@@ -397,6 +415,7 @@ class _ChangePasswordState extends State<ChangePassword> {
           );
         });
   }
+
 
 
 }
