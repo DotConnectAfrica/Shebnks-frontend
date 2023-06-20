@@ -263,7 +263,7 @@ class _SheIqState extends State<SheIq> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Apply SheLoan'),
+          title: const Text('SheIQ'),
         ),
         backgroundColor: const Color(0xfff6e0e0),
 
@@ -305,7 +305,7 @@ class _SheIqState extends State<SheIq> {
                                   child: TextFormField(
                                     controller: _amountController,
                                     decoration: InputDecoration(
-                                      hintText: 'Amount',
+                                      hintText: 'Answer',
                                       contentPadding: const EdgeInsets.fromLTRB(
                                           16.0, 0, 16.0, 0),
 
@@ -330,7 +330,7 @@ class _SheIqState extends State<SheIq> {
                                     ),
                                     validator: (val) {
                                       if (val!.length == 0) {
-                                        return "Amount cannot be empty";
+                                        return "Field cannot be empty";
                                       } else {
                                         return null;
                                       }
@@ -370,7 +370,7 @@ class _SheIqState extends State<SheIq> {
                                   child: TextFormField(
                                     controller: _amountController,
                                     decoration: InputDecoration(
-                                      hintText: 'Amount',
+                                      hintText: 'Answer',
                                       contentPadding: const EdgeInsets.fromLTRB(
                                           16.0, 0, 16.0, 0),
 
@@ -395,7 +395,7 @@ class _SheIqState extends State<SheIq> {
                                     ),
                                     validator: (val) {
                                       if (val!.length == 0) {
-                                        return "Amount cannot be empty";
+                                        return "Field cannot be empty";
                                       } else {
                                         return null;
                                       }
@@ -435,7 +435,7 @@ class _SheIqState extends State<SheIq> {
                                   child: TextFormField(
                                     controller: _amountController,
                                     decoration: InputDecoration(
-                                      hintText: 'Amount',
+                                      hintText: 'Answer',
                                       contentPadding: const EdgeInsets.fromLTRB(
                                           16.0, 0, 16.0, 0),
 
@@ -460,7 +460,7 @@ class _SheIqState extends State<SheIq> {
                                     ),
                                     validator: (val) {
                                       if (val!.length == 0) {
-                                        return "Amount cannot be empty";
+                                        return "Field cannot be empty";
                                       } else {
                                         return null;
                                       }
@@ -500,7 +500,7 @@ class _SheIqState extends State<SheIq> {
                                   child: TextFormField(
                                     controller: _amountController,
                                     decoration: InputDecoration(
-                                      hintText: 'Amount',
+                                      hintText: 'Answer',
                                       contentPadding: const EdgeInsets.fromLTRB(
                                           16.0, 0, 16.0, 0),
 
@@ -525,7 +525,7 @@ class _SheIqState extends State<SheIq> {
                                     ),
                                     validator: (val) {
                                       if (val!.length == 0) {
-                                        return "Amount cannot be empty";
+                                        return "Field cannot be empty";
                                       } else {
                                         return null;
                                       }
@@ -565,7 +565,7 @@ class _SheIqState extends State<SheIq> {
                                   child: TextFormField(
                                     controller: _amountController,
                                     decoration: InputDecoration(
-                                      hintText: 'Amount',
+                                      hintText: 'Answer',
                                       contentPadding: const EdgeInsets.fromLTRB(
                                           16.0, 0, 16.0, 0),
 
@@ -590,7 +590,7 @@ class _SheIqState extends State<SheIq> {
                                     ),
                                     validator: (val) {
                                       if (val!.length == 0) {
-                                        return "Amount cannot be empty";
+                                        return "Field cannot be empty";
                                       } else {
                                         return null;
                                       }
@@ -630,7 +630,7 @@ class _SheIqState extends State<SheIq> {
                                   child: TextFormField(
                                     controller: _amountController,
                                     decoration: InputDecoration(
-                                      hintText: 'Amount',
+                                      hintText: 'Answer',
                                       contentPadding: const EdgeInsets.fromLTRB(
                                           16.0, 0, 16.0, 0),
 
@@ -655,7 +655,7 @@ class _SheIqState extends State<SheIq> {
                                     ),
                                     validator: (val) {
                                       if (val!.length == 0) {
-                                        return "Amount cannot be empty";
+                                        return "Field cannot be empty";
                                       } else {
                                         return null;
                                       }
@@ -695,7 +695,7 @@ class _SheIqState extends State<SheIq> {
                                   child: TextFormField(
                                     controller: _amountController,
                                     decoration: InputDecoration(
-                                      hintText: 'Amount',
+                                      hintText: 'Answer',
                                       contentPadding: const EdgeInsets.fromLTRB(
                                           16.0, 0, 16.0, 0),
 
@@ -720,7 +720,7 @@ class _SheIqState extends State<SheIq> {
                                     ),
                                     validator: (val) {
                                       if (val!.length == 0) {
-                                        return "Amount cannot be empty";
+                                        return "Field cannot be empty";
                                       } else {
                                         return null;
                                       }
@@ -760,7 +760,7 @@ class _SheIqState extends State<SheIq> {
                                   child: TextFormField(
                                     controller: _amountController,
                                     decoration: InputDecoration(
-                                      hintText: 'Amount',
+                                      hintText: 'Answer',
                                       contentPadding: const EdgeInsets.fromLTRB(
                                           16.0, 0, 16.0, 0),
 
@@ -785,7 +785,7 @@ class _SheIqState extends State<SheIq> {
                                     ),
                                     validator: (val) {
                                       if (val!.length == 0) {
-                                        return "Amount cannot be empty";
+                                        return "Field cannot be empty";
                                       } else {
                                         return null;
                                       }
@@ -825,7 +825,7 @@ class _SheIqState extends State<SheIq> {
                                   child: TextFormField(
                                     controller: _amountController,
                                     decoration: InputDecoration(
-                                      hintText: 'Amount',
+                                      hintText: 'Answer',
                                       contentPadding: const EdgeInsets.fromLTRB(
                                           16.0, 0, 16.0, 0),
 
@@ -850,7 +850,7 @@ class _SheIqState extends State<SheIq> {
                                     ),
                                     validator: (val) {
                                       if (val!.length == 0) {
-                                        return "Amount cannot be empty";
+                                        return "Field cannot be empty";
                                       } else {
                                         return null;
                                       }
@@ -890,7 +890,7 @@ class _SheIqState extends State<SheIq> {
                                   child: TextFormField(
                                     controller: _amountController,
                                     decoration: InputDecoration(
-                                      hintText: 'Amount',
+                                      hintText: 'Answer',
                                       contentPadding: const EdgeInsets.fromLTRB(
                                           16.0, 0, 16.0, 0),
 
@@ -915,7 +915,7 @@ class _SheIqState extends State<SheIq> {
                                     ),
                                     validator: (val) {
                                       if (val!.length == 0) {
-                                        return "Amount cannot be empty";
+                                        return "Field cannot be empty";
                                       } else {
                                         return null;
                                       }
@@ -1192,7 +1192,7 @@ class _SheIqState extends State<SheIq> {
                                         ),
                                         validator: (val) {
                                           if (val!.length == 0) {
-                                            return "Amount cannot be empty";
+                                            return "Field cannot be empty";
                                           } else {
                                             return null;
                                           }
@@ -1232,7 +1232,7 @@ class _SheIqState extends State<SheIq> {
                                       child: TextFormField(
                                         controller: _amountController,
                                         decoration: InputDecoration(
-                                          hintText: 'Amount',
+                                          hintText: 'Answer',
                                           contentPadding: const EdgeInsets.fromLTRB(
                                               16.0, 0, 16.0, 0),
 
@@ -1257,7 +1257,7 @@ class _SheIqState extends State<SheIq> {
                                         ),
                                         validator: (val) {
                                           if (val!.length == 0) {
-                                            return "Amount cannot be empty";
+                                            return "Field cannot be empty";
                                           } else {
                                             return null;
                                           }

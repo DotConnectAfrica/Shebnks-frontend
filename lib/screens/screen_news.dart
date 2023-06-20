@@ -86,7 +86,7 @@ class _HealtResourceState extends State<ScreenNews> {
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
-                      ScreenWebView(news_next.title, news_next.link),
+                      ScreenWebView( news_next.link),
                 ),
               );
             },
@@ -100,7 +100,6 @@ class _HealtResourceState extends State<ScreenNews> {
                           CachedNetworkImage(
                             imageUrl: news.image!,
                             fit: BoxFit.cover,
-                            height: 160,
                             width: MediaQuery.of(context).size.width,
                             placeholder: (context, url) => Container(
                               color: Colors.grey[300],
@@ -141,7 +140,7 @@ class _HealtResourceState extends State<ScreenNews> {
                   ],
                 ),
                 Container(
-                  margin: EdgeInsets.all(16),
+                  margin: EdgeInsets.all(10),
                   child: Column(
                     children: [
                       Row(
@@ -151,7 +150,7 @@ class _HealtResourceState extends State<ScreenNews> {
                               '${news.body!}',
                               // "body",
                               style: TextStyle(fontSize: 13),
-                              maxLines: 3,
+                              maxLines: 6,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -175,7 +174,7 @@ class _HealtResourceState extends State<ScreenNews> {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        ScreenWebView(news_next.title, news_next.link),
+                        ScreenWebView( news_next.link),
                   ),
                 );
               },
@@ -201,16 +200,19 @@ class _HealtResourceState extends State<ScreenNews> {
                   ),
                   Expanded(
                     flex: 7,
-                    child: Column(
+                    child: Column( mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
                               child: Text(
                                 '${news.body}',
                                 // "body",
                                 style: TextStyle(fontSize: 11),
-                                maxLines: 3,
+                                maxLines: 6,
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
@@ -258,13 +260,13 @@ class _HealtResourceState extends State<ScreenNews> {
               .getElementsByClassName('rt-img-responsive')
               .first
               .attributes['data-src'];
-          // var link = element
-          //     .getElementsByClassName('inhype-post-image-wrapper')
-          //     .first
-          //     .children
-          //     .first
-          //     .attributes['href']
-          //     .toString();
+          var link = element
+              .getElementsByClassName('rt-img-holder')
+              .first
+              .children
+              .first
+              .attributes['href']
+              .toString();
 
           // var refineImage = image.substring(22, image.length - 2);
 
@@ -274,7 +276,7 @@ class _HealtResourceState extends State<ScreenNews> {
             // "date": date,
             // "duration": duration,
             "body": body,
-            // "link": link
+            "link": link
           };
 
           ModelNews news = ModelNews(data);

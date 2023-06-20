@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:form_builder_file_picker/form_builder_file_picker.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -2213,6 +2214,79 @@ class _LoansPageState extends State<LoansPage> {
                           ]),
                         ),
                       ),
+                      Card(
+                        margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        elevation: 0.9,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(10.0))),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, top: 30, bottom: 30),
+                          child: Column(
+                            children: [
+                              const Text('25. Attach the following documents either as .docx, pdf,  or png'),
+
+                              FormBuilderFilePicker(
+                                name: 'businessPlan',
+                                decoration: const InputDecoration(
+                                    labelText: 'Business plan'),
+                                // maxFiles: 3, // Maximum number of attachments allowed
+                                previewImages: true, // Display image previews
+                                onChanged: (value) {
+                                  print(value);
+                                },
+                                // selectorButtonOnErrorText: 'Add attachments',
+                              ),
+
+                              FormBuilderFilePicker(
+                                name: 'financialStatement',
+                                decoration: const InputDecoration(labelText: 'Financial Statement'),
+                                // maxFiles: 3, // Maximum number of attachments allowed
+                                previewImages: true, // Display image previews
+                                onChanged: (value) {
+                                  print(value);
+                                },
+                                // selectorButtonOnErrorText: 'Add attachments',
+                              ),
+
+                              FormBuilderFilePicker(
+                                name: 'taxAdminCertificate',
+                                decoration: const InputDecoration(labelText: 'Tax Compliance Certificate'),
+                                // maxFiles: 3, // Maximum number of attachments allowed
+                                previewImages: true, // Display image previews
+                                onChanged: (value) {
+                                  print(value);
+                                },
+                                // selectorButtonOnErrorText: 'Add attachments',
+                              ),
+
+                              FormBuilderFilePicker(
+                                name: 'applicantCoinvestorStmt',
+                                decoration: const InputDecoration(labelText: 'Applicant Coinvester Statement'),
+                                // maxFiles: 3, // Maximum number of attachments allowed
+                                previewImages: true, // Display image previews
+                                onChanged: (value) {
+                                  print(value);
+                                },
+                                // selectorButtonOnErrorText: 'Add attachments',
+                              ),
+                              // SizedBox(height: 20),
+                              // ElevatedButton(
+                              //   onPressed: () {
+                              //     if (_formKey.currentState!.saveAndValidate()) {
+                              //       final formData = _formKey.currentState!.value;
+                              //       // Process the form data here
+                              //       print(formData);
+                              //     }
+                              //   },
+                              //   child: Text('Submit'),
+                              // ),
+                            ],
+                          ),
+                        ),
+                      ),
+
 
 
                       const SizedBox(height: 16.0),
