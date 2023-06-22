@@ -1957,34 +1957,20 @@ class _LoansPageState extends State<LoansPage> {
                             ),
                           )),
                       Card(
-                          margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                          elevation: 0.9,
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 20, right: 20, top: 30, bottom: 30),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                        margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        elevation: 0.9,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(10.0))),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, top: 30, bottom: 30),
+                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      "21. Have you participated in any business \n or entrepreneurship training programs?",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2!
-                                          .copyWith(),
-                                    ),
-                                    Text(
-                                      "*",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2!
-                                          .copyWith(color: Colors.red),
-                                    )
-                                  ],
+                                const Text(
+                                    "21. Have you participated in any business or entrepreneurship training programs?"),
+                                const SizedBox(
+                                  height: 8,
                                 ),
                                 ListTile(
                                   contentPadding: const EdgeInsets.only(left: 0),
@@ -2023,9 +2009,9 @@ class _LoansPageState extends State<LoansPage> {
                                     },
                                   ),
                                 )
-                              ],
-                            ),
-                          )),
+                              ]),
+                        ),
+                      ),
                       Card(
                         margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                         elevation: 0.9,
@@ -2086,34 +2072,20 @@ class _LoansPageState extends State<LoansPage> {
                         ),
                       ),
                       Card(
-                          margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                          elevation: 0.9,
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 20, right: 20, top: 30, bottom: 30),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                        margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        elevation: 0.9,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(10.0))),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, top: 30, bottom: 30),
+                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      "23. Are you willing to work with a business \n mentor or advisor, if offered?",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2!
-                                          .copyWith(),
-                                    ),
-                                    Text(
-                                      "*",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2!
-                                          .copyWith(color: Colors.red),
-                                    )
-                                  ],
+                                const Text(
+                                    "23. Are you willing to work with a business mentor or advisor, if offered?"),
+                                const SizedBox(
+                                  height: 8,
                                 ),
                                 ListTile(
                                   contentPadding: const EdgeInsets.only(left: 0),
@@ -2152,9 +2124,9 @@ class _LoansPageState extends State<LoansPage> {
                                     },
                                   ),
                                 )
-                              ],
-                            ),
-                          )),
+                              ]),
+                        ),
+                      ),
                       Card(
                         margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                         elevation: 0.9,
