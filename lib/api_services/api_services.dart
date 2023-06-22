@@ -288,6 +288,17 @@ class ApiServices {
     }
   }
 
+  //todo sheiq response
+  applysheIq(String _userId, Map _data, String _token) async{
+    //String url = base_url +
+    Map<String, String> headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer ${_token}',
+    };
+
+  }
+
   checkSeedProgress(String _userId, String _token) async {
     String url = base_url + '/seed/${_userId}';
     Map<String, String> headers = {

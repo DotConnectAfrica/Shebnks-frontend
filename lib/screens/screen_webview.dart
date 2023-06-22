@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class ScreenWebView extends StatefulWidget {
-  final String? pageTitle;
+  // final String? pageTitle;
   final String? url;
   ScreenWebView(
-    this.pageTitle,
+    // this.pageTitle,
     this.url,
   );
 
@@ -30,7 +30,8 @@ class _WebViewState extends State<ScreenWebView> {
           color: Colors.black, //change your color here
         ),
         title: Text(
-          widget.pageTitle!,
+          //
+          "She IQ",
           style: TextStyle(color: Colors.black, fontSize: 20),
         ),
         centerTitle: true,

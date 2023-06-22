@@ -878,7 +878,9 @@ class _HomescreenState extends State<Homescreen> {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (BuildContext context) =>
-                  ScreenWebView('About SHEbnks', 'https://shebnks.mobi/'),
+                  ScreenWebView('About SHEbnks',
+                      // 'https://shebnks.mobi/'
+                  ),
             ),
           );
         } else if (index == 4) {

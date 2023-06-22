@@ -39,64 +39,48 @@ class _SheIqState extends State<SheIq> {
     _prefs.setBool('hasExistingLoan', true);
   }
 
-  TextEditingController _amountController = TextEditingController();
-  TextEditingController _womanOwnedController = TextEditingController();
-  TextEditingController _howLongController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _dateOfBirthController = TextEditingController();
+  TextEditingController _nationalityController = TextEditingController();
+  TextEditingController _identificationNumberController = TextEditingController();
+  TextEditingController _residentialAddressController = TextEditingController();
+  TextEditingController _phoneNumberController = TextEditingController();
+  TextEditingController _emailAddressController = TextEditingController();
+  TextEditingController _employmentStatusController = TextEditingController();
+  TextEditingController _loansTakenBeforeController = TextEditingController();
+  TextEditingController _purposeOfLoanTakenBeforeController = TextEditingController();
+  TextEditingController _whoTookLoanLoanTakenBeforeController = TextEditingController();
+  TextEditingController _fromWhoTookLoanLoanTakenBeforeController = TextEditingController();
+  TextEditingController _whenLoanTakenController = TextEditingController();
+  TextEditingController _typeOfBusinessController = TextEditingController();
+  TextEditingController _businessOperationController = TextEditingController();
+  TextEditingController _fieldOfBuinessController = TextEditingController();
+  TextEditingController _typeofLoanController = TextEditingController();
 
-  // TextEditingController .dispose();
-  TextEditingController _legalController = TextEditingController();
-  TextEditingController _industryController = TextEditingController();
-  TextEditingController _loanPurposeController = TextEditingController();
-  TextEditingController _loanUseController = TextEditingController();
-  TextEditingController _estimatedTimeController = TextEditingController();
-  TextEditingController _businessOverviewController = TextEditingController();
-  TextEditingController _annualRevenueTimeController = TextEditingController();
-  TextEditingController _existingLoansController = TextEditingController();
-  TextEditingController _collateralController = TextEditingController();
-  TextEditingController _previouslyAppliedController = TextEditingController();
-  TextEditingController _statementController = TextEditingController();
-  TextEditingController _employeeNoController = TextEditingController();
-  TextEditingController _financialChallengesController =
-  TextEditingController();
-  TextEditingController _bplanController = TextEditingController();
-  TextEditingController _competitorController = TextEditingController();
-  TextEditingController _womenController = TextEditingController();
-  TextEditingController _marketingController = TextEditingController();
-  TextEditingController _reliabilityController = TextEditingController();
-  TextEditingController _trainingController = TextEditingController();
-  TextEditingController _mentorController = TextEditingController();
-  TextEditingController _otherInfoController = TextEditingController();
 
-  // TextEditingController _trainingController = TextEditingController();
 
   @override
   void dispose() {
     // _amountController.dispose();
-    _amountController.dispose();
-    _womanOwnedController.dispose();
-    _howLongController.dispose();
-    _legalController.dispose();
-    _industryController.dispose();
-    _loanPurposeController.dispose();
-    _loanUseController.dispose();
-    _estimatedTimeController.dispose();
-    _businessOverviewController.dispose();
-    _annualRevenueTimeController.dispose();
-    _existingLoansController.dispose();
-    _collateralController.dispose();
-    _previouslyAppliedController.dispose();
-    _statementController.dispose();
-    _employeeNoController.dispose();
-    _financialChallengesController.dispose();
-    _bplanController.dispose();
-    _competitorController.dispose();
-    _womenController.dispose();
-    _marketingController.dispose();
-    _reliabilityController.dispose();
-    _trainingController.dispose();
-    _mentorController.dispose();
-    _otherInfoController.dispose();
-    // TextEditingController _trainingController = TextEditingController();
+    _nameController.dispose();
+    _dateOfBirthController.dispose();
+    _nationalityController.dispose();
+    _identificationNumberController.dispose();
+    _residentialAddressController.dispose();
+    _phoneNumberController.dispose();
+    _phoneNumberController.dispose();
+    _employmentStatusController.dispose();
+    _loansTakenBeforeController.dispose();
+    _purposeOfLoanTakenBeforeController.dispose();
+    _whoTookLoanLoanTakenBeforeController.dispose();
+    _fromWhoTookLoanLoanTakenBeforeController.dispose();
+    _whenLoanTakenController.dispose();
+    _typeOfBusinessController.dispose();
+    _businessOperationController.dispose();
+    _fieldOfBuinessController.dispose();
+    _typeofLoanController.dispose();
+
+
     super.dispose();
   }
 
@@ -107,32 +91,24 @@ class _SheIqState extends State<SheIq> {
       });
       List<String> finalIndustry = [];
 
-      final amount = _amountController.text;
-      // final womanOwned = _womanOwnedController.text;
-      final howLong = _howLongController.text;
-      final legal = _legalController.text;
-      // final industry = _industryController.text;
-      finalIndustry.addAll(_industryController.text.split(','));
-      finalIndustry.addAll(selectedCategories2);
-      final loanPurpose = _loanPurposeController.text;
-      final loanUse = _loanUseController.text;
-      final estTime = _estimatedTimeController.text;
-      final businessOverview = _businessOverviewController.text;
-      final annualRevenue = _annualRevenueTimeController.text;
-      // final existingloans = _existingLoansController.text;
-      final collateral = _collateralController.text;
-      final previouslyAppplied = _previouslyAppliedController.text;
-      // final statement = _statementController.text;
-      final employeeNo = _employeeNoController.text;
-      final financialChallenges = _financialChallengesController.text;
-      // final bPlan = _bplanController.text;
-      final competitor = _competitorController.text;
-      // final women = _womenController.text;
-      final marketing = _marketingController.text;
-      // final reliability = _reliabilityController.text;
-      // final training = _trainingController.text;
-      // final mentor = _mentorController.text;
-      final otherInfo = _otherInfoController.text;
+      final name = _nameController.text;
+      final birthDate = _dateOfBirthController.text;
+      final nationality = _nationalityController.text;
+      final identity = _identificationNumberController.text;
+      final residentialAddress = _residentialAddressController.text;
+      final phoneNumber = _phoneNumberController.text;
+      final employmentStatus = _employmentStatusController.text;
+      final loansTakenBefore = _loansTakenBeforeController.text;
+      final purposeOfLoanTakenBefore = _purposeOfLoanTakenBeforeController.text;
+      final whoTookLoanBefore = _whoTookLoanLoanTakenBeforeController.text;
+      final fromWhoWasLoanTaken = _fromWhoTookLoanLoanTakenBeforeController.text;
+      final whenWasLoanTaken = _whenLoanTakenController.text;
+      final typeOfBusiness = _typeOfBusinessController.text;
+      final businessOperation = _businessOperationController.text;
+      final fieldOfBusiness = _fieldOfBuinessController.text;
+      final typeOfLoan = _typeofLoanController.text;
+
+
       // var isWoman//Owned = 1;
       // var fStatement = 1;
       // var collateral = 1;
@@ -141,36 +117,32 @@ class _SheIqState extends State<SheIq> {
       // var references = 1;
       // var mentor = 1;
       // var programs = 1;
-      final loanData = {
-        'amount': amount,
+      final sheIqData = {
+        'Name': name,
         "survey": {
-          // 'womanOwned': isWomanOwned==1,
-          // 'howLong': howLong,
-          // 'legal': legal,
-          // 'industry': finalIndustry,
-          // 'loanPurpose': loanPurpose,
-          // 'loanUse': loanUse,
-          // 'estTime': estTime,
-          // 'businessOverview': businessOverview,
-          // 'annualRevenue': annualRevenue,
-          // 'existingloans': existing==1,
-          // 'collateral': collateral==1,
-          // 'previouslyAppplied': previouslyAppplied,
-          // 'statement': fStatement==1,
-          // 'employeeNo': employeeNo,
-          // 'financialChallenges': financialChallenges,
-          // 'bPlan': bPlan==1,
-          // 'competitor': competitor,
-          // 'women': womenInit==1,
-          // 'marketing': marketing,
-          // 'reliability': references==1,
-          // 'training': programs==1,
-          // 'mentor': mentor==1,
-          // 'otherInfo': otherInfo,
+          'DatefBirth': birthDate,
+          'Nationality': nationality,
+          'ID': identity,
+          'ResidentailAddress': residentialAddress,
+          'PhoneNumber': phoneNumber,
+          'EmploymentStatus': employmentStatus,
+          'loansTakenBefore': loansTakenBefore,
+          'purposeOfLoanTakenBefore': purposeOfLoanTakenBefore,
+          'whoTookLoanBefore': whoTookLoanBefore,
+          'fromWhoWasLoanTaken': fromWhoWasLoanTaken,
+          'AnyOneWithBankAccount': isAnyoneHavingBankAccount==1,
+          'AnyOneHavingAtmInTheHouse': isHavingAtmCard==1,
+          'HavingInsurance': isHavingInsurancePolicy==1,
+          'isHavingBusiness': isHavingBusiness ==1,
+          'whenWasLoanTaken': whenWasLoanTaken,
+          'typeOfBusiness': typeOfBusiness,
+          'businessOperation': businessOperation,
+          'fieldOfBusiness': fieldOfBusiness,
+          'typeOfLoan': typeOfLoan
         }
       };
       _apiServices
-          .applyloan(loanData, widget.token, widget.userId)
+          .applysheIq(sheIqData as String, widget.token, widget.userId)
           .then((value) {
         setState(() {
           _isLoading = false;
@@ -178,7 +150,7 @@ class _SheIqState extends State<SheIq> {
         if (value.status == 'OK') {
           // var
           // storeHasLoan();
-          _successDialog('Loan Application Submitted Successfully');
+          _successDialog('SheIQ Submitted Successfully');
           debugPrint('tmessage is.......${value.message.toString()}');
         } else if (value.status == 'BAD_REQUEST') {
           _showDialog('${value.message.toString()}');
@@ -263,7 +235,7 @@ class _SheIqState extends State<SheIq> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Apply SheLoan'),
+          title: const Text('SheIQ'),
         ),
         backgroundColor: const Color(0xfff6e0e0),
 
@@ -303,9 +275,9 @@ class _SheIqState extends State<SheIq> {
                                 Flexible(
                                   // height: 60,
                                   child: TextFormField(
-                                    controller: _amountController,
+                                    controller: _nameController,
                                     decoration: InputDecoration(
-                                      hintText: 'Amount',
+                                      hintText: 'Answer',
                                       contentPadding: const EdgeInsets.fromLTRB(
                                           16.0, 0, 16.0, 0),
 
@@ -330,7 +302,7 @@ class _SheIqState extends State<SheIq> {
                                     ),
                                     validator: (val) {
                                       if (val!.length == 0) {
-                                        return "Amount cannot be empty";
+                                        return "Field cannot be empty";
                                       } else {
                                         return null;
                                       }
@@ -368,9 +340,9 @@ class _SheIqState extends State<SheIq> {
                                 Flexible(
                                   // height: 60,
                                   child: TextFormField(
-                                    controller: _amountController,
+                                    controller: _dateOfBirthController,
                                     decoration: InputDecoration(
-                                      hintText: 'Amount',
+                                      hintText: 'Answer',
                                       contentPadding: const EdgeInsets.fromLTRB(
                                           16.0, 0, 16.0, 0),
 
@@ -395,7 +367,7 @@ class _SheIqState extends State<SheIq> {
                                     ),
                                     validator: (val) {
                                       if (val!.length == 0) {
-                                        return "Amount cannot be empty";
+                                        return "Field cannot be empty";
                                       } else {
                                         return null;
                                       }
@@ -433,9 +405,9 @@ class _SheIqState extends State<SheIq> {
                                 Flexible(
                                   // height: 60,
                                   child: TextFormField(
-                                    controller: _amountController,
+                                    controller: _nationalityController,
                                     decoration: InputDecoration(
-                                      hintText: 'Amount',
+                                      hintText: 'Answer',
                                       contentPadding: const EdgeInsets.fromLTRB(
                                           16.0, 0, 16.0, 0),
 
@@ -460,7 +432,7 @@ class _SheIqState extends State<SheIq> {
                                     ),
                                     validator: (val) {
                                       if (val!.length == 0) {
-                                        return "Amount cannot be empty";
+                                        return "Field cannot be empty";
                                       } else {
                                         return null;
                                       }
@@ -498,9 +470,9 @@ class _SheIqState extends State<SheIq> {
                                 Flexible(
                                   // height: 60,
                                   child: TextFormField(
-                                    controller: _amountController,
+                                    controller: _identificationNumberController,
                                     decoration: InputDecoration(
-                                      hintText: 'Amount',
+                                      hintText: 'Answer',
                                       contentPadding: const EdgeInsets.fromLTRB(
                                           16.0, 0, 16.0, 0),
 
@@ -525,7 +497,7 @@ class _SheIqState extends State<SheIq> {
                                     ),
                                     validator: (val) {
                                       if (val!.length == 0) {
-                                        return "Amount cannot be empty";
+                                        return "Field cannot be empty";
                                       } else {
                                         return null;
                                       }
@@ -563,9 +535,9 @@ class _SheIqState extends State<SheIq> {
                                 Flexible(
                                   // height: 60,
                                   child: TextFormField(
-                                    controller: _amountController,
+                                    controller: _residentialAddressController,
                                     decoration: InputDecoration(
-                                      hintText: 'Amount',
+                                      hintText: 'Answer',
                                       contentPadding: const EdgeInsets.fromLTRB(
                                           16.0, 0, 16.0, 0),
 
@@ -590,7 +562,7 @@ class _SheIqState extends State<SheIq> {
                                     ),
                                     validator: (val) {
                                       if (val!.length == 0) {
-                                        return "Amount cannot be empty";
+                                        return "Field cannot be empty";
                                       } else {
                                         return null;
                                       }
@@ -628,9 +600,9 @@ class _SheIqState extends State<SheIq> {
                                 Flexible(
                                   // height: 60,
                                   child: TextFormField(
-                                    controller: _amountController,
+                                    controller: _phoneNumberController,
                                     decoration: InputDecoration(
-                                      hintText: 'Amount',
+                                      hintText: 'Answer',
                                       contentPadding: const EdgeInsets.fromLTRB(
                                           16.0, 0, 16.0, 0),
 
@@ -655,7 +627,7 @@ class _SheIqState extends State<SheIq> {
                                     ),
                                     validator: (val) {
                                       if (val!.length == 0) {
-                                        return "Amount cannot be empty";
+                                        return "Field cannot be empty";
                                       } else {
                                         return null;
                                       }
@@ -693,9 +665,9 @@ class _SheIqState extends State<SheIq> {
                                 Flexible(
                                   // height: 60,
                                   child: TextFormField(
-                                    controller: _amountController,
+                                    controller: _emailAddressController,
                                     decoration: InputDecoration(
-                                      hintText: 'Amount',
+                                      hintText: 'Answer',
                                       contentPadding: const EdgeInsets.fromLTRB(
                                           16.0, 0, 16.0, 0),
 
@@ -720,7 +692,7 @@ class _SheIqState extends State<SheIq> {
                                     ),
                                     validator: (val) {
                                       if (val!.length == 0) {
-                                        return "Amount cannot be empty";
+                                        return "Field cannot be empty";
                                       } else {
                                         return null;
                                       }
@@ -758,9 +730,9 @@ class _SheIqState extends State<SheIq> {
                                 Flexible(
                                   // height: 60,
                                   child: TextFormField(
-                                    controller: _amountController,
+                                    controller: _employmentStatusController,
                                     decoration: InputDecoration(
-                                      hintText: 'Amount',
+                                      hintText: 'Answer',
                                       contentPadding: const EdgeInsets.fromLTRB(
                                           16.0, 0, 16.0, 0),
 
@@ -785,7 +757,7 @@ class _SheIqState extends State<SheIq> {
                                     ),
                                     validator: (val) {
                                       if (val!.length == 0) {
-                                        return "Amount cannot be empty";
+                                        return "Field cannot be empty";
                                       } else {
                                         return null;
                                       }
@@ -823,9 +795,9 @@ class _SheIqState extends State<SheIq> {
                                 Flexible(
                                   // height: 60,
                                   child: TextFormField(
-                                    controller: _amountController,
+                                    controller: _loansTakenBeforeController,
                                     decoration: InputDecoration(
-                                      hintText: 'Amount',
+                                      hintText: 'Answer',
                                       contentPadding: const EdgeInsets.fromLTRB(
                                           16.0, 0, 16.0, 0),
 
@@ -850,7 +822,7 @@ class _SheIqState extends State<SheIq> {
                                     ),
                                     validator: (val) {
                                       if (val!.length == 0) {
-                                        return "Amount cannot be empty";
+                                        return "Field cannot be empty";
                                       } else {
                                         return null;
                                       }
@@ -888,9 +860,9 @@ class _SheIqState extends State<SheIq> {
                                 Flexible(
                                   // height: 60,
                                   child: TextFormField(
-                                    controller: _amountController,
+                                    controller: _purposeOfLoanTakenBeforeController,
                                     decoration: InputDecoration(
-                                      hintText: 'Amount',
+                                      hintText: 'Answer',
                                       contentPadding: const EdgeInsets.fromLTRB(
                                           16.0, 0, 16.0, 0),
 
@@ -915,7 +887,7 @@ class _SheIqState extends State<SheIq> {
                                     ),
                                     validator: (val) {
                                       if (val!.length == 0) {
-                                        return "Amount cannot be empty";
+                                        return "Field cannot be empty";
                                       } else {
                                         return null;
                                       }
@@ -1103,16 +1075,16 @@ class _SheIqState extends State<SheIq> {
                                   title: const Text(
                                       'Others'),
                                   value: selectedCategories2.contains(
-                                      "Provident Fund"),
+                                      "Other"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
                                         selectedCategories2.add(
-                                            "Provident Fund");
+                                            "Other");
                                       } else {
                                         selectedCategories2.remove(
-                                            "Provident Fund");
+                                            "Other");
                                       }
                                     });
                                   },
@@ -1122,7 +1094,7 @@ class _SheIqState extends State<SheIq> {
                                     padding: const EdgeInsets.only(
                                         left: 20, right: 20),
                                     child: TextFormField(
-                                      controller: _industryController,
+                                      controller: _fromWhoTookLoanLoanTakenBeforeController,
                                       validator: (value) => isOtherEnabled2
                                           ? value!.isEmpty
                                           ? "this field is required"
@@ -1165,7 +1137,7 @@ class _SheIqState extends State<SheIq> {
                                     Flexible(
                                       // height: 60,
                                       child: TextFormField(
-                                        controller: _amountController,
+                                        controller: _whoTookLoanLoanTakenBeforeController,
                                         decoration: InputDecoration(
                                           hintText: 'Answer',
                                           contentPadding: const EdgeInsets.fromLTRB(
@@ -1192,7 +1164,7 @@ class _SheIqState extends State<SheIq> {
                                         ),
                                         validator: (val) {
                                           if (val!.length == 0) {
-                                            return "Amount cannot be empty";
+                                            return "Field cannot be empty";
                                           } else {
                                             return null;
                                           }
@@ -1230,9 +1202,9 @@ class _SheIqState extends State<SheIq> {
                                     Flexible(
                                       // height: 60,
                                       child: TextFormField(
-                                        controller: _amountController,
+                                        controller: _whenLoanTakenController,
                                         decoration: InputDecoration(
-                                          hintText: 'Amount',
+                                          hintText: 'Answer',
                                           contentPadding: const EdgeInsets.fromLTRB(
                                               16.0, 0, 16.0, 0),
 
@@ -1257,7 +1229,7 @@ class _SheIqState extends State<SheIq> {
                                         ),
                                         validator: (val) {
                                           if (val!.length == 0) {
-                                            return "Amount cannot be empty";
+                                            return "Field cannot be empty";
                                           } else {
                                             return null;
                                           }
@@ -1631,7 +1603,7 @@ class _SheIqState extends State<SheIq> {
                                     Flexible(
                                       // height: 60,
                                       child: TextFormField(
-                                        controller: _amountController,
+                                        controller: _businessOperationController,
                                         decoration: InputDecoration(
                                           hintText: 'Answer',
                                           contentPadding: const EdgeInsets.fromLTRB(
