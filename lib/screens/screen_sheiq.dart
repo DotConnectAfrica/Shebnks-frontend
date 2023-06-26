@@ -47,15 +47,14 @@ class _SheIqState extends State<SheIq> {
   TextEditingController _phoneNumberController = TextEditingController();
   TextEditingController _emailAddressController = TextEditingController();
   TextEditingController _employmentStatusController = TextEditingController();
-  TextEditingController _loansTakenBeforeController = TextEditingController();
-  TextEditingController _purposeOfLoanTakenBeforeController = TextEditingController();
-  TextEditingController _whoTookLoanLoanTakenBeforeController = TextEditingController();
-  TextEditingController _fromWhoTookLoanLoanTakenBeforeController = TextEditingController();
-  TextEditingController _whenLoanTakenController = TextEditingController();
-  TextEditingController _typeOfBusinessController = TextEditingController();
-  TextEditingController _businessOperationController = TextEditingController();
-  TextEditingController _fieldOfBuinessController = TextEditingController();
-  TextEditingController _typeofLoanController = TextEditingController();
+  TextEditingController _monthlyIncome = TextEditingController();
+  TextEditingController _maritalStatus= TextEditingController();
+  TextEditingController _gender= TextEditingController();
+  TextEditingController _ethnicity= TextEditingController();
+  TextEditingController _educationLevel= TextEditingController();
+  TextEditingController _employmentIndustry= TextEditingController();
+
+
 
 
 
@@ -68,22 +67,16 @@ class _SheIqState extends State<SheIq> {
     _identificationNumberController.dispose();
     _residentialAddressController.dispose();
     _phoneNumberController.dispose();
-    _phoneNumberController.dispose();
+    _emailAddressController.dispose();
+    _maritalStatus.dispose();
     _employmentStatusController.dispose();
-    _loansTakenBeforeController.dispose();
-    _purposeOfLoanTakenBeforeController.dispose();
-    _whoTookLoanLoanTakenBeforeController.dispose();
-    _fromWhoTookLoanLoanTakenBeforeController.dispose();
-    _whenLoanTakenController.dispose();
-    _typeOfBusinessController.dispose();
-    _businessOperationController.dispose();
-    _fieldOfBuinessController.dispose();
-    _typeofLoanController.dispose();
-
-
+    _monthlyIncome.dispose();
+    _gender.dispose();
+    _ethnicity.dispose();
+    _educationLevel.dispose();
+    _employmentIndustry.dispose();
     super.dispose();
   }
-
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       setState(() {
@@ -97,16 +90,15 @@ class _SheIqState extends State<SheIq> {
       final identity = _identificationNumberController.text;
       final residentialAddress = _residentialAddressController.text;
       final phoneNumber = _phoneNumberController.text;
+      final email = _emailAddressController.text;
       final employmentStatus = _employmentStatusController.text;
-      final loansTakenBefore = _loansTakenBeforeController.text;
-      final purposeOfLoanTakenBefore = _purposeOfLoanTakenBeforeController.text;
-      final whoTookLoanBefore = _whoTookLoanLoanTakenBeforeController.text;
-      final fromWhoWasLoanTaken = _fromWhoTookLoanLoanTakenBeforeController.text;
-      final whenWasLoanTaken = _whenLoanTakenController.text;
-      final typeOfBusiness = _typeOfBusinessController.text;
-      final businessOperation = _businessOperationController.text;
-      final fieldOfBusiness = _fieldOfBuinessController.text;
-      final typeOfLoan = _typeofLoanController.text;
+      final monthlyIncome = _monthlyIncome.text;
+      final maritalStatus = _maritalStatus.text;
+      final gender = _gender.text;
+      final ethnicity = _ethnicity.text;
+      final educationLevel = _educationLevel.text;
+      final employmentIndustry = _employmentIndustry.text;
+
 
 
       // var isWoman//Owned = 1;
@@ -126,19 +118,15 @@ class _SheIqState extends State<SheIq> {
           'ResidentailAddress': residentialAddress,
           'PhoneNumber': phoneNumber,
           'EmploymentStatus': employmentStatus,
-          'loansTakenBefore': loansTakenBefore,
-          'purposeOfLoanTakenBefore': purposeOfLoanTakenBefore,
-          'whoTookLoanBefore': whoTookLoanBefore,
-          'fromWhoWasLoanTaken': fromWhoWasLoanTaken,
-          'AnyOneWithBankAccount': isAnyoneHavingBankAccount==1,
-          'AnyOneHavingAtmInTheHouse': isHavingAtmCard==1,
-          'HavingInsurance': isHavingInsurancePolicy==1,
-          'isHavingBusiness': isHavingBusiness ==1,
-          'whenWasLoanTaken': whenWasLoanTaken,
-          'typeOfBusiness': typeOfBusiness,
-          'businessOperation': businessOperation,
-          'fieldOfBusiness': fieldOfBusiness,
-          'typeOfLoan': typeOfLoan
+          'MonthlyIncome': monthlyIncome,
+          'Email': email,
+          'MaritalStatus': maritalStatus,
+          'Gender': gender,
+          'Ethnicity': ethnicity,
+          'EducationLevel': educationLevel,
+          'EmploymentIndustry': employmentIndustry
+
+
         }
       };
       _apiServices
@@ -251,6 +239,10 @@ class _SheIqState extends State<SheIq> {
                       const Text('* All fields are required'),
                       const SizedBox(
                         height: 8,
+                      ),
+                      const Text('a. Personal information', style: TextStyle(fontSize: 20, color: Colors.blue, fontWeight: FontWeight.bold)),
+                      const SizedBox(
+                        height: 4,
                       ),
                       Card(
                         margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -460,7 +452,7 @@ class _SheIqState extends State<SheIq> {
                           child: Column( crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                             const Text(
-                                '4. What is your Identification Number, eg passport, or ID card Number*'),
+                                '4. What is your National Identification, eg passport, or ID card Number*'),
                             const SizedBox(
                               height: 8,
                             ),
@@ -512,6 +504,10 @@ class _SheIqState extends State<SheIq> {
                             ),
                           ]),
                         ),
+                      ),
+                      const Text('b. Contact information', style: TextStyle(fontSize: 20, color: Colors.blue, fontWeight: FontWeight.bold)),
+                      const SizedBox(
+                        height: 4,
                       ),
                       Card(
                         margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -708,6 +704,10 @@ class _SheIqState extends State<SheIq> {
                           ]),
                         ),
                       ),
+                      const Text('c. Financial information', style: TextStyle(fontSize: 20, color: Colors.blue, fontWeight: FontWeight.bold)),
+                      const SizedBox(
+                        height: 4,
+                      ),
                       Card(
                         margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                         elevation: 0.9,
@@ -785,7 +785,7 @@ class _SheIqState extends State<SheIq> {
                           child: Column( crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                             const Text(
-                                '9. In the last year, how many loans has your household taken ?*'),
+                                '9. What is your monthly Income ?*'),
                             const SizedBox(
                               height: 8,
                             ),
@@ -795,7 +795,7 @@ class _SheIqState extends State<SheIq> {
                                 Flexible(
                                   // height: 60,
                                   child: TextFormField(
-                                    controller: _loansTakenBeforeController,
+                                    controller: _monthlyIncome,
                                     decoration: InputDecoration(
                                       hintText: 'Answer',
                                       contentPadding: const EdgeInsets.fromLTRB(
@@ -836,6 +836,144 @@ class _SheIqState extends State<SheIq> {
                               ],
                             ),
                           ]),
+                        ),
+                      ),
+                      const Text('d. Marital Status', style: TextStyle(fontSize: 20, color: Colors.blue, fontWeight: FontWeight.bold)),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      Card(
+                        margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        elevation: 0.9,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(10.0))),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, top: 30, bottom: 30),
+                          child: Column( crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                    '10. What is your Marital status (single, married, divorced, etc) ?*'),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Flexible(
+                                      // height: 60,
+                                      child: TextFormField(
+                                        controller: _maritalStatus,
+                                        decoration: InputDecoration(
+                                          hintText: 'Answer',
+                                          contentPadding: const EdgeInsets.fromLTRB(
+                                              16.0, 0, 16.0, 0),
+
+                                          hintStyle: const TextStyle(
+                                              fontSize: 13, color: Colors.grey),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            ),
+                                          ),
+                                          //fillColor: Colors.green
+                                        ),
+                                        validator: (val) {
+                                          if (val!.length == 0) {
+                                            return "Field cannot be empty";
+                                          } else {
+                                            return null;
+                                          }
+                                        },
+                                        keyboardType: TextInputType.text,
+                                        style: const TextStyle(
+                                          fontFamily: "Poppins",
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ]),
+                        ),
+                      ),
+                      const Text('e. Demographic Information:', style: TextStyle(fontSize: 20, color: Colors.blue, fontWeight: FontWeight.bold)),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      Card(
+                        margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        elevation: 0.9,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                            BorderRadius.all(Radius.circular(10.0))),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, top: 30, bottom: 30),
+                          child: Column( crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                    '11. What is your gender ?*'),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Flexible(
+                                      // height: 60,
+                                      child: TextFormField(
+                                        controller: _gender,
+                                        decoration: InputDecoration(
+                                          hintText: 'Answer',
+                                          contentPadding: const EdgeInsets.fromLTRB(
+                                              16.0, 0, 16.0, 0),
+
+                                          hintStyle: const TextStyle(
+                                              fontSize: 13, color: Colors.grey),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            ),
+                                          ),
+                                          //fillColor: Colors.green
+                                        ),
+                                        validator: (val) {
+                                          if (val!.length == 0) {
+                                            return "Field cannot be empty";
+                                          } else {
+                                            return null;
+                                          }
+                                        },
+                                        keyboardType: TextInputType.text,
+                                        style: const TextStyle(
+                                          fontFamily: "Poppins",
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ]),
                         ),
                       ),
                       Card(
@@ -849,285 +987,8 @@ class _SheIqState extends State<SheIq> {
                               left: 20, right: 20, top: 30, bottom: 30),
                           child: Column( crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                            const Text(
-                                '10. For what purpose was the loan taken?'),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(
-                                  // height: 60,
-                                  child: TextFormField(
-                                    controller: _purposeOfLoanTakenBeforeController,
-                                    decoration: InputDecoration(
-                                      hintText: 'Answer',
-                                      contentPadding: const EdgeInsets.fromLTRB(
-                                          16.0, 0, 16.0, 0),
-
-                                      hintStyle: const TextStyle(
-                                          fontSize: 13, color: Colors.grey),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(8.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(8.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.grey,
-                                          width: 1.0,
-                                        ),
-                                      ),
-                                      //fillColor: Colors.green
-                                    ),
-                                    validator: (val) {
-                                      if (val!.length == 0) {
-                                        return "Field cannot be empty";
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                    keyboardType: TextInputType.text,
-                                    style: const TextStyle(
-                                      fontFamily: "Poppins",
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ]),
-                        ),
-                      ),
-                      Card(
-                          margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                          elevation: 0.9,
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 20, right: 20, top: 30, bottom: 30),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text.rich(
-                                  TextSpan(
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .subtitle2!
-                                        .copyWith(),
-                                    text:
-                                    "11. From who was the loan taken From ?",
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                          text: '*',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .subtitle2!
-                                              .copyWith(color: Colors.red)),
-                                    ],
-                                  ),
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Family Member'),
-                                  value: selectedCategories2
-                                      .contains("Family Member"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("Family Member");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("Family Member");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Commercial Bank'),
-                                  value: selectedCategories2
-                                      .contains("Commercial Bank"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("Commercial Bank");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("Commercial Bank");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title:
-                                  const Text('Micro Finance Institutions'),
-                                  value: selectedCategories2
-                                      .contains("Micro Finance Institutions"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2
-                                            .add("Micro Finance Institutions");
-                                      } else {
-                                        selectedCategories2.remove(
-                                            "Micro Finance Institutions");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Cooperative'),
-                                  value: selectedCategories2
-                                      .contains("Cooperative"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2
-                                            .add("Cooperative");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("Cooperative");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Self Help group'),
-                                  value: selectedCategories2
-                                      .contains("Self Help group"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2
-                                            .add("Self Help group");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("Self Help group");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title:
-                                  const Text('Finance Company'),
-                                  value: selectedCategories2
-                                      .contains("Finance Company"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2
-                                            .add("Finance Company");
-                                      } else {
-                                        selectedCategories2.remove(
-                                            "Finance Company");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title:
-                                  const Text('Friend'),
-                                  value: selectedCategories2
-                                      .contains("Friend"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2
-                                            .add("Friend");
-                                      } else {
-                                        selectedCategories2.remove(
-                                            "Friend");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title: const Text(
-                                      'Provident Fund'),
-                                  value: selectedCategories2.contains(
-                                      "Provident Fund"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add(
-                                            "Provident Fund");
-                                      } else {
-                                        selectedCategories2.remove(
-                                            "Provident Fund");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title: const Text(
-                                      'Others'),
-                                  value: selectedCategories2.contains(
-                                      "Other"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add(
-                                            "Other");
-                                      } else {
-                                        selectedCategories2.remove(
-                                            "Other");
-                                      }
-                                    });
-                                  },
-                                ),
-
-                                Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 20, right: 20),
-                                    child: TextFormField(
-                                      controller: _fromWhoTookLoanLoanTakenBeforeController,
-                                      validator: (value) => isOtherEnabled2
-                                          ? value!.isEmpty
-                                          ? "this field is required"
-                                          : null
-                                          : null,
-                                      enabled: isOtherEnabled,
-                                      decoration: const InputDecoration(
-                                        labelText: 'Enter others here',
-                                        labelStyle: TextStyle(
-                                          color: Colors.black,
-                                        ),
-                                        enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Color(0xFF6200EE)),
-                                        ),
-                                      ),
-                                    ))
-                              ],
-                            ),
-                          )),
-                      Card(
-                        margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                        elevation: 0.9,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
                                 const Text(
-                                    '12. Who in the household decided to take this loan? *'),
+                                    '12. What is your Ethnicity ?*'),
                                 const SizedBox(
                                   height: 8,
                                 ),
@@ -1137,7 +998,7 @@ class _SheIqState extends State<SheIq> {
                                     Flexible(
                                       // height: 60,
                                       child: TextFormField(
-                                        controller: _whoTookLoanLoanTakenBeforeController,
+                                        controller: _ethnicity,
                                         decoration: InputDecoration(
                                           hintText: 'Answer',
                                           contentPadding: const EdgeInsets.fromLTRB(
@@ -1189,10 +1050,10 @@ class _SheIqState extends State<SheIq> {
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column( crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
-                                    '13. How long ago was the loan taken out. (In hours, days, months or year)? *'),
+                                    '13. What is your Education Level ?*'),
                                 const SizedBox(
                                   height: 8,
                                 ),
@@ -1202,7 +1063,7 @@ class _SheIqState extends State<SheIq> {
                                     Flexible(
                                       // height: 60,
                                       child: TextFormField(
-                                        controller: _whenLoanTakenController,
+                                        controller: _educationLevel,
                                         decoration: InputDecoration(
                                           hintText: 'Answer',
                                           contentPadding: const EdgeInsets.fromLTRB(
@@ -1245,6 +1106,8 @@ class _SheIqState extends State<SheIq> {
                               ]),
                         ),
                       ),
+
+
                       Card(
                         margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                         elevation: 0.9,
@@ -1254,346 +1117,10 @@ class _SheIqState extends State<SheIq> {
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column( crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
-                                    '13. Do you or anyone in your household have a bank account ? *'),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                ListTile(
-                                  contentPadding: const EdgeInsets.only(left: 0),
-                                  title: Text(
-                                    'Yes',
-                                    style:
-                                    Theme.of(context).textTheme.subtitle1,
-                                  ),
-                                  leading: Radio(
-                                    value: 1,
-                                    groupValue: isAnyoneHavingBankAccount,
-                                    onChanged: (int? value) {
-                                      setState(
-                                            () {
-                                          isAnyoneHavingBankAccount = value!;
-                                        },
-                                      );
-                                    },
-                                  ),
-                                ),
-                                ListTile(
-                                  contentPadding:
-                                  const EdgeInsets.only(left: 0, top: 0),
-                                  title: Text(
-                                    'No',
-                                    style:
-                                    Theme.of(context).textTheme.subtitle1,
-                                  ),
-                                  leading: Radio(
-                                    value: 0,
-                                    groupValue: isAnyoneHavingBankAccount,
-                                    onChanged: (int? value) {
-                                      setState(() {
-                                        isAnyoneHavingBankAccount = value!;
-                                      });
-                                    },
-                                  ),
-                                )
-                              ]),
-                        ),
-                      ),
-                      Card(
-                        margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                        elevation: 0.9,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                    '14. Do you have ATM Card ? *'),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                ListTile(
-                                  contentPadding: const EdgeInsets.only(left: 0),
-                                  title: Text(
-                                    'Yes',
-                                    style:
-                                    Theme.of(context).textTheme.subtitle1,
-                                  ),
-                                  leading: Radio(
-                                    value: 1,
-                                    groupValue: isHavingAtmCard,
-                                    onChanged: (int? value) {
-                                      setState(
-                                            () {
-                                              isHavingAtmCard = value!;
-                                        },
-                                      );
-                                    },
-                                  ),
-                                ),
-                                ListTile(
-                                  contentPadding:
-                                  const EdgeInsets.only(left: 0, top: 0),
-                                  title: Text(
-                                    'No',
-                                    style:
-                                    Theme.of(context).textTheme.subtitle1,
-                                  ),
-                                  leading: Radio(
-                                    value: 0,
-                                    groupValue: isHavingAtmCard,
-                                    onChanged: (int? value) {
-                                      setState(() {
-                                        isHavingAtmCard = value!;
-                                      });
-                                    },
-                                  ),
-                                )
-                              ]),
-                        ),
-                      ),
-                      Card(
-                        margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                        elevation: 0.9,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                    '15. Do you have insurance policy ? *'),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                ListTile(
-                                  contentPadding: const EdgeInsets.only(left: 0),
-                                  title: Text(
-                                    'Yes',
-                                    style:
-                                    Theme.of(context).textTheme.subtitle1,
-                                  ),
-                                  leading: Radio(
-                                    value: 1,
-                                    groupValue: isHavingInsurancePolicy,
-                                    onChanged: (int? value) {
-                                      setState(
-                                            () {
-                                              isHavingInsurancePolicy = value!;
-                                        },
-                                      );
-                                    },
-                                  ),
-                                ),
-                                ListTile(
-                                  contentPadding:
-                                  const EdgeInsets.only(left: 0, top: 0),
-                                  title: Text(
-                                    'No',
-                                    style:
-                                    Theme.of(context).textTheme.subtitle1,
-                                  ),
-                                  leading: Radio(
-                                    value: 0,
-                                    groupValue: isHavingInsurancePolicy,
-                                    onChanged: (int? value) {
-                                      setState(() {
-                                        isHavingInsurancePolicy = value!;
-                                      });
-                                    },
-                                  ),
-                                )
-                              ]),
-                        ),
-                      ),
-                      Card(
-                        margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                        elevation: 0.9,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                    '16. Do you Have a business ? *'),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                ListTile(
-                                  contentPadding: const EdgeInsets.only(left: 0),
-                                  title: Text(
-                                    'Yes',
-                                    style:
-                                    Theme.of(context).textTheme.subtitle1,
-                                  ),
-                                  leading: Radio(
-                                    value: 1,
-                                    groupValue: isHavingBusiness,
-                                    onChanged: (int? value) {
-                                      setState(
-                                            () {
-                                              isHavingBusiness = value!;
-                                        },
-                                      );
-                                    },
-                                  ),
-                                ),
-                                ListTile(
-                                  contentPadding:
-                                  const EdgeInsets.only(left: 0, top: 0),
-                                  title: Text(
-                                    'No',
-                                    style:
-                                    Theme.of(context).textTheme.subtitle1,
-                                  ),
-                                  leading: Radio(
-                                    value: 0,
-                                    groupValue: isHavingBusiness,
-                                    onChanged: (int? value) {
-                                      setState(() {
-                                        isHavingBusiness = value!;
-                                      });
-                                    },
-                                  ),
-                                )
-                              ]),
-                        ),
-                      ),
-                      Card(
-                          margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                          elevation: 0.9,
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 20, right: 20, top: 30, bottom: 30),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text.rich(
-                                  TextSpan(
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .subtitle2!
-                                        .copyWith(),
-                                    text:
-                                    "17. What type of business do you have ?",
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                          text: '*',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .subtitle2!
-                                              .copyWith(color: Colors.red)),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 7,
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Start a completely new enterprise'),
-                                  value: selectedCategories2
-                                      .contains("Start a completely new enterprise"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("Start a completely new enterprise");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("Start a completely new enterprise");
-                                      }
-                                    });
-                                  },
-                                ),
-                                const SizedBox(
-                                  height: 7,
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Creation by an existing enterprise (affiliate)'),
-                                  value: selectedCategories2
-                                      .contains("Creation by an existing enterprise (affiliate)"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("Creation by an existing enterprise (affiliate)");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("Creation by an existing enterprise (affiliate)");
-                                      }
-                                    });
-                                  },
-                                ),
-                                const SizedBox(
-                                  height: 7,
-                                ),
-                                CheckboxListTile(
-                                  title:
-                                  const Text('Restart a business after dormancy of over 2 years'),
-                                  value: selectedCategories2
-                                      .contains("Restart a business after dormancy of over 2 years"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2
-                                            .add("Restart a business after dormancy of over 2 years");
-                                      } else {
-                                        selectedCategories2.remove(
-                                            "Restart a business after dormancy of over 2 years");
-                                      }
-                                    });
-                                  },
-                                ),
-                                const SizedBox(
-                                  height: 7,
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Take-over a purchase of another enterprise'),
-                                  value: selectedCategories2
-                                      .contains("Take-over a purchase of another enterprise"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2
-                                            .add("Take-over a purchase of another enterprise");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("Take-over a purchase of another enterprise");
-                                      }
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                          )),
-                      Card(
-                        margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                        elevation: 0.9,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                    '18. How long has your business been in operation? *'),
+                                  "14. What industry is your business in ?(eg Agribusiness, energy, tech, Beauty, construction etc )",),
                                 const SizedBox(
                                   height: 8,
                                 ),
@@ -1603,7 +1130,7 @@ class _SheIqState extends State<SheIq> {
                                     Flexible(
                                       // height: 60,
                                       child: TextFormField(
-                                        controller: _businessOperationController,
+                                        controller: _employmentIndustry,
                                         decoration: InputDecoration(
                                           hintText: 'Answer',
                                           contentPadding: const EdgeInsets.fromLTRB(
@@ -1630,7 +1157,7 @@ class _SheIqState extends State<SheIq> {
                                         ),
                                         validator: (val) {
                                           if (val!.length == 0) {
-                                            return "Amount cannot be empty";
+                                            return "Field cannot be empty";
                                           } else {
                                             return null;
                                           }
@@ -1646,332 +1173,6 @@ class _SheIqState extends State<SheIq> {
                               ]),
                         ),
                       ),
-                      Card(
-                          margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                          elevation: 0.9,
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 20, right: 20, top: 30, bottom: 30),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text.rich(
-                                  TextSpan(
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .subtitle2!
-                                        .copyWith(),
-                                    text:
-                                    "19. What industry is your business in ?",
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                          text: '*',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .subtitle2!
-                                              .copyWith(color: Colors.red)),
-                                    ],
-                                  ),
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Agribusiness'),
-                                  value: selectedCategories2
-                                      .contains("Agribusiness"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("Agribusiness");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("Agribusiness");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Beauty'),
-                                  value: selectedCategories2
-                                      .contains("Beauty"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("Beauty");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("Beauty");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('ICT and communications'),
-                                  value: selectedCategories2
-                                      .contains("ICT and communications"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("ICT and communications");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("ICT and communications");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('construction'),
-                                  value: selectedCategories2
-                                      .contains("construction"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("construction");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("construction");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Energy'),
-                                  value: selectedCategories2
-                                      .contains("Energy"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("Energy");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("Energy");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Financial services'),
-                                  value: selectedCategories2
-                                      .contains("Financial services"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("Financial services");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("Financial services");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Media and marketing'),
-                                  value: selectedCategories2
-                                      .contains("Media and marketing"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("Media and marketing");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("Media and marketing");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Non-profit'),
-                                  value: selectedCategories2
-                                      .contains("Non-profit"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("Non-profit");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("Non-profit");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Property'),
-                                  value: selectedCategories2
-                                      .contains("Property"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("Property");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("Property");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Retail'),
-                                  value: selectedCategories2
-                                      .contains("Retail"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("Retail");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("Retail");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('others'),
-                                  value: selectedCategories2
-                                      .contains("others"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("others");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("others");
-                                      }
-                                    });
-                                  },
-                                ),
-
-                              ],
-                            ),
-                          )),
-                      Card(
-                          margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                          elevation: 0.9,
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 20, right: 20, top: 30, bottom: 30),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text.rich(
-                                  TextSpan(
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .subtitle2!
-                                        .copyWith(),
-                                    text:
-                                    "20. What type of loans do you have for your business ?",
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                          text: '*',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .subtitle2!
-                                              .copyWith(color: Colors.red)),
-                                    ],
-                                  ),
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Working capital'),
-                                  value: selectedCategories2
-                                      .contains("Working capital"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("Working capital");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("Working capital");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Overdraft'),
-                                  value: selectedCategories2
-                                      .contains("Overdraft"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("Overdraft");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("Overdraft");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Equipment Leasing'),
-                                  value: selectedCategories2
-                                      .contains("Equipment Leasing"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("Equipment Leasing");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("Equipment Leasing");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Commercial Mortgage'),
-                                  value: selectedCategories2
-                                      .contains("Commercial Mortgage"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("Commercial Mortgage");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("Commercial Mortgage");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Others'),
-                                  value: selectedCategories2
-                                      .contains("Others"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("Others");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("Others");
-                                      }
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                          )),
-
-
-
 
 
                       const SizedBox(height: 16.0),
