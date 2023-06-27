@@ -49,10 +49,10 @@ class Data {
 }
 
 class Loan {
-  int? amountToPay;
+  var amountToPay;
   String? appliedOn;
-  int? initialAmount;
-  int? amountRemaining;
+  var initialAmount;
+  var amountRemaining;
   String? id;
   Null? disbursedOn;
   String? status;

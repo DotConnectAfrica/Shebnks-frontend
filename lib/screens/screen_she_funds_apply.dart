@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,6 +26,14 @@ class AddSeed extends StatefulWidget {
 
 class _AddSeedState extends State<AddSeed> {
   final _formKey = GlobalKey<FormState>();
+  String? businessPlan, bPlanFilePath;
+  String? coInvestorStmt, coFilePath;
+  bool hasAttachmentBp = false;
+  bool hasAttachmentCo = false;
+  bool hasAttachmentFi = false;
+  bool hasAttachmentTx = false;
+  String? financialStmt, financialFilePath;
+  String? taxCompliance, taxFilePath;
   final _formKey1 = GlobalKey<FormState>();
 
   final aboutController = TextEditingController();
@@ -67,14 +74,13 @@ class _AddSeedState extends State<AddSeed> {
   TextEditingController _controller = TextEditingController();
   var _token;
   var _userId;
-  getTokenUser() async{
+
+  getTokenUser() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
-   setState(() {
-     _token = _prefs.getString('token');
-     _userId= _prefs.getString('userId');
-   });
-
-
+    setState(() {
+      _token = _prefs.getString('token');
+      _userId = _prefs.getString('userId');
+    });
   }
 
   @override
@@ -101,7 +107,7 @@ class _AddSeedState extends State<AddSeed> {
   List<String> selectedCategories2 = [];
   var isOtherEnabled2 = false;
   var isOtherEnabled = false;
-  bool isLoading= false;
+  bool isLoading = false;
   var isWomanOwned = 1;
   var fundraised = 1;
   var generatingRevenue = 1;
@@ -322,7 +328,8 @@ class _AddSeedState extends State<AddSeed> {
                                     },
                                   ),
                                   CheckboxListTile(
-                                    title: const Text('Building and Construction'),
+                                    title:
+                                        const Text('Building and Construction'),
                                     value: selectedCategories
                                         .contains("Building and Construction"),
                                     activeColor: const Color(0xffed39ca),
@@ -464,8 +471,8 @@ class _AddSeedState extends State<AddSeed> {
                                     },
                                   ),
                                   Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 20, right: 20),
+                                      padding: const EdgeInsets.only(
+                                          left: 20, right: 20),
                                       child: TextFormField(
                                         controller: sectorsController,
                                         validator: (value) => isOtherEnabled
@@ -521,7 +528,8 @@ class _AddSeedState extends State<AddSeed> {
                                     ],
                                   ),
                                   ListTile(
-                                    contentPadding: const EdgeInsets.only(left: 0),
+                                    contentPadding:
+                                        const EdgeInsets.only(left: 0),
                                     title: Text(
                                       'Yes',
                                       style:
@@ -848,7 +856,8 @@ class _AddSeedState extends State<AddSeed> {
                                     ],
                                   ),
                                   ListTile(
-                                    contentPadding: const EdgeInsets.only(left: 0),
+                                    contentPadding:
+                                        const EdgeInsets.only(left: 0),
                                     title: Text(
                                       'Yes',
                                       style:
@@ -934,78 +943,101 @@ class _AddSeedState extends State<AddSeed> {
                                 key: _formKey1,
                                 child: Column(
                                   children: [
-                                    const Text('13. Attach the following documents either as .docx, pdf,  or png'),
+                                    const Text(
+                                        '13. Attach the following documents either as .docx, pdf,  or png'),
                                     // FormBuilderTextField(
                                     //   name: 'businessPlan',
                                     //   decoration: const InputDecoration(labelText: ''),
                                     //   // validator: FormBuilderValidators.required(context),
                                     // ),
-                                    FormBuilderFilePicker(
-                                      name: 'businessPlan',
-                                      decoration: const InputDecoration(labelText: 'Business plan' ),
-                                      // maxFiles: 3, // Maximum number of attachments allowed
-                                      previewImages: true, // Display image previews
-                                      onChanged: (value) {
-                                        print(value);
-                                      },
-                                      // selectorButtonOnErrorText: 'Add attachments',
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text('Business Plan'),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            IconButton(
+                                                onPressed: _pickBPlan,
+                                                icon: const Icon(
+                                                    Icons.add_circle_outline)),
+                                            hasAttachmentBp
+                                                ? const Icon(
+                                                    Icons.file_present,
+                                                    size: 35,
+                                                  )
+                                                : const Text('Add File'),
+                                          ],
+                                        ),
+                                        const Divider(
+                                          height: 1,
+                                        ),
+                                        const Text('Financial Statements'),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            IconButton(
+                                                onPressed: pickFinancialStmt,
+                                                icon: const Icon(
+                                                    Icons.add_circle_outline)),
+                                            hasAttachmentFi
+                                                ? const Icon(
+                                                    Icons.file_present,
+                                                    size: 35,
+                                                  )
+                                                : const Text('Add File'),
+                                          ],
+                                        ),
+                                        const Divider(
+                                          height: 1,
+                                        ),
+                                        const Text('CoInvestor Statement'),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            IconButton(
+                                                onPressed: pickcoInvestorStmt,
+                                                icon: const Icon(
+                                                    Icons.add_circle_outline)),
+                                            hasAttachmentCo
+                                                ? const Icon(
+                                                    Icons.file_present,
+                                                    size: 35,
+                                                  )
+                                                : const Text('Add File'),
+                                          ],
+                                        ),
+                                        const Divider(
+                                          height: 1,
+                                        ),const Text('Tax Compliance Certificate'),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            IconButton(
+                                                onPressed: pickTaxCompliance,
+                                                icon: const Icon(
+                                                    Icons.add_circle_outline)),
+                                            hasAttachmentTx
+                                                ? const Icon(
+                                                    Icons.file_present,
+                                                    size: 35,
+                                                  )
+                                                : const Text('Add File'),
+                                          ],
+                                        ),
+                                        const Divider(
+                                          height: 1,
+                                        )
+                                      ],
                                     ),
-                                    // FormBuilderTextField(
-                                    //   name: 'financialStatement',
-                                    //   decoration: const InputDecoration(labelText: 'Financial Statement'),
-                                    //   // validator: FormBuilderValidators.required(context),
-                                    // ),
-                                    FormBuilderFilePicker(
-                                      name: 'financialStatement',
-                                      decoration: const InputDecoration(labelText: 'Financial Statement'),
-                                      // maxFiles: 3, // Maximum number of attachments allowed
-                                      previewImages: true, // Display image previews
-                                      onChanged: (value) {
-                                        print(value);
-                                      },
-                                      // selectorButtonOnErrorText: 'Add attachments',
-                                    ),
-                                    // FormBuilderTextField(
-                                    //   name: 'taxAdminCertificate',
-                                    //   decoration: const InputDecoration(labelText: 'Tax Compliance Certificate'),
-                                    //   // validator: FormBuilderValidators.required(context),
-                                    // ),
-                                    FormBuilderFilePicker(
-                                      name: 'taxAdminCertificate',
-                                      decoration: const InputDecoration(labelText: 'Tax Compliance Certificate'),
-                                      // maxFiles: 3, // Maximum number of attachments allowed
-                                      previewImages: true, // Display image previews
-                                      onChanged: (value) {
-                                        print(value);
-                                      },
-                                      // selectorButtonOnErrorText: 'Add attachments',
-                                    ),
-                                    // FormBuilderTextField(
-                                    //   name: 'applicantCoinvestorStmt',
-                                    //   decoration: const InputDecoration(labelText: 'Applicant Coinvester Statement'),
-                                    //   // validator: FormBuilderValidators.required(context),
-                                    // ),
-                                    FormBuilderFilePicker(
-                                      name: 'applicantCoinvestorStmt',
-                                      decoration: const InputDecoration(labelText: 'Applicant Coinvester Statement'),
-                                      // maxFiles: 3, // Maximum number of attachments allowed
-                                      previewImages: true, // Display image previews
-                                      onChanged: (value) {
-                                        print(value);
-                                      },
-                                      // selectorButtonOnErrorText: 'Add attachments',
-                                    ),
-                                    // SizedBox(height: 20),
-                                    // ElevatedButton(
-                                    //   onPressed: () {
-                                    //     if (_formKey.currentState!.saveAndValidate()) {
-                                    //       final formData = _formKey.currentState!.value;
-                                    //       // Process the form data here
-                                    //       print(formData);
-                                    //     }
-                                    //   },
-                                    //   child: Text('Submit'),
-                                    // ),
+
                                   ],
                                 ),
                               ),
@@ -1089,66 +1121,75 @@ class _AddSeedState extends State<AddSeed> {
                     )),
                 GestureDetector(
                   onTap: () async {
-                    _successDialog('Your Shefund Application has been submitted Successfully');
-
-                    UniversalMethods.show_toast('Submitted Successfully', context);
+                    // _successDialog(
+                    //     'Your Shefund Application has been submitted Successfully');
+                    //
+                    // UniversalMethods.show_toast(
+                    //     'Submitted Successfully', context);
 
                     // final form =
                     //
                     //
-                    // _formKey.currentState!;
-                    // // if (form.validate()) {
-                    // //   form.save();
-                    //
-                    //   FocusScope.of(context).unfocus();
-                    //   List<String> finalSectors = [];
-                    //   List<String> finalTarget = [];
-                    //   List<String> othersAttachment = [];
-                    //   finalSectors.addAll(transactonController.text.split(','));
-                    //   finalTarget.addAll(anyOtherinfoController.text.split(','));
-                    //   finalTarget.addAll(selectedCategories2);
-                    //   finalSectors.addAll(selectedCategories);
-                    //
-                    //   final finaData = {
-                    //     // "username": email,
-                    //     // "name": myController1.text,
-                    //     "about": aboutController.text,
-                    //     "impact": impactController.text,
-                    //     "problems": problemController.text,
-                    //     "bridging": bridgingController.text,
-                    //     // "email": email,
-                    //     "founders": founderController.text.split(','),
-                    //     // "number": myController4.text,
-                    //     "womanOwned": isWomanOwned == 1,
-                    //     "sectors": finalSectors,
-                    //     "marketing": marketingController.text,
-                    //     "primaryTarget": finalTarget,
-                    //     "provenTransaction": transactonController.text,
-                    //     "reason": tellusController.text,
-                    //     "fundraised": fundraised == 1,
-                    //     "stemInitiative": stemInitiativeController.text,
-                    //     // "attachments": formData['attachments'],
-                    //     "otherInfo": anyOtherinfoController.text
-                    //   };
-                    //   print(finaData.toString());
-                    //
-                    //   ApiServices().applySeedFund(_userId,finaData, _token).then((value) {
-                    //     print('SeedValue>>>>>>${value.toString()}');
-                    //     UniversalMethods.show_toast('${value.message.toString()}', context);
-                    //     if(value.status=="OK"){
-                    //       Get.offAll(()=>ScreenSheFunds());
-                    //     }
-                    //   });
-                    //
-                    //   print(finaData);
-                    //
-                    // // } else {
-                    //   print("The form is invalid");
-                    // UniversalMethods.show_toast('Fill all fields', context);
-                    }
+                    _formKey.currentState!;
+                    if (_formKey.currentState!.validate()) {
+                      // form.save();
+
+                    FocusScope.of(context).unfocus();
+                    List<String> finalSectors = [];
+                    List<String> finalTarget = [];
+                    List<String> othersAttachment = [];
+                    finalSectors.addAll(transactonController.text.split(','));
+                    finalTarget.addAll(anyOtherinfoController.text.split(','));
+                    finalTarget.addAll(selectedCategories2);
+                    finalSectors.addAll(selectedCategories);
+
+                    Map finaData = {
+                      "businessPlan": '$businessPlan',
+                      "taxCompliance": '$taxCompliance',
+                      "coInvestorStmt": "$coInvestorStmt",
+                      "financialStmt": '$financialStmt',
+                      // "name": myController1.text,
+                      "about": aboutController.text,
+                      "impact": impactController.text,
+                      "problems": problemController.text,
+                      "bridging": bridgingController.text,
+                      // "email": email,
+                      "founders": '${founderController.text.split(',')}',
+                      // "number": myController4.text,
+                      "womanOwned": isWomanOwned == 1,
+                      "sectors": finalSectors,
+                      "marketing": marketingController.text,
+                      "primaryTarget": finalTarget,
+                      "provenTransaction": transactonController.text,
+                      "reason": tellusController.text,
+                      "fundraised": fundraised == 1,
+                      "stemInitiative": stemInitiativeController.text,
+                      // "attachments": formData['attachments'],
+                      "otherInfo": anyOtherinfoController.text
+                    };
+                    print('Data>>>>${finaData.toString()}');
+
+                    ApiServices()
+                        .applySeedFund(_userId, finaData, _token)
+                        .then((value) {
+                      print('SeedValue>>>>>>${value.toString()}');
+                      UniversalMethods.show_toast(
+                          '${value.message.toString()}', context);
+                      if (value.status == "OK") {
+                        Get.offAll(() => ScreenSheFunds());
+                      }
+                    });
+
+                    print(finaData);
+
+                    } else {
+                    // print("The form is invalid");
+                    UniversalMethods.show_toast('Fill all fields', context);
+                  }
                   //  Navigator.of(context).pop();
-                  // },,
-                  ,child: Padding(
+                  },
+
+                  child: Padding(
                     padding: const EdgeInsets.fromLTRB(0, 20, 0, 40),
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(20, 30, 20, 20),
@@ -1179,6 +1220,7 @@ class _AddSeedState extends State<AddSeed> {
       ),
     );
   }
+
   void _successDialog(String message) {
     showDialog(
         context: context,
@@ -1212,5 +1254,81 @@ class _AddSeedState extends State<AddSeed> {
                 ])),
           );
         });
+  }
+
+  Future _pickBPlan() async {
+    final result = await FilePicker.platform
+        .pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
+    if (result != null) {
+      setState(() {
+        hasAttachmentBp = true;
+      });
+      bPlanFilePath = result.files.single.path!;
+      debugPrint('Filepath>>>>>$bPlanFilePath');
+      final file = File(bPlanFilePath!);
+      final documentBytes = await file.readAsBytes();
+      debugPrint('bytes>>>>>>$documentBytes');
+      businessPlan = base64.encode(documentBytes);
+      debugPrint('base64>>>>>>$documentBytes');
+
+      return businessPlan;
+    }
+  }
+
+  Future pickTaxCompliance() async {
+    final result = await FilePicker.platform
+        .pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
+    if (result != null) {
+      setState(() {
+        hasAttachmentTx = true;
+      });
+      taxFilePath = result.files.single.path!;
+      debugPrint('Filepath>>>>>$taxFilePath');
+      final file = File(taxFilePath!);
+      final documentBytes = await file.readAsBytes();
+      debugPrint('bytes>>>>>>$documentBytes');
+      taxCompliance = base64.encode(documentBytes);
+      debugPrint('base64>>>>>>$documentBytes');
+
+      return taxCompliance;
+    }
+  }
+
+  Future pickcoInvestorStmt() async {
+    final result = await FilePicker.platform
+        .pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
+    if (result != null) {
+      setState(() {
+        hasAttachmentCo = true;
+      });
+      coFilePath = result.files.single.path!;
+      debugPrint('Filepath>>>>>$coFilePath');
+      final file = File(coFilePath!);
+      final documentBytes = await file.readAsBytes();
+      debugPrint('bytes>>>>>>$documentBytes');
+      coInvestorStmt = base64.encode(documentBytes);
+      debugPrint('base64>>>>>>$documentBytes');
+
+      return coInvestorStmt;
+    }
+  }
+
+  Future pickFinancialStmt() async {
+    final result = await FilePicker.platform
+        .pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
+    if (result != null) {
+      setState(() {
+        hasAttachmentFi = true;
+      });
+      financialFilePath = result.files.single.path!;
+      debugPrint('Filepath>>>>>$financialFilePath');
+      final file = File(financialFilePath!);
+      final documentBytes = await file.readAsBytes();
+      debugPrint('bytes>>>>>>$documentBytes');
+      financialStmt = base64.encode(documentBytes);
+      debugPrint('base64>>>>>>$documentBytes');
+
+      return financialStmt;
+    }
   }
 }
