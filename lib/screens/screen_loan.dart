@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:form_builder_file_picker/form_builder_file_picker.dart';
 import 'package:get/get.dart';
@@ -35,6 +39,14 @@ class _LoansPageState extends State<LoansPage> {
   var mentor = 1;
   var programs = 1;
   var existing =1;
+  String? businessPlan, bPlanFilePath;
+  String? coInvestorStmt, coFilePath;
+  bool hasAttachmentBp = false;
+  bool hasAttachmentCo = false;
+  bool hasAttachmentFi = false;
+  bool hasAttachmentTx = false;
+  String? financialStmt, financialFilePath;
+  String? taxCompliance, taxFilePath;
 
 
 
@@ -177,6 +189,10 @@ class _LoansPageState extends State<LoansPage> {
       // var mentor = 1;
       // var programs = 1;
       final loanData = {
+        'financialStatement':financialStmt,
+        'taxCompliance':taxCompliance,
+        'coInvestorStatement':coInvestorStmt,
+        'businessPlan':businessPlan,
         'amount': amount,
         "survey": {
           'womanOwned': isWomanOwned==1,
@@ -2187,77 +2203,116 @@ class _LoansPageState extends State<LoansPage> {
                         ),
                       ),
                       Card(
-                        margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                        elevation: 0.9,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column(
-                            children: [
-                              const Text('25. Attach the following documents either as .docx, pdf,  or png'),
+                          margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                          elevation: 0.9,
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(10.0))),
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 20, right: 20, top: 30, bottom: 30),
+                            child: FormBuilder(
+                              child: Column(
+                                children: [
+                                  const Text(
+                                      '25. Attach the following documents either as .docx, pdf,  or png'),
+                                  // FormBuilderTextField(
+                                  //   name: 'businessPlan',
+                                  //   decoration: const InputDecoration(labelText: ''),
+                                  //   // validator: FormBuilderValidators.required(context),
+                                  // ),
+                                  Column(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      const Text('Business Plan'),
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.start,
+                                        children: [
+                                          IconButton(
+                                              onPressed: _pickBPlan,
+                                              icon: const Icon(
+                                                  Icons.add_circle_outline)),
+                                          hasAttachmentBp
+                                              ? const Icon(
+                                            Icons.file_present,
+                                            size: 35,
+                                          )
+                                              : const Text('Add File'),
+                                        ],
+                                      ),
+                                      const Divider(
+                                        height: 1,
+                                      ),
+                                      const Text('Financial Statements'),
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.start,
+                                        children: [
+                                          IconButton(
+                                              onPressed: pickFinancialStmt,
+                                              icon: const Icon(
+                                                  Icons.add_circle_outline)),
+                                          hasAttachmentFi
+                                              ? const Icon(
+                                            Icons.file_present,
+                                            size: 35,
+                                          )
+                                              : const Text('Add File'),
+                                        ],
+                                      ),
+                                      const Divider(
+                                        height: 1,
+                                      ),
+                                      const Text('CoInvestor Statement'),
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.start,
+                                        children: [
+                                          IconButton(
+                                              onPressed: pickcoInvestorStmt,
+                                              icon: const Icon(
+                                                  Icons.add_circle_outline)),
+                                          hasAttachmentCo
+                                              ? const Icon(
+                                            Icons.file_present,
+                                            size: 35,
+                                          )
+                                              : const Text('Add File'),
+                                        ],
+                                      ),
+                                      const Divider(
+                                        height: 1,
+                                      ),const Text('Tax Compliance Certificate'),
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.start,
+                                        children: [
+                                          IconButton(
+                                              onPressed: pickTaxCompliance,
+                                              icon: const Icon(
+                                                  Icons.add_circle_outline)),
+                                          hasAttachmentTx
+                                              ? const Icon(
+                                            Icons.file_present,
+                                            size: 35,
+                                          )
+                                              : const Text('Add File'),
+                                        ],
+                                      ),
+                                      const Divider(
+                                        height: 1,
+                                      )
+                                    ],
+                                  ),
 
-                              FormBuilderFilePicker(
-                                name: 'businessPlan',
-                                decoration: const InputDecoration(
-                                    labelText: 'Business plan'),
-                                // maxFiles: 3, // Maximum number of attachments allowed
-                                previewImages: true, // Display image previews
-                                onChanged: (value) {
-                                  print(value);
-                                },
-                                // selectorButtonOnErrorText: 'Add attachments',
+                                ],
                               ),
-
-                              FormBuilderFilePicker(
-                                name: 'financialStatement',
-                                decoration: const InputDecoration(labelText: 'Financial Statement'),
-                                // maxFiles: 3, // Maximum number of attachments allowed
-                                previewImages: true, // Display image previews
-                                onChanged: (value) {
-                                  print(value);
-                                },
-                                // selectorButtonOnErrorText: 'Add attachments',
-                              ),
-
-                              FormBuilderFilePicker(
-                                name: 'taxAdminCertificate',
-                                decoration: const InputDecoration(labelText: 'Tax Compliance Certificate'),
-                                // maxFiles: 3, // Maximum number of attachments allowed
-                                previewImages: true, // Display image previews
-                                onChanged: (value) {
-                                  print(value);
-                                },
-                                // selectorButtonOnErrorText: 'Add attachments',
-                              ),
-
-                              FormBuilderFilePicker(
-                                name: 'applicantCoinvestorStmt',
-                                decoration: const InputDecoration(labelText: 'Applicant Coinvester Statement'),
-                                // maxFiles: 3, // Maximum number of attachments allowed
-                                previewImages: true, // Display image previews
-                                onChanged: (value) {
-                                  print(value);
-                                },
-                                // selectorButtonOnErrorText: 'Add attachments',
-                              ),
-                              // SizedBox(height: 20),
-                              // ElevatedButton(
-                              //   onPressed: () {
-                              //     if (_formKey.currentState!.saveAndValidate()) {
-                              //       final formData = _formKey.currentState!.value;
-                              //       // Process the form data here
-                              //       print(formData);
-                              //     }
-                              //   },
-                              //   child: Text('Submit'),
-                              // ),
-                            ],
-                          ),
-                        ),
-                      ),
+                            ),
+                          )),
 
 
 
@@ -2298,5 +2353,80 @@ class _LoansPageState extends State<LoansPage> {
                     ],
                   )),
             ])));
+  }
+  Future _pickBPlan() async {
+    final result = await FilePicker.platform
+        .pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
+    if (result != null) {
+      setState(() {
+        hasAttachmentBp = true;
+      });
+      bPlanFilePath = result.files.single.path!;
+      debugPrint('Filepath>>>>>$bPlanFilePath');
+      final file = File(bPlanFilePath!);
+      final documentBytes = await file.readAsBytes();
+      debugPrint('bytes>>>>>>$documentBytes');
+      businessPlan = base64.encode(documentBytes);
+      debugPrint('base64>>>>>>$documentBytes');
+
+      return businessPlan;
+    }
+  }
+
+  Future pickTaxCompliance() async {
+    final result = await FilePicker.platform
+        .pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
+    if (result != null) {
+      setState(() {
+        hasAttachmentTx = true;
+      });
+      taxFilePath = result.files.single.path!;
+      debugPrint('Filepath>>>>>$taxFilePath');
+      final file = File(taxFilePath!);
+      final documentBytes = await file.readAsBytes();
+      debugPrint('bytes>>>>>>$documentBytes');
+      taxCompliance = base64.encode(documentBytes);
+      debugPrint('base64>>>>>>$documentBytes');
+
+      return taxCompliance;
+    }
+  }
+
+  Future pickcoInvestorStmt() async {
+    final result = await FilePicker.platform
+        .pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
+    if (result != null) {
+      setState(() {
+        hasAttachmentCo = true;
+      });
+      coFilePath = result.files.single.path!;
+      debugPrint('Filepath>>>>>$coFilePath');
+      final file = File(coFilePath!);
+      final documentBytes = await file.readAsBytes();
+      debugPrint('bytes>>>>>>$documentBytes');
+      coInvestorStmt = base64.encode(documentBytes);
+      debugPrint('base64>>>>>>$documentBytes');
+
+      return coInvestorStmt;
+    }
+  }
+
+  Future pickFinancialStmt() async {
+    final result = await FilePicker.platform
+        .pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
+    if (result != null) {
+      setState(() {
+        hasAttachmentFi = true;
+      });
+      financialFilePath = result.files.single.path!;
+      debugPrint('Filepath>>>>>$financialFilePath');
+      final file = File(financialFilePath!);
+      final documentBytes = await file.readAsBytes();
+      debugPrint('bytes>>>>>>$documentBytes');
+      financialStmt = base64.encode(documentBytes);
+      debugPrint('base64>>>>>>$documentBytes');
+
+      return financialStmt;
+    }
   }
 }
