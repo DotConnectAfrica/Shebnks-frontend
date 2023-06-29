@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:she_banks/api_services/api_services.dart';
+import 'package:she_banks/screens/recent_winners_webview.dart';
 import 'package:she_banks/screens/screen_she_funds_apply.dart';
 
 class ScreenSheFunds extends StatefulWidget {
@@ -284,14 +285,78 @@ class _ScreenSheFundsState extends State<ScreenSheFunds> {
                               fontSize: 18),
                         ),
                       ),
-                      // Padding(
-                      //     padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                      //     child: ListView.builder(
-                      //       shrinkWrap: true,
-                      //       physics: NeverScrollableScrollPhysics(),
-                      //       itemCount: _recent.length,
-                      //       itemBuilder: _buildItemsForListViewRecent,
-                      //     )),
+
+                      Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: itemList.length,
+                            itemBuilder: (BuildContext context, int index){
+                              return ListTile(
+                                title: Padding(
+                                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                                  child: GestureDetector(
+                                    child: Card(
+                                      color: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        side: const BorderSide(
+                                            color: Colors.white70, width: 1),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                      child: Padding(
+                                        padding:
+                                        const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                        child: Container(
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: <Widget>[
+                                              Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(itemList[index].title, style: const TextStyle(
+                                                          fontWeight: FontWeight.bold,
+                                                          fontSize: 18,
+                                                          color: Colors.black),),
+                                                      const SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                    ],
+                                                  )),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              RecentWinners( itemList[index].link),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                onTap: () {
+                                  // RecentWinners(itemList[index].link);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          RecentWinners( itemList[index].link),
+                                    ),
+                                  );
+                                },
+                              );
+                            }
+                          )),
+
+
                       const SizedBox(
                         height: 10,
                       ),
@@ -327,3 +392,18 @@ class _ScreenSheFundsState extends State<ScreenSheFunds> {
     });
   }
 }
+
+class Item {
+  final String title;
+  final String link;
+
+  Item({required this.title, required this.link});
+}
+
+List<Item> itemList = [
+  Item(title: "2022 Miss.Africa Digital Seed Fund Winners", link: "https://missdotafrica.digital/apply-now/2022-miss-africa-digital-seed-fund-winners/"),
+  Item(title: "2019 Miss.Africa Digital Seed Fund Winners", link: "https://missdotafrica.digital/apply-now/2019-miss-africa-digital-seed-fund-winners/"),
+  Item(title: "Winners: 2018 Seed Fund", link: "https://missdotafrica.digital/winners-2018-seed-fund/"),
+  Item(title: "Winners: 2016/17 Seed Fund", link: "https://missdotafrica.digital/winners-2016-17-seed-fund/"),
+  Item(title: "Winners: 2015 Seed Fund", link: "https://missdotafrica.digital/apply-now/winners/"),
+];
