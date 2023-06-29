@@ -288,7 +288,7 @@ class _LoginPassState extends State<LoginPass> {
             var status = value.data.loan.status;
             var loanId = value.data.loan.id;
             // Loan loan = value.data.loan;
-            storeLoanDetails(initAmount, remainingAmount, status, loanId, amountToPay);
+            storeLoanDetails(initAmount, remainingAmount, status, amountToPay,loanId);
           });
         } else {
           setState(() {
