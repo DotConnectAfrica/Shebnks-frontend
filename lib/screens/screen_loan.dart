@@ -189,12 +189,13 @@ class _LoansPageState extends State<LoansPage> {
       // var mentor = 1;
       // var programs = 1;
       final loanData = {
-        'financialStatement':financialStmt,
-        'taxCompliance':taxCompliance,
-        'coInvestorStatement':coInvestorStmt,
-        'businessPlan':businessPlan,
+
         'amount': amount,
         "survey": {
+          'financialStatement':financialStmt,
+          'taxCompliance':taxCompliance,
+          'coInvestorStatement':coInvestorStmt,
+          'businessPlan':businessPlan,
           'womanOwned': isWomanOwned==1,
           'howLong': howLong,
           'legal': legal,
@@ -953,6 +954,64 @@ class _LoansPageState extends State<LoansPage> {
                               ],
                             ),
                           )),
+                      // Card(
+                      //   margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      //   elevation: 0.9,
+                      //   shape: const RoundedRectangleBorder(
+                      //       borderRadius:
+                      //       BorderRadius.all(Radius.circular(10.0))),
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.only(
+                      //         left: 20, right: 20, top: 30, bottom: 30),
+                      //     child: Column(children: [
+                      //       const Text(
+                      //           '6. What is the legal structure of your business (sole proprietorship, partnership, LLC, etc.)?'),
+                      //       const SizedBox(
+                      //         height: 8,
+                      //       ),
+                      //       Row(mainAxisSize: MainAxisSize.min, children: [
+                      //         Flexible(
+                      //           child: TextFormField(
+                      //             controller: _legalController,
+                      //             decoration: InputDecoration(
+                      //               hintText: 'Legal structure',
+                      //               contentPadding:
+                      //               const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+                      //
+                      //               hintStyle: const TextStyle(
+                      //                   fontSize: 13, color: Colors.grey),
+                      //               focusedBorder: OutlineInputBorder(
+                      //                 borderRadius: BorderRadius.circular(8.0),
+                      //                 borderSide: const BorderSide(
+                      //                   color: Colors.grey,
+                      //                 ),
+                      //               ),
+                      //               enabledBorder: OutlineInputBorder(
+                      //                 borderRadius: BorderRadius.circular(8.0),
+                      //                 borderSide: const BorderSide(
+                      //                   color: Colors.grey,
+                      //                   width: 1.0,
+                      //                 ),
+                      //               ),
+                      //               //fillColor: Colors.green
+                      //             ),
+                      //             validator: (val) {
+                      //               if (val!.length == 0) {
+                      //                 return "Field cannot be empty";
+                      //               } else {
+                      //                 return null;
+                      //               }
+                      //             },
+                      //             keyboardType: TextInputType.text,
+                      //             style: const TextStyle(
+                      //               fontFamily: "Poppins",
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ]),
+                      //     ]),
+                      //   ),
+                      // ),
                       Card(
                         margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                         elevation: 0.9,
@@ -964,65 +1023,7 @@ class _LoansPageState extends State<LoansPage> {
                               left: 20, right: 20, top: 30, bottom: 30),
                           child: Column(children: [
                             const Text(
-                                '6. What is the legal structure of your business (sole proprietorship, partnership, LLC, etc.)?'),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Row(mainAxisSize: MainAxisSize.min, children: [
-                              Flexible(
-                                child: TextFormField(
-                                  controller: _legalController,
-                                  decoration: InputDecoration(
-                                    hintText: 'Legal structure',
-                                    contentPadding:
-                                    const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-
-                                    hintStyle: const TextStyle(
-                                        fontSize: 13, color: Colors.grey),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      borderSide: const BorderSide(
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      borderSide: const BorderSide(
-                                        color: Colors.grey,
-                                        width: 1.0,
-                                      ),
-                                    ),
-                                    //fillColor: Colors.green
-                                  ),
-                                  validator: (val) {
-                                    if (val!.length == 0) {
-                                      return "Field cannot be empty";
-                                    } else {
-                                      return null;
-                                    }
-                                  },
-                                  keyboardType: TextInputType.text,
-                                  style: const TextStyle(
-                                    fontFamily: "Poppins",
-                                  ),
-                                ),
-                              ),
-                            ]),
-                          ]),
-                        ),
-                      ),
-                      Card(
-                        margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                        elevation: 0.9,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column(children: [
-                            const Text(
-                                '7. What is the purpose of the loan? (e.g., working capital, equipment purchase, expansion, etc.)'),
+                                '6. What is the purpose of the loan? (e.g., working capital, equipment purchase, expansion, etc.)'),
                             const SizedBox(
                               height: 8,
                             ),
@@ -1139,7 +1140,7 @@ class _LoansPageState extends State<LoansPage> {
                           child: Column(children: [
                             const SizedBox(height: 16.0),
                             const Text(
-                                '8. How will the loan funds be used to benefit your business?'),
+                                '7. How will the loan funds be used to benefit your business?'),
                             const SizedBox(
                               height: 8,
                             ),
@@ -1198,7 +1199,7 @@ class _LoansPageState extends State<LoansPage> {
                           child: Column(children: [
                             const SizedBox(height: 16.0),
                             const Text(
-                                '9. Can you provide a brief overview of your business, including its products or services?'),
+                                '8. Can you provide a brief overview of your business, including its products or services?'),
                             const SizedBox(
                               height: 8,
                             ),
@@ -1257,7 +1258,7 @@ class _LoansPageState extends State<LoansPage> {
                           child: Column(children: [
                             const SizedBox(height: 16.0),
                             const Text(
-                                '10. What is your business\'s annual revenue and net profit (if applicable)?'),
+                                '9. What is your business\'s annual revenue and net profit (if applicable)?'),
                             const SizedBox(
                               height: 8,
                             ),
@@ -1320,7 +1321,7 @@ class _LoansPageState extends State<LoansPage> {
                                 Row(
                                   children: [
                                     Text(
-                                      "11. Do you have any existing loans or \n outstanding debts related \n to your business?",
+                                      "10. Do you have any existing loans or \n outstanding debts related \n to your business?",
                                       style: Theme.of(context)
                                           .textTheme
                                           .subtitle2!
@@ -1364,10 +1365,10 @@ class _LoansPageState extends State<LoansPage> {
                                   ),
                                   leading: Radio(
                                     value: 0,
-                                    groupValue: collateral,
+                                    groupValue: existing,
                                     onChanged: (int? value) {
                                       setState(() {
-                                        collateral = value!;
+                                        existing = value!;
                                       });
                                     },
                                   ),
@@ -1390,7 +1391,7 @@ class _LoansPageState extends State<LoansPage> {
                                 Row(
                                   children: [
                                     Text(
-                                      "12. Are you willing to provide \n collateral or a personal guarantee \n for the loan?' ",
+                                      "11. Are you willing to provide \n collateral or a personal guarantee \n for the loan?' ",
                                       style: Theme.of(context)
                                           .textTheme
                                           .subtitle2!
@@ -1460,7 +1461,7 @@ class _LoansPageState extends State<LoansPage> {
                                 Row(
                                   children: [
                                     Text(
-                                      "13. Have you previously \n  applied for a business loan?  ",
+                                      "12. Have you previously \n  applied for a business loan?  ",
                                       style: Theme.of(context)
                                           .textTheme
                                           .subtitle2!
@@ -1530,7 +1531,7 @@ class _LoansPageState extends State<LoansPage> {
                                 Row(
                                   children: [
                                     Text(
-                                      "14. Can you provide financial \n statements for your business, \n such as income statements \n and balance sheets?",
+                                      "13. Can you provide financial \n statements for your business, \n such as income statements \n and balance sheets?",
                                       style: Theme.of(context)
                                           .textTheme
                                           .subtitle2!
@@ -1597,7 +1598,7 @@ class _LoansPageState extends State<LoansPage> {
                           child: Column(children: [
                             const SizedBox(height: 16.0),
                             const Text(
-                                '15. How many employees do you currently have, and do you plan to hire additional staff with the loan funds?'),
+                                '14. How many employees do you currently have, and do you plan to hire additional staff with the loan funds?'),
                             const SizedBox(
                               height: 8,
                             ),
@@ -1656,7 +1657,7 @@ class _LoansPageState extends State<LoansPage> {
                           child: Column(children: [
                             const SizedBox(height: 16.0),
                             const Text(
-                                '16. Are you currently experiencing any financial challenges or legal issues related to your business? Elaborate each '),
+                                '15. Are you currently experiencing any financial challenges or legal issues related to your business? Elaborate each '),
                             const SizedBox(
                               height: 8,
                             ),
@@ -1718,7 +1719,7 @@ class _LoansPageState extends State<LoansPage> {
                                 Row(
                                   children: [
                                     Text(
-                                      "17. Do you have a business plan or \n strategy for growth and sustainability? ",
+                                      "16. Do you have a business plan or \n strategy for growth and sustainability? ",
                                       style: Theme.of(context)
                                           .textTheme
                                           .subtitle2!
@@ -1785,7 +1786,7 @@ class _LoansPageState extends State<LoansPage> {
                           child: Column(children: [
                             const SizedBox(height: 16.0),
                             const Text(
-                                '18. What sets your business apart from competitors in your industry?'),
+                                '17. What sets your business apart from competitors in your industry?'),
                             const SizedBox(
                               height: 8,
                             ),
@@ -1847,7 +1848,7 @@ class _LoansPageState extends State<LoansPage> {
                                 Row(
                                   children: [
                                     Text(
-                                      "19. Are you involved in any \n women-focused or \n community initiatives?",
+                                      "18. Are you involved in any \n women-focused or \n community initiatives?",
                                       style: Theme.of(context)
                                           .textTheme
                                           .subtitle2!
@@ -1917,7 +1918,7 @@ class _LoansPageState extends State<LoansPage> {
                                 Row(
                                   children: [
                                     Text(
-                                      "20. Can you provide references from \n clients,  suppliers, or partners who \n can vouch  for your  business\'s \n reliability?",
+                                      "19. Can you provide references from \n clients,  suppliers, or partners who \n can vouch  for your  business\'s \n reliability?",
                                       style: Theme.of(context)
                                           .textTheme
                                           .subtitle2!
@@ -1984,7 +1985,7 @@ class _LoansPageState extends State<LoansPage> {
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
-                                    "21. Have you participated in any business or entrepreneurship training programs?"),
+                                    "20. Have you participated in any business or entrepreneurship training programs?"),
                                 const SizedBox(
                                   height: 8,
                                 ),
@@ -2040,7 +2041,7 @@ class _LoansPageState extends State<LoansPage> {
                           child: Column(children: [
                             const SizedBox(height: 16.0),
                             const Text(
-                                '22. How do you plan to market and promote your business in the future?'),
+                                '21. How do you plan to market and promote your business in the future?'),
                             const SizedBox(
                               height: 8,
                             ),
@@ -2099,7 +2100,7 @@ class _LoansPageState extends State<LoansPage> {
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
-                                    "23. Are you willing to work with a business mentor or advisor, if offered?"),
+                                    "22. Are you willing to work with a business mentor or advisor, if offered?"),
                                 const SizedBox(
                                   height: 8,
                                 ),
@@ -2155,7 +2156,7 @@ class _LoansPageState extends State<LoansPage> {
                           child: Column(children: [
                             const SizedBox(height: 16.0),
                             const Text(
-                                '24. Is there any additional information you would like to provide to support your loan application?'),
+                                '23. Is there any additional information you would like to provide to support your loan application?'),
                             const SizedBox(
                               height: 8,
                             ),
@@ -2215,7 +2216,7 @@ class _LoansPageState extends State<LoansPage> {
                               child: Column(
                                 children: [
                                   const Text(
-                                      '25. Attach the following documents either as .docx, pdf,  or png'),
+                                      '24. Attach the following documents either as .docx, pdf,  or png'),
                                   // FormBuilderTextField(
                                   //   name: 'businessPlan',
                                   //   decoration: const InputDecoration(labelText: ''),

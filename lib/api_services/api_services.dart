@@ -14,6 +14,7 @@ import 'package:she_banks/models/loan_types.dart';
 import 'package:she_banks/models/loginModel.dart';
 import 'package:she_banks/models/model_user.dart';
 import 'package:she_banks/models/seedModel.dart';
+import 'package:she_banks/models/sheSuccess.dart';
 
 import '../models/Error.dart';
 import '../models/FirebaseModel.dart';
@@ -282,7 +283,7 @@ class ApiServices {
     debugPrint('Seed Fund Response is>>>>${response.body}');
 
     if (response.statusCode == 200) {
-      return SuccessModel.fromJson(jsonDecode(response.body));
+      return SheSuccess.fromJson(jsonDecode(response.body));
     } else {
       return ErrorP.fromJson(jsonDecode(response.body));
     }
