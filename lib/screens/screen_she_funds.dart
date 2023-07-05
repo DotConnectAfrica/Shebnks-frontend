@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:she_banks/api_services/api_services.dart';
+import 'package:she_banks/screens/recent_winners_webview.dart';
 import 'package:she_banks/screens/screen_she_funds_apply.dart';
 
 class ScreenSheFunds extends StatefulWidget {
@@ -47,283 +48,362 @@ class _ScreenSheFundsState extends State<ScreenSheFunds> {
         ),
         body: seedFundOpen == false
             ? Center(
-                child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  children: [
-                    Image.asset("assets/images/closed.png"),
-                    const Text(
-                      'The seedfund application has been closed, Wait for the next seedfund to open',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ],
-                ),
-              ))
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                children: [
+                  Image.asset("assets/images/closed.png"),
+                  const Text(
+                    'The seedfund application has been closed, Wait for the next seedfund to open',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ],
+              ),
+            ))
             : SingleChildScrollView(
-                physics: const ScrollPhysics(),
-                child: SafeArea(
-                  top: true,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                        child: Card(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            side: const BorderSide(
-                                color: Colors.white70, width: 1),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                            child: GestureDetector(
-                              onTap: () async {
-                                Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        AddSeed(),
-                                  ),
-                                );
+          physics: const ScrollPhysics(),
+          child: SafeArea(
+            top: true,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                  child: Card(
+                    color: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      side: const BorderSide(
+                          color: Colors.white70, width: 1),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                      child: GestureDetector(
+                        onTap: () async {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  AddSeed(),
+                            ),
+                          );
 
-                                // if (!seedFundOpen &&
-                                //     !hasNotAppliedBefore) {
-                                //   final snackBar = SnackBar(
-                                //     behavior: SnackBarBehavior.floating,
-                                //     content: Text(
-                                //         'The seedfund application has been closed,Wait for the next seedfund to open'),
-                                //     duration: Duration(seconds: 4),
-                                //   );
-                                //   ScaffoldMessenger.of(context)
-                                //       .showSnackBar(snackBar);
-                                //   return;
-                                // }
-                                // if (hasNotAppliedBefore) {
-                                //   Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) => AddSeed(
-                                //           onSuccesfull: (bool) {
-                                //             print(
-                                //                 "the value is $bool");
-                                //             setState(() {
-                                //               isLoading = true;
-                                //             });
-                                //             getData()
-                                //                 .then((value) => {
-                                //               setState(() {
-                                //                 if (value) {
-                                //                   isLoading =
-                                //                   false;
-                                //                 } else {
-                                //                   isLoading =
-                                //                   false;
-                                //                 }
-                                //               })
-                                //             });
-                                //           },
-                                //         )),
-                                //   );
-                                // } else {
-                                //   final snackBar = SnackBar(
-                                //     behavior: SnackBarBehavior.floating,
-                                //     content: Text(
-                                //         'You already have an active seedfund application'),
-                                //     duration: Duration(seconds: 3),
-                                //   );
-                                //   ScaffoldMessenger.of(context)
-                                //       .showSnackBar(snackBar);
-                                // }
-                              },
-                              child: Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    Expanded(
-                                        child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          constraints: const BoxConstraints(
-                                              minWidth: 100, maxWidth: 150),
-                                          child: const Text(
-                                            'Apply for seed fund',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 20,
-                                                color: Colors.black),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Container(
-                                            constraints: const BoxConstraints(
-                                                minWidth: 100, maxWidth: 150),
-                                            child: const Text(
-                                              'View active SHEfunds inorder to receive funding for projects',
-                                              overflow: TextOverflow.clip,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 15,
-                                                  fontWeight:
-                                                      FontWeight.normal),
-                                            )),
-                                      ],
-                                    )),
-                                    Expanded(
-                                        child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 0, 0, 0),
-                                      child: Image.asset(
-                                        'assets/images/rising_trend_of_money_funds.png',
-                                        fit: BoxFit.fill,
-                                        width: 140,
-                                        height: 140,
-                                      ),
-                                    ))
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                        child: GestureDetector(
-                          child: Card(
-                            color: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              side: const BorderSide(
-                                  color: Colors.white70, width: 1),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                              child: Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    Expanded(
-                                        child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          'View progress',
+                          // if (!seedFundOpen &&
+                          //     !hasNotAppliedBefore) {
+                          //   final snackBar = SnackBar(
+                          //     behavior: SnackBarBehavior.floating,
+                          //     content: Text(
+                          //         'The seedfund application has been closed,Wait for the next seedfund to open'),
+                          //     duration: Duration(seconds: 4),
+                          //   );
+                          //   ScaffoldMessenger.of(context)
+                          //       .showSnackBar(snackBar);
+                          //   return;
+                          // }
+                          // if (hasNotAppliedBefore) {
+                          //   Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => AddSeed(
+                          //           onSuccesfull: (bool) {
+                          //             print(
+                          //                 "the value is $bool");
+                          //             setState(() {
+                          //               isLoading = true;
+                          //             });
+                          //             getData()
+                          //                 .then((value) => {
+                          //               setState(() {
+                          //                 if (value) {
+                          //                   isLoading =
+                          //                   false;
+                          //                 } else {
+                          //                   isLoading =
+                          //                   false;
+                          //                 }
+                          //               })
+                          //             });
+                          //           },
+                          //         )),
+                          //   );
+                          // } else {
+                          //   final snackBar = SnackBar(
+                          //     behavior: SnackBarBehavior.floating,
+                          //     content: Text(
+                          //         'You already have an active seedfund application'),
+                          //     duration: Duration(seconds: 3),
+                          //   );
+                          //   ScaffoldMessenger.of(context)
+                          //       .showSnackBar(snackBar);
+                          // }
+                        },
+                        child: Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        constraints: const BoxConstraints(
+                                            minWidth: 100, maxWidth: 150),
+                                        child: const Text(
+                                          'Apply for seed fund',
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20,
                                               color: Colors.black),
                                         ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Container(
-                                            constraints: const BoxConstraints(
-                                                minWidth: 100, maxWidth: 150),
-                                            child: const Text(
-                                              'View how your seedfund application is fairing on',
-                                              overflow: TextOverflow.clip,
-                                              style: TextStyle(
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Container(
+                                          constraints: const BoxConstraints(
+                                              minWidth: 100, maxWidth: 150),
+                                          child: const Text(
+                                            'View active SHEfunds inorder to receive funding for projects',
+                                            overflow: TextOverflow.clip,
+                                            style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 15,
-                                                fontWeight: FontWeight.normal,
-                                              ),
-                                            )),
-                                      ],
-                                    )),
-                                    Expanded(
-                                        child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 0, 0, 0),
-                                      child: Image.asset(
-                                        'assets/images/team_5356575.png',
-                                        fit: BoxFit.fill,
-                                        width: 140,
-                                        height: 140,
-                                      ),
-                                    ))
-                                  ],
-                                ),
-                              ),
-                            ),
+                                                fontWeight:
+                                                FontWeight.normal),
+                                          )),
+                                    ],
+                                  )),
+                              Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        20, 0, 0, 0),
+                                    child: Image.asset(
+                                      'assets/images/rising_trend_of_money_funds.png',
+                                      fit: BoxFit.fill,
+                                      width: 140,
+                                      height: 140,
+                                    ),
+                                  ))
+                            ],
                           ),
-                          onTap: () {
-                            debugPrint('token is>>>>>$token');
-                            debugPrint('userId is>>>>>$userId');
-
-                            _apiServices
-                                .checkSeedProgress(userId, token)
-                                .then((value) {
-                                  debugPrint('SeedProgress Value>>>${value.message.toString()}');
-                                  if(value.status == "OK"){
-                                    _showDialog(value.message.toString());
-                                  }
-                                  else{
-                                    _showDialog(value.message.toString());
-                                  }
-                            });
-                          },
                         ),
                       ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'Recent Winners',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              fontSize: 18),
-                        ),
-                      ),
-                      // Padding(
-                      //     padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                      //     child: ListView.builder(
-                      //       shrinkWrap: true,
-                      //       physics: NeverScrollableScrollPhysics(),
-                      //       itemCount: _recent.length,
-                      //       itemBuilder: _buildItemsForListViewRecent,
-                      //     )),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ));
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                  child: GestureDetector(
+                    child: Card(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(
+                            color: Colors.white70, width: 1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                      child: Padding(
+                        padding:
+                        const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                        child: Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'View progress',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
+                                            color: Colors.black),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Container(
+                                          constraints: const BoxConstraints(
+                                              minWidth: 100, maxWidth: 150),
+                                          child: const Text(
+                                            'View how your seedfund application is fairing on',
+                                            overflow: TextOverflow.clip,
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.normal,
+                                            ),
+                                          )),
+                                    ],
+                                  )),
+                              Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        20, 0, 0, 0),
+                                    child: Image.asset(
+                                      'assets/images/team_5356575.png',
+                                      fit: BoxFit.fill,
+                                      width: 140,
+                                      height: 140,
+                                    ),
+                                  ))
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      debugPrint('token is>>>>>$token');
+                      debugPrint('userId is>>>>>$userId');
+
+                      _apiServices
+                          .checkSeedProgress(userId, token)
+                          .then((value) {
+                        debugPrint('SeedProgress Value>>>${value.message.toString()}');
+                        if(value.status == "OK"){
+                          _showDialog(value.message.toString());
+                        }
+                        else{
+                          _showDialog(value.message.toString());
+                        }
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    'Recent Winners',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        fontSize: 18),
+                  ),
+                ),
+
+                Padding(
+                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: itemList.length,
+                        itemBuilder: (BuildContext context, int index){
+                          return ListTile(
+                            title: Padding(
+                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                              child: GestureDetector(
+                                child: Card(
+                                  color: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    side: const BorderSide(
+                                        color: Colors.white70, width: 1),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                  child: Padding(
+                                    padding:
+                                    const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                    child: Container(
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(itemList[index].title, style: const TextStyle(
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 18,
+                                                      color: Colors.black),),
+                                                  const SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                ],
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          RecentWinners( itemList[index].link),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            onTap: () {
+                              // RecentWinners(itemList[index].link);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      RecentWinners( itemList[index].link),
+                                ),
+                              );
+                            },
+                          );
+                        }
+                    )),
+
+
+                const SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
+          ),
+        ));
   }
   void _showDialog(String message){
     showDialog(context: context, builder: (BuildContext context){
       return AlertDialog(
         content: Container(
-          height: MediaQuery.of(context).size.height*0.27,
+            height: MediaQuery.of(context).size.height*0.27,
 
-        child: Column(
-          children: [
-            SizedBox(height: 24,),
+            child: Column(
+                children: [
+                  SizedBox(height: 24,),
 
-            Icon(Icons.warning_amber_rounded, size: 50, color: Colors.pink.shade300,),
-            SizedBox(height: 24,),
-            Text(message),
-          SizedBox(height: 24,),
-          OutlinedButton(onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text('Ok'))
+                  Icon(Icons.warning_amber_rounded, size: 50, color: Colors.pink.shade300,),
+                  SizedBox(height: 24,),
+                  Text(message),
+                  SizedBox(height: 24,),
+                  OutlinedButton(onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                      child: Text('Ok'))
 
-          ]
+                ]
 
-        )),
+            )),
       );
 
     });
   }
 }
+
+class Item {
+  final String title;
+  final String link;
+
+  Item({required this.title, required this.link});
+}
+
+List<Item> itemList = [
+  Item(title: "2022 Miss.Africa Digital Seed Fund Winners", link: "https://missdotafrica.digital/apply-now/2022-miss-africa-digital-seed-fund-winners/"),
+  Item(title: "2019 Miss.Africa Digital Seed Fund Winners", link: "https://missdotafrica.digital/apply-now/2019-miss-africa-digital-seed-fund-winners/"),
+  Item(title: "Winners: 2018 Seed Fund", link: "https://missdotafrica.digital/winners-2018-seed-fund/"),
+  Item(title: "Winners: 2016/17 Seed Fund", link: "https://missdotafrica.digital/winners-2016-17-seed-fund/"),
+  Item(title: "Winners: 2015 Seed Fund", link: "https://missdotafrica.digital/apply-now/winners/"),
+];
