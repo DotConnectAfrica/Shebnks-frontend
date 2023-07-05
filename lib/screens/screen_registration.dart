@@ -1,7 +1,7 @@
 import 'dart:convert';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+//
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
@@ -40,9 +40,9 @@ class _ScreenLoginState extends State<ScreenRegistration> {
   bool is_code_sent = false;
   bool _isLoading= false;
   String? phone, partPhone;
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  FirebaseAuth auth = FirebaseAuth.instance;
-  CollectionReference? users;
+  // FirebaseFirestore firestore = FirebaseFirestore.instance;
+  // FirebaseAuth auth = FirebaseAuth.instance;
+  // CollectionReference? users;
   // final ApiServices _apiServices = ApiServices();
 
   getPhone() async {

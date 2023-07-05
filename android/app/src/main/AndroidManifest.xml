@@ -8,7 +8,9 @@
         </intent>
     </queries>
 
-   <application
+
+
+    <application
         android:label="shebnks"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">

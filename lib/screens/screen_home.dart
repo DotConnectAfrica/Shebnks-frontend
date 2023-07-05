@@ -970,7 +970,7 @@ class _HomescreenState extends State<Homescreen> {
                   if(value.status=='OK'){
                     _showDialog(value.message.toString());
                   }
-                  else{
+                  else if(value.status=='BAD_REQUEST'){
                     _showFailDialog(value.message.toString());
                   }
                 });

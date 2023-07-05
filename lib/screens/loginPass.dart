@@ -38,6 +38,7 @@ class _LoginPassState extends State<LoginPass> {
   var _token;
   var _userId;
   String? encondedLoans;
+  String? dToken;
   List<Question> questions = [];
 
   // List<Loans> loans =[];
@@ -57,6 +58,15 @@ class _LoginPassState extends State<LoginPass> {
     var phone = _prefs.getString("PhoneNumber");
     _mPhone = phone?.replaceAll('+', '');
     return _mPhone;
+  }
+  getDToken() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      dToken = prefs.getString('dToken');
+
+    });
+
+
   }
 
   setLoginState() async {
@@ -99,6 +109,7 @@ class _LoginPassState extends State<LoginPass> {
   void initState() {
     setLoginState();
     getPhone();
+    getDToken();
     // getIQuestions();
     super.initState();
   }
@@ -241,6 +252,7 @@ class _LoginPassState extends State<LoginPass> {
     Map newRequestData = {
       'password': "${_password.toString()}",
       'mobile': "${_phone.toString()}",
+      'deviceToken': dToken
     };
     _apiServices.login(newRequestData).then((value) {
       debugPrint('loginValue...${value}');

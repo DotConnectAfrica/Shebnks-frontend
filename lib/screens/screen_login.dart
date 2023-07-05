@@ -1,8 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:country_list_pick/country_selection_theme.dart';
 import 'package:country_list_pick/support/code_country.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -40,19 +38,30 @@ class _ScreenLoginState extends State<AccountLogin> {
   bool _isLoading = false;
   String phone = "";
   String partPhone = "";
-  FirebaseAuth auth = FirebaseAuth.instance;
+  String? dToken = "";
+  // FirebaseAuth auth = FirebaseAuth.instance;
 
   //FirebaseFirestore firestore = FirebaseFirestore.instance;
-  CollectionReference? users;
+  // CollectionReference? users;
   String? country_code = '+254';
 
   adddPhoneNumber(String mPhone) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("PhoneNumber", mPhone);
   }
+  getDToken() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      dToken = prefs.getString('dToken');
+
+    });
+
+
+  }
 
   @override
   void initState() {
+    getDToken();
     // TODO: implement initState
     super.initState();
     //_get_country_code();

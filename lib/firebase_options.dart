@@ -44,44 +44,40 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBn27JD52Ctl3rPYd6oElerGyHHdAB7cUQ',
-    appId: '1:598559610460:web:f9e559ef3935a3e939f899',
-    messagingSenderId: '598559610460',
-    projectId: 'shebnksapp',
-    authDomain: 'shebnksapp.firebaseapp.com',
-    databaseURL: 'https://shebnksapp-default-rtdb.firebaseio.com',
-    storageBucket: 'shebnksapp.appspot.com',
-    measurementId: 'G-9QR1SP0N06',
+    apiKey: 'AIzaSyBuFXYEL-nyyBew7qdkwWYPfK2VOi9bx50',
+    appId: '1:278910685584:web:01c9a488eae06b65a5e315',
+    messagingSenderId: '278910685584',
+    projectId: 'shebanks-mobile-app',
+    authDomain: 'shebanks-mobile-app.firebaseapp.com',
+    storageBucket: 'shebanks-mobile-app.appspot.com',
+    measurementId: 'G-QL781RFG9S',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAME47KafkhVo9SsT27lghyq6yG1u1P_9o',
-    appId: '1:865239668665:android:60717000cc72b682480868',
-    messagingSenderId: '865239668665',
-    projectId: 'shebanks-d375c',
-    databaseURL: 'https://shebanks-d375c-default-rtdb.firebaseio.com/',
-    storageBucket: 'gs://shebanks-d375c.appspot.com',
+    apiKey: 'AIzaSyDOZb1JZqao6pSbuFToPAgVlpvmeQWBeHg',
+    appId: '1:278910685584:android:f4ceca9674a5e055a5e315',
+    messagingSenderId: '278910685584',
+    projectId: 'shebanks-mobile-app',
+    storageBucket: 'shebanks-mobile-app.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyC7AyhZbZeUl65XCX_naOGZJZrgEKWUAMA',
-    appId: '1:598559610460:ios:5a79ec7c2186615939f899',
-    messagingSenderId: '598559610460',
-    projectId: 'shebnksapp',
-    databaseURL: 'https://shebnksapp-default-rtdb.firebaseio.com',
-    storageBucket: 'shebnksapp.appspot.com',
-    iosClientId: '598559610460-hc91iagqhv5ll9gr8ufjic6senac9k71.apps.googleusercontent.com',
+    apiKey: 'AIzaSyCjVxbn1grcVQiIHpssm6rQ1zztCSl9niA',
+    appId: '1:278910685584:ios:4e20ea6de23f5c42a5e315',
+    messagingSenderId: '278910685584',
+    projectId: 'shebanks-mobile-app',
+    storageBucket: 'shebanks-mobile-app.appspot.com',
+    iosClientId: '278910685584-of5rsf9b9rv009dml44mgddbqjmvn03g.apps.googleusercontent.com',
     iosBundleId: 'org.dotconnectafrica.shebnks',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyC7AyhZbZeUl65XCX_naOGZJZrgEKWUAMA',
-    appId: '1:598559610460:ios:5a79ec7c2186615939f899',
-    messagingSenderId: '598559610460',
-    projectId: 'shebnksapp',
-    databaseURL: 'https://shebnksapp-default-rtdb.firebaseio.com',
-    storageBucket: 'shebnksapp.appspot.com',
-    iosClientId: '598559610460-hc91iagqhv5ll9gr8ufjic6senac9k71.apps.googleusercontent.com',
+    apiKey: 'AIzaSyCjVxbn1grcVQiIHpssm6rQ1zztCSl9niA',
+    appId: '1:278910685584:ios:4e20ea6de23f5c42a5e315',
+    messagingSenderId: '278910685584',
+    projectId: 'shebanks-mobile-app',
+    storageBucket: 'shebanks-mobile-app.appspot.com',
+    iosClientId: '278910685584-of5rsf9b9rv009dml44mgddbqjmvn03g.apps.googleusercontent.com',
     iosBundleId: 'org.dotconnectafrica.shebnks',
   );
 }

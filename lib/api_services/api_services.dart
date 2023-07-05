@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -42,7 +42,7 @@ class ApiServices {
   // final String base_url = 'http://192.168.29.238:8080/she/api/v1';
 
   // /auth/login';
-  FirebaseAuth auth = FirebaseAuth.instance;
+  // FirebaseAuth auth = FirebaseAuth.instance;
 
   Future requestOtp(String mobile) async {
     String url = base_url + '/user/auth/otp/${mobile}';

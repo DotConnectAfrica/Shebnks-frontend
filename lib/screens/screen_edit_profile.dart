@@ -1,5 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -49,9 +48,9 @@ class _MyAccountState extends State<ScreenEditProfile> {
   final TextEditingController controller_email = TextEditingController();
   final TextEditingController controller_id_number = TextEditingController();
 
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  FirebaseAuth auth = FirebaseAuth.instance;
-  CollectionReference? users;
+  // FirebaseFirestore firestore = FirebaseFirestore.instance;
+  // FirebaseAuth auth = FirebaseAuth.instance;
+  // CollectionReference? users;
   // ModelUser? user;
 
   getToken() async {

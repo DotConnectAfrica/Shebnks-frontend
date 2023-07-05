@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen>
   late AnimationController _anime_controller;
   late bool? userExists;
 
-  FirebaseAuth auth = FirebaseAuth.instance;
+  // FirebaseAuth auth = FirebaseAuth.instance;
 
   // CollectionReference? users;
   setUserBool() async{
@@ -60,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   _move_to_next() {
     const duration = 3;
-    var user = auth.currentUser;
+    // var user = auth.currentUser;
 
     Timer(Duration(seconds: duration), () async {
       // var user = auth.currentUser;
