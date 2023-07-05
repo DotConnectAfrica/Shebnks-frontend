@@ -104,7 +104,7 @@ class _LoansPageState extends State<LoansPage> {
   TextEditingController _statementController = TextEditingController();
   TextEditingController _employeeNoController = TextEditingController();
   TextEditingController _financialChallengesController =
-      TextEditingController();
+  TextEditingController();
   TextEditingController _bplanController = TextEditingController();
   TextEditingController _competitorController = TextEditingController();
   TextEditingController _womenController = TextEditingController();
@@ -192,10 +192,6 @@ class _LoansPageState extends State<LoansPage> {
 
         'amount': amount,
         "survey": {
-          'financialStatement':financialStmt,
-          'taxCompliance':taxCompliance,
-          'coInvestorStatement':coInvestorStmt,
-          'businessPlan':businessPlan,
           'womanOwned': isWomanOwned==1,
           'howLong': howLong,
           'legal': legal,
@@ -219,6 +215,10 @@ class _LoansPageState extends State<LoansPage> {
           'training': programs==1,
           'mentor': mentor==1,
           'otherInfo': otherInfo,
+          'financialStatement':financialStmt,
+          'taxCompliance':taxCompliance,
+          'coInvestorStatement':coInvestorStmt,
+          'businessPlan':businessPlan,
         }
       };
       _apiServices
@@ -337,7 +337,7 @@ class _LoansPageState extends State<LoansPage> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.all(Radius.circular(10.0))),
+                            BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
@@ -363,14 +363,14 @@ class _LoansPageState extends State<LoansPage> {
                                           fontSize: 13, color: Colors.grey),
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius:
-                                            BorderRadius.circular(8.0),
+                                        BorderRadius.circular(8.0),
                                         borderSide: const BorderSide(
                                           color: Colors.grey,
                                         ),
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius:
-                                            BorderRadius.circular(8.0),
+                                        BorderRadius.circular(8.0),
                                         borderSide: const BorderSide(
                                           color: Colors.grey,
                                           width: 1.0,
@@ -648,7 +648,7 @@ class _LoansPageState extends State<LoansPage> {
                           elevation: 0.9,
                           shape: const RoundedRectangleBorder(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0))),
+                              BorderRadius.all(Radius.circular(10.0))),
                           child: Padding(
                             padding: const EdgeInsets.only(
                                 left: 20, right: 20, top: 30, bottom: 30),
@@ -662,7 +662,7 @@ class _LoansPageState extends State<LoansPage> {
                                         .subtitle2!
                                         .copyWith(),
                                     text:
-                                        "5. Which SDGs are you primarily targeting? (Please fill multiple if necessary) ?",
+                                    "5. Which SDGs are you primarily targeting? (Please fill multiple if necessary) ?",
                                     children: <TextSpan>[
                                       TextSpan(
                                           text: '*',
@@ -707,7 +707,7 @@ class _LoansPageState extends State<LoansPage> {
                                 ),
                                 CheckboxListTile(
                                   title:
-                                      const Text('Good health and wellbeing'),
+                                  const Text('Good health and wellbeing'),
                                   value: selectedCategories2
                                       .contains("Good health and wellbeing"),
                                   activeColor: const Color(0xffed39ca),
@@ -759,7 +759,7 @@ class _LoansPageState extends State<LoansPage> {
                                 ),
                                 CheckboxListTile(
                                   title:
-                                      const Text('Clean water and Sanitation'),
+                                  const Text('Clean water and Sanitation'),
                                   value: selectedCategories2
                                       .contains("Clean water and Sanitation"),
                                   activeColor: const Color(0xffed39ca),
@@ -777,7 +777,7 @@ class _LoansPageState extends State<LoansPage> {
                                 ),
                                 CheckboxListTile(
                                   title:
-                                      const Text('Affordable and Clean energy'),
+                                  const Text('Affordable and Clean energy'),
                                   value: selectedCategories2
                                       .contains("Affordable and Clean energy"),
                                   activeColor: const Color(0xffed39ca),
@@ -919,7 +919,7 @@ class _LoansPageState extends State<LoansPage> {
                                 ),
                                 CheckboxListTile(
                                   controlAffinity:
-                                      ListTileControlAffinity.trailing,
+                                  ListTileControlAffinity.trailing,
                                   title: const Text('Others'),
                                   value: isOtherEnabled2,
                                   activeColor: const Color(0xffed39ca),
@@ -936,8 +936,8 @@ class _LoansPageState extends State<LoansPage> {
                                       controller: _industryController,
                                       validator: (value) => isOtherEnabled2
                                           ? value!.isEmpty
-                                              ? "this field is required"
-                                              : null
+                                          ? "this field is required"
+                                          : null
                                           : null,
                                       enabled: isOtherEnabled,
                                       decoration: const InputDecoration(
@@ -1365,10 +1365,10 @@ class _LoansPageState extends State<LoansPage> {
                                   ),
                                   leading: Radio(
                                     value: 0,
-                                    groupValue: existing,
+                                    groupValue: collateral,
                                     onChanged: (int? value) {
                                       setState(() {
-                                        existing = value!;
+                                        collateral = value!;
                                       });
                                     },
                                   ),
@@ -2328,25 +2328,25 @@ class _LoansPageState extends State<LoansPage> {
                         // right: MediaQuery.of(context).size.width * 0.3),
                         child: _isLoading
                             ? SpinKitCircle(
-                                color: Color(0xffed39ca),
-                              )
+                          color: Color(0xffed39ca),
+                        )
                             : OutlinedButton(
-                                onPressed: () {
-                                  _submitForm();
-                                },
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all<Color>(
-                                          Color(0xffed39ca)),
-                                  shape: MaterialStateProperty.all(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(50.0)),
-                                  ),
-                                ),
-                                // style: ,
-                                child: const Text('Apply Loan', style:TextStyle(color: Colors.white)),
-                              ),
+                          onPressed: () {
+                            _submitForm();
+                          },
+                          style: ButtonStyle(
+                            backgroundColor:
+                            MaterialStateProperty.all<Color>(
+                                Color(0xffed39ca)),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.circular(50.0)),
+                            ),
+                          ),
+                          // style: ,
+                          child: const Text('Apply Loan', style:TextStyle(color: Colors.white)),
+                        ),
                       ),
                       const SizedBox(
                         height: 16,

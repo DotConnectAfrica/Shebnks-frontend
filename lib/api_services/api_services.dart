@@ -14,7 +14,6 @@ import 'package:she_banks/models/loan_types.dart';
 import 'package:she_banks/models/loginModel.dart';
 import 'package:she_banks/models/model_user.dart';
 import 'package:she_banks/models/seedModel.dart';
-import 'package:she_banks/models/sheSuccess.dart';
 
 import '../models/Error.dart';
 import '../models/FirebaseModel.dart';
@@ -193,7 +192,7 @@ class ApiServices {
     }
   }
 
-   submit_iq( iq_body, String _token, String _userId) async {
+  submit_iq( Map iq_body, String _token, String _userId) async {
     String url = '${base_url}/iq/create/$_userId';
     print('id$_userId');
     print('token$_token');
@@ -210,7 +209,7 @@ class ApiServices {
       debugPrint('requestbodyisss......' + '${iq_body}');
 
       final response =
-          await http.post(Uri.parse(url), headers: headers, body: jsonEncode(iq_body));
+      await http.post(Uri.parse(url), headers: headers, body: jsonEncode(iq_body));
       debugPrint('IQ Response>>>>>>>${response.body}');
       if(response.statusCode == 200){
         return SuccessModel.fromJson(jsonDecode(response.body));
@@ -283,7 +282,7 @@ class ApiServices {
     debugPrint('Seed Fund Response is>>>>${response.body}');
 
     if (response.statusCode == 200) {
-      return SheSuccess.fromJson(jsonDecode(response.body));
+      return SuccessModel.fromJson(jsonDecode(response.body));
     } else {
       return ErrorP.fromJson(jsonDecode(response.body));
     }

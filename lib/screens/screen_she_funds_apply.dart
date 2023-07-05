@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:form_builder_file_picker/form_builder_file_picker.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -28,6 +29,7 @@ class _AddSeedState extends State<AddSeed> {
   final _formKey = GlobalKey<FormState>();
   String? businessPlan, bPlanFilePath;
   String? coInvestorStmt, coFilePath;
+  bool isloading = false;
   bool hasAttachmentBp = false;
   bool hasAttachmentCo = false;
   bool hasAttachmentFi = false;
@@ -141,7 +143,7 @@ class _AddSeedState extends State<AddSeed> {
                             elevation: 0.9,
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                             child: Padding(
                               padding: const EdgeInsets.only(
                                   left: 20, right: 20, top: 30, bottom: 30),
@@ -174,8 +176,8 @@ class _AddSeedState extends State<AddSeed> {
                                         .textTheme
                                         .subtitle2!
                                         .copyWith(
-                                            color: Colors.red,
-                                            fontWeight: FontWeight.bold),
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold),
                                   )
                                 ],
                               ),
@@ -201,7 +203,7 @@ class _AddSeedState extends State<AddSeed> {
                             elevation: 0.9,
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                             child: Padding(
                               padding: const EdgeInsets.only(
                                   left: 20, right: 20, top: 30, bottom: 30),
@@ -215,7 +217,7 @@ class _AddSeedState extends State<AddSeed> {
                                           .subtitle2!
                                           .copyWith(),
                                       text:
-                                          "1. Tell us about your organization or Project (Applicant expected to give the name, size, current residence and any other information)",
+                                      "1. Tell us about your organization or Project (Applicant expected to give the name, size, current residence and any other information)",
                                       children: <TextSpan>[
                                         TextSpan(
                                             text: '*',
@@ -243,7 +245,7 @@ class _AddSeedState extends State<AddSeed> {
                             elevation: 0.9,
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                             child: Padding(
                               padding: const EdgeInsets.only(
                                   left: 20, right: 20, top: 30, bottom: 30),
@@ -257,7 +259,7 @@ class _AddSeedState extends State<AddSeed> {
                                           .subtitle2!
                                           .copyWith(),
                                       text:
-                                          "2. Who is the trusted founder(s) or Leader? (Please include phone number and email address and separate eact founder by comma)",
+                                      "2. Who is the trusted founder(s) or Leader? (Please include phone number and email address and separate eact founder by comma)",
                                       children: <TextSpan>[
                                         TextSpan(
                                             text: '*',
@@ -275,7 +277,7 @@ class _AddSeedState extends State<AddSeed> {
                                         : null,
                                     decoration: const InputDecoration(
                                         hintText:
-                                            " Who is the trusted founder(s) or Leader? (Please include phone number and email address)"),
+                                        " Who is the trusted founder(s) or Leader? (Please include phone number and email address)"),
                                   )
                                 ],
                               ),
@@ -286,7 +288,7 @@ class _AddSeedState extends State<AddSeed> {
                             elevation: 0.9,
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                             child: Padding(
                               padding: const EdgeInsets.only(
                                   left: 20, right: 20, top: 30, bottom: 30),
@@ -300,7 +302,7 @@ class _AddSeedState extends State<AddSeed> {
                                           .subtitle2!
                                           .copyWith(),
                                       text:
-                                          "3. Which sector does your business operate in(Please fill multiple if necessary) ?",
+                                      "3. Which sector does your business operate in(Please fill multiple if necessary) ?",
                                       children: <TextSpan>[
                                         TextSpan(
                                             text: '*',
@@ -329,7 +331,7 @@ class _AddSeedState extends State<AddSeed> {
                                   ),
                                   CheckboxListTile(
                                     title:
-                                        const Text('Building and Construction'),
+                                    const Text('Building and Construction'),
                                     value: selectedCategories
                                         .contains("Building and Construction"),
                                     activeColor: const Color(0xffed39ca),
@@ -397,7 +399,7 @@ class _AddSeedState extends State<AddSeed> {
                                   CheckboxListTile(
                                     title: const Text('Health'),
                                     value:
-                                        selectedCategories.contains("Health"),
+                                    selectedCategories.contains("Health"),
                                     activeColor: const Color(0xffed39ca),
                                     onChanged: (bool? value) {
                                       setState(() {
@@ -446,7 +448,7 @@ class _AddSeedState extends State<AddSeed> {
                                   CheckboxListTile(
                                     title: const Text('Service'),
                                     value:
-                                        selectedCategories.contains("Service"),
+                                    selectedCategories.contains("Service"),
                                     activeColor: const Color(0xffed39ca),
                                     onChanged: (bool? value) {
                                       setState(() {
@@ -460,7 +462,7 @@ class _AddSeedState extends State<AddSeed> {
                                   ),
                                   CheckboxListTile(
                                     controlAffinity:
-                                        ListTileControlAffinity.trailing,
+                                    ListTileControlAffinity.trailing,
                                     title: const Text('Others'),
                                     value: isOtherEnabled,
                                     activeColor: const Color(0xffed39ca),
@@ -477,13 +479,13 @@ class _AddSeedState extends State<AddSeed> {
                                         controller: sectorsController,
                                         validator: (value) => isOtherEnabled
                                             ? value!.isEmpty
-                                                ? "this field is required"
-                                                : null
+                                            ? "this field is required"
+                                            : null
                                             : null,
                                         enabled: isOtherEnabled,
                                         decoration: const InputDecoration(
                                           labelText:
-                                              'Enter others here(seperate wtih comma)',
+                                          'Enter others here(seperate wtih comma)',
                                           labelStyle: TextStyle(
                                             color: Colors.black,
                                           ),
@@ -502,7 +504,7 @@ class _AddSeedState extends State<AddSeed> {
                             elevation: 0.9,
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                             child: Padding(
                               padding: const EdgeInsets.only(
                                   left: 20, right: 20, top: 30, bottom: 30),
@@ -529,18 +531,18 @@ class _AddSeedState extends State<AddSeed> {
                                   ),
                                   ListTile(
                                     contentPadding:
-                                        const EdgeInsets.only(left: 0),
+                                    const EdgeInsets.only(left: 0),
                                     title: Text(
                                       'Yes',
                                       style:
-                                          Theme.of(context).textTheme.subtitle1,
+                                      Theme.of(context).textTheme.subtitle1,
                                     ),
                                     leading: Radio(
                                       value: 1,
                                       groupValue: isWomanOwned,
                                       onChanged: (int? value) {
                                         setState(
-                                          () {
+                                              () {
                                             isWomanOwned = value!;
                                           },
                                         );
@@ -549,11 +551,11 @@ class _AddSeedState extends State<AddSeed> {
                                   ),
                                   ListTile(
                                     contentPadding:
-                                        const EdgeInsets.only(left: 0, top: 0),
+                                    const EdgeInsets.only(left: 0, top: 0),
                                     title: Text(
                                       'No',
                                       style:
-                                          Theme.of(context).textTheme.subtitle1,
+                                      Theme.of(context).textTheme.subtitle1,
                                     ),
                                     leading: Radio(
                                       value: 0,
@@ -574,7 +576,7 @@ class _AddSeedState extends State<AddSeed> {
                             elevation: 0.9,
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                             child: Padding(
                               padding: const EdgeInsets.only(
                                   left: 20, right: 20, top: 30, bottom: 30),
@@ -588,7 +590,7 @@ class _AddSeedState extends State<AddSeed> {
                                           .subtitle2!
                                           .copyWith(),
                                       text:
-                                          "5. How is your business/project involved in bridging the gender gap of women in STEM?",
+                                      "5. How is your business/project involved in bridging the gender gap of women in STEM?",
                                       children: <TextSpan>[
                                         TextSpan(
                                             text: '*',
@@ -616,7 +618,7 @@ class _AddSeedState extends State<AddSeed> {
                             elevation: 0.9,
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                             child: Padding(
                               padding: const EdgeInsets.only(
                                   left: 20, right: 20, top: 30, bottom: 30),
@@ -660,7 +662,7 @@ class _AddSeedState extends State<AddSeed> {
                             elevation: 0.9,
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                             child: Padding(
                               padding: const EdgeInsets.only(
                                   left: 20, right: 20, top: 30, bottom: 30),
@@ -702,7 +704,7 @@ class _AddSeedState extends State<AddSeed> {
                             elevation: 0.9,
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                             child: Padding(
                               padding: const EdgeInsets.only(
                                   left: 20, right: 20, top: 30, bottom: 30),
@@ -716,7 +718,7 @@ class _AddSeedState extends State<AddSeed> {
                                           .subtitle2!
                                           .copyWith(),
                                       text:
-                                          "8. How does your business/project market or plan to market its products and services?",
+                                      "8. How does your business/project market or plan to market its products and services?",
                                       children: <TextSpan>[
                                         TextSpan(
                                             text: '*',
@@ -744,7 +746,7 @@ class _AddSeedState extends State<AddSeed> {
                             elevation: 0.9,
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                             child: Padding(
                               padding: const EdgeInsets.only(
                                   left: 20, right: 20, top: 30, bottom: 30),
@@ -788,7 +790,7 @@ class _AddSeedState extends State<AddSeed> {
                             elevation: 0.9,
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                             child: Padding(
                               padding: const EdgeInsets.only(
                                   left: 20, right: 20, top: 30, bottom: 30),
@@ -802,7 +804,7 @@ class _AddSeedState extends State<AddSeed> {
                                           .subtitle2!
                                           .copyWith(),
                                       text:
-                                          "10. Do you have a proven traction? (Some customers, generating revenue, app downloads etc)",
+                                      "10. Do you have a proven traction? (Some customers, generating revenue, app downloads etc)",
                                       children: <TextSpan>[
                                         TextSpan(
                                             text: '*',
@@ -830,7 +832,7 @@ class _AddSeedState extends State<AddSeed> {
                             elevation: 0.9,
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                             child: Padding(
                               padding: const EdgeInsets.only(
                                   left: 20, right: 20, top: 30, bottom: 30),
@@ -857,11 +859,11 @@ class _AddSeedState extends State<AddSeed> {
                                   ),
                                   ListTile(
                                     contentPadding:
-                                        const EdgeInsets.only(left: 0),
+                                    const EdgeInsets.only(left: 0),
                                     title: Text(
                                       'Yes',
                                       style:
-                                          Theme.of(context).textTheme.subtitle1,
+                                      Theme.of(context).textTheme.subtitle1,
                                     ),
                                     leading: Radio(
                                       value: 1,
@@ -875,11 +877,11 @@ class _AddSeedState extends State<AddSeed> {
                                   ),
                                   ListTile(
                                     contentPadding:
-                                        const EdgeInsets.only(left: 0, top: 0),
+                                    const EdgeInsets.only(left: 0, top: 0),
                                     title: Text(
                                       'No',
                                       style:
-                                          Theme.of(context).textTheme.subtitle1,
+                                      Theme.of(context).textTheme.subtitle1,
                                     ),
                                     leading: Radio(
                                       value: 0,
@@ -900,7 +902,7 @@ class _AddSeedState extends State<AddSeed> {
                             elevation: 0.9,
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                             child: Padding(
                               padding: const EdgeInsets.only(
                                   left: 20, right: 20, top: 30, bottom: 30),
@@ -935,7 +937,7 @@ class _AddSeedState extends State<AddSeed> {
                             elevation: 0.9,
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                             child: Padding(
                               padding: const EdgeInsets.only(
                                   left: 20, right: 20, top: 30, bottom: 30),
@@ -944,7 +946,7 @@ class _AddSeedState extends State<AddSeed> {
                                 child: Column(
                                   children: [
                                     const Text(
-                                        '13. Attach the following documents either as .docx, pdf,  or png'),
+                                        '13. Attach the following documents'),
                                     // FormBuilderTextField(
                                     //   name: 'businessPlan',
                                     //   decoration: const InputDecoration(labelText: ''),
@@ -952,14 +954,14 @@ class _AddSeedState extends State<AddSeed> {
                                     // ),
                                     Column(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                      MainAxisAlignment.start,
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
                                         const Text('Business Plan'),
                                         Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.start,
+                                          MainAxisAlignment.start,
                                           children: [
                                             IconButton(
                                                 onPressed: _pickBPlan,
@@ -967,9 +969,9 @@ class _AddSeedState extends State<AddSeed> {
                                                     Icons.add_circle_outline)),
                                             hasAttachmentBp
                                                 ? const Icon(
-                                                    Icons.file_present,
-                                                    size: 35,
-                                                  )
+                                              Icons.file_present,
+                                              size: 35,
+                                            )
                                                 : const Text('Add File'),
                                           ],
                                         ),
@@ -979,7 +981,7 @@ class _AddSeedState extends State<AddSeed> {
                                         const Text('Financial Statements'),
                                         Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.start,
+                                          MainAxisAlignment.start,
                                           children: [
                                             IconButton(
                                                 onPressed: pickFinancialStmt,
@@ -987,9 +989,9 @@ class _AddSeedState extends State<AddSeed> {
                                                     Icons.add_circle_outline)),
                                             hasAttachmentFi
                                                 ? const Icon(
-                                                    Icons.file_present,
-                                                    size: 35,
-                                                  )
+                                              Icons.file_present,
+                                              size: 35,
+                                            )
                                                 : const Text('Add File'),
                                           ],
                                         ),
@@ -999,7 +1001,7 @@ class _AddSeedState extends State<AddSeed> {
                                         const Text('CoInvestor Statement'),
                                         Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.start,
+                                          MainAxisAlignment.start,
                                           children: [
                                             IconButton(
                                                 onPressed: pickcoInvestorStmt,
@@ -1007,9 +1009,9 @@ class _AddSeedState extends State<AddSeed> {
                                                     Icons.add_circle_outline)),
                                             hasAttachmentCo
                                                 ? const Icon(
-                                                    Icons.file_present,
-                                                    size: 35,
-                                                  )
+                                              Icons.file_present,
+                                              size: 35,
+                                            )
                                                 : const Text('Add File'),
                                           ],
                                         ),
@@ -1018,7 +1020,7 @@ class _AddSeedState extends State<AddSeed> {
                                         ),const Text('Tax Compliance Certificate'),
                                         Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.start,
+                                          MainAxisAlignment.start,
                                           children: [
                                             IconButton(
                                                 onPressed: pickTaxCompliance,
@@ -1026,9 +1028,9 @@ class _AddSeedState extends State<AddSeed> {
                                                     Icons.add_circle_outline)),
                                             hasAttachmentTx
                                                 ? const Icon(
-                                                    Icons.file_present,
-                                                    size: 35,
-                                                  )
+                                              Icons.file_present,
+                                              size: 35,
+                                            )
                                                 : const Text('Add File'),
                                           ],
                                         ),
@@ -1090,7 +1092,7 @@ class _AddSeedState extends State<AddSeed> {
                             elevation: 0.9,
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                             child: Padding(
                               padding: const EdgeInsets.only(
                                   left: 20, right: 20, top: 30, bottom: 30),
@@ -1119,8 +1121,12 @@ class _AddSeedState extends State<AddSeed> {
                             ))
                       ],
                     )),
-                GestureDetector(
+                isLoading?
+                SpinKitCircle(color: MyColors().primaryColor,):GestureDetector(
                   onTap: () async {
+                    setState(() {
+                      isLoading = true;
+                    });
                     // _successDialog(
                     //     'Your Shefund Application has been submitted Successfully');
                     //
@@ -1131,62 +1137,68 @@ class _AddSeedState extends State<AddSeed> {
                     //
                     //
                     _formKey.currentState!;
-                    if (_formKey.currentState!.validate()) {
+                    if (_formKey.currentState!.validate()
+                    ) {
                       // form.save();
 
-                    FocusScope.of(context).unfocus();
-                    List<String> finalSectors = [];
-                    List<String> finalTarget = [];
-                    List<String> othersAttachment = [];
-                    finalSectors.addAll(transactonController.text.split(','));
-                    finalTarget.addAll(anyOtherinfoController.text.split(','));
-                    finalTarget.addAll(selectedCategories2);
-                    finalSectors.addAll(selectedCategories);
+                      FocusScope.of(context).unfocus();
+                      List<String> finalSectors = [];
+                      List<String> finalTarget = [];
+                      List<String> othersAttachment = [];
+                      finalSectors.addAll(transactonController.text.split(','));
+                      finalTarget.addAll(anyOtherinfoController.text.split(','));
+                      finalTarget.addAll(selectedCategories2);
+                      finalSectors.addAll(selectedCategories);
 
-                    Map finaData = {
-                      "businessPlan": '$businessPlan',
-                      "taxCompliance": '$taxCompliance',
-                      "coInvestorStmt": "$coInvestorStmt",
-                      "financialStmt": '$financialStmt',
-                      // "name": myController1.text,
-                      "about": aboutController.text,
-                      "impact": impactController.text,
-                      "problems": problemController.text,
-                      "bridging": bridgingController.text,
-                      // "email": email,
-                      "founders": '${founderController.text.split(',')}',
-                      // "number": myController4.text,
-                      "womanOwned": isWomanOwned == 1,
-                      "sectors": finalSectors,
-                      "marketing": marketingController.text,
-                      "primaryTarget": finalTarget,
-                      "provenTransaction": transactonController.text,
-                      "reason": tellusController.text,
-                      "fundraised": fundraised == 1,
-                      "stemInitiative": stemInitiativeController.text,
-                      // "attachments": formData['attachments'],
-                      "otherInfo": anyOtherinfoController.text
-                    };
-                    print('Data>>>>${finaData.toString()}');
+                      Map finaData = {
+                        "businessPlan": '$businessPlan',
+                        "taxCompliance": '$taxCompliance',
+                        "coInvestorStmt": "$coInvestorStmt",
+                        "financialStmt": '$financialStmt',
+                        // "name": myController1.text,
+                        "about": aboutController.text,
+                        "impact": impactController.text,
+                        "problems": problemController.text,
+                        "bridging": bridgingController.text,
+                        // "email": email,
+                        "founders": '${founderController.text.split(',')}',
+                        // "number": myController4.text,
+                        "womanOwned": isWomanOwned == 1,
+                        "sectors": finalSectors,
+                        "marketing": marketingController.text,
+                        "primaryTarget": finalTarget,
+                        "provenTransaction": transactonController.text,
+                        "reason": tellusController.text,
+                        "fundraised": fundraised == 1,
+                        "stemInitiative": stemInitiativeController.text,
+                        // "attachments": formData['attachments'],
+                        "otherInfo": anyOtherinfoController.text
+                      };
+                      print('Data>>>>${finaData.toString()}');
 
-                    ApiServices()
-                        .applySeedFund(_userId, finaData, _token)
-                        .then((value) {
-                      print('SeedValue>>>>>>${value.toString()}');
-                      UniversalMethods.show_toast(
-                          '${value.message.toString()}', context);
-                      if (value.status == "OK") {
-                        Get.offAll(() => ScreenSheFunds());
-                      }
-                    });
+                      ApiServices()
+                          .applySeedFund(_userId, finaData, _token)
+                          .then((value) {
+                        print('SeedValue>>>>>>${value.toString()}');
+                        // _successDialog(value.me)
+                        // UniversalMethods.show_toast(
+                        //     '${value.message.toString()}', context);
+                        if (value.status == "OK") {
+                          _successDialog(value.message.toString());
+                          // Get.offAll(() => ScreenSheFunds());
+                        }else{
+                          _dialog(value.message.toString());
 
-                    print(finaData);
+                        }
+                      });
+
+                      print(finaData);
 
                     } else {
-                    // print("The form is invalid");
-                    UniversalMethods.show_toast('Fill all fields', context);
-                  }
-                  //  Navigator.of(context).pop();
+                      // print("The form is invalid");
+                      UniversalMethods.show_toast('Fill all fields', context);
+                    }
+                    //  Navigator.of(context).pop();
                   },
 
                   child: Padding(
@@ -1236,6 +1248,40 @@ class _AddSeedState extends State<AddSeed> {
                     Icons.check_circle,
                     size: 50,
                     color: Colors.green,
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  Text(message),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  OutlinedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        // push(MaterialPageRoute(
+                        // builder: (context) => Homescreen()));
+                      },
+                      child: const Text('Ok'))
+                ])),
+          );
+        });
+  }
+  void _dialog(String message) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Container(
+                height: MediaQuery.of(context).size.height * 0.27,
+                child: Column(children: [
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  const Icon(
+                    Icons.warning_amber_rounded,
+                    size: 50,
+                    color: Colors.red,
                   ),
                   const SizedBox(
                     height: 24,
