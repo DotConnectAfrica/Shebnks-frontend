@@ -63,10 +63,13 @@ dependencies:
   image_picker: ^0.8.6+4
   flutter_spinkit: ^5.1.0
   flutter_form_builder: ^8.0.0
+  flutter_inapp_notifications: ^1.0.0
   form_builder_file_picker: ^3.0.0
+
   firebase_analytics: ^10.4.3
   #  firebase_core: ^1.1.0
-  firebase_messaging: ^14.6.4
+  firebase_messaging: ^14.6.5
+#  firebase_messaging: ^14.6.5
   #firebase tings
   firebase_auth: ^4.1.4
   cloud_firestore: ^4.1.0

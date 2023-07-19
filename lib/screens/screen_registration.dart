@@ -2,6 +2,7 @@ import 'dart:convert';
 //
 // import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_inapp_notifications/flutter_inapp_notifications.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
@@ -598,7 +599,19 @@ class _ScreenLoginState extends State<ScreenRegistration> {
       if (value.status == 'OK') {
         storeUserBool();
        Get.offAll(()=>LoginPass());
-       UniversalMethods.show_toast('Registration Successful', context);
+        InAppNotifications.show(
+            title: "Shebnks",
+            leading: Image.asset('assets/images/logo.png'),
+            description: value.message.toString(),
+            // ending: Icon(Icons.arrow_forward_ios),
+
+
+            onTap: (){
+              Navigator.pop(context);
+            }
+
+        );
+       // UniversalMethods.show_toast('Registration Successful', context);
        // Get.snackBar('Successful','Registration');
         debugPrint('tmessage is.......${value.message}');
       }

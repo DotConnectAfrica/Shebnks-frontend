@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_inapp_notifications/flutter_inapp_notifications.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:form_builder_file_picker/form_builder_file_picker.dart';
 import 'package:get/get.dart';
@@ -14,7 +15,9 @@ import 'package:she_banks/screens/screen_she_funds.dart';
 import 'package:she_banks/utils/universal_methods.dart';
 
 import '../api_services/api_services.dart';
+import '../models/Notification.dart';
 import '../models/model_user.dart';
+import '../utils/NotificationProvider.dart';
 import 'colors.dart';
 
 class AddSeed extends StatefulWidget {
@@ -1120,11 +1123,10 @@ class _AddSeedState extends State<AddSeed> {
                       ],
                     )),
                 isLoading?
-                SpinKitCircle(color: MyColors().primaryColor,):GestureDetector(
+                SpinKitCircle(color: MyColors().primaryColor,):
+                GestureDetector(
                   onTap: () async {
-                    setState(() {
-                      isLoading = true;
-                    });
+
                     // _successDialog(
                     //     'Your Shefund Application has been submitted Successfully');
                     //
@@ -1137,6 +1139,9 @@ class _AddSeedState extends State<AddSeed> {
                     _formKey.currentState!;
                     if (_formKey.currentState!.validate()
                     ) {
+                      setState(() {
+                        isLoading = true;
+                      });
                       // form.save();
 
                       FocusScope.of(context).unfocus();
@@ -1256,9 +1261,32 @@ class _AddSeedState extends State<AddSeed> {
                   ),
                   OutlinedButton(
                       onPressed: () {
-                        Navigator.of(context).pop();
-                        // push(MaterialPageRoute(
-                        // builder: (context) => Homescreen()));
+                        final notificationsProvider =
+                        Provider.of<NotificationsProvider>(context, listen: false);
+
+                        // Simulate receiving a new notification
+                        final newNotification = NotificationModel(
+                          title: 'SheFunds',
+                          body: '$message',
+
+                        );
+
+                        // Add the notification to the provider
+                        notificationsProvider.addNotification(newNotification);
+                        InAppNotifications.show(
+                            title: "SheFunds",
+                            leading: Image.asset('assets/images/logo.png'),
+                            description: message,
+                            // ending: Icon(Icons.arrow_forward_ios),
+
+
+                            onTap: (){
+                              Navigator.pop(context);
+                            }
+
+                        );
+                        Navigator.pop(context);
+                        // Get.off(() => ScreenSheFunds());
                       },
                       child: const Text('Ok'))
                 ])),
@@ -1290,9 +1318,28 @@ class _AddSeedState extends State<AddSeed> {
                   ),
                   OutlinedButton(
                       onPressed: () {
-                        Navigator.of(context).pop();
-                        // push(MaterialPageRoute(
-                        // builder: (context) => Homescreen()));
+                        final notificationsProvider =
+                        Provider.of<NotificationsProvider>(context, listen: false);
+
+                        // Simulate receiving a new notification
+                        final newNotification = NotificationModel(
+                          title: 'SheFunds',
+                          body: '$message',
+
+                        );
+
+                        // Add the notification to the provider
+                        notificationsProvider.addNotification(newNotification);
+                        InAppNotifications.show(
+                            title: "SheFunds",
+                            leading: Image.asset('assets/images/logo.png'),
+                        description: message,
+                        // ending: Icon(Icons.arrow_forward_ios),
+
+
+                        );
+                        Navigator.pop(context);
+                        // Get.off (() => ScreenSheFunds());
                       },
                       child: const Text('Ok'))
                 ])),

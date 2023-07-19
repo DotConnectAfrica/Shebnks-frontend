@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../utils/NotificationProvider.dart';
 
 
 class NotificationPage extends StatefulWidget {
@@ -7,24 +10,23 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  List<String> notifications = [];
+  // List<String> notifications = [];
 
   @override
   Widget build(BuildContext context) {
+    final notificationsProvider = Provider.of<NotificationsProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Notifications'),
       ),
-      body: notifications.isNotEmpty
+      body: notificationsProvider.notifications.isNotEmpty
           ? ListView.builder(
-        itemCount: notifications.length,
+        itemCount: notificationsProvider.notifications.length,
         itemBuilder: (BuildContext context, int index) {
+          final notification = notificationsProvider.notifications[index];
           return ListTile(
-            title: Text(notifications[index]),
-            onTap: () {
-              // Handle notification tap
-              print('Notification tapped: ${notifications[index]}');
-            },
+            title: Text(notification.title),
+            subtitle: Text(notification.body),
           );
         },
       )

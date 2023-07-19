@@ -3,15 +3,19 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_inapp_notifications/flutter_inapp_notifications.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:form_builder_file_picker/form_builder_file_picker.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:she_banks/screens/screen_home.dart';
 import 'package:she_banks/screens/screen_she_funds.dart';
 
 import '../api_services/api_services.dart';
+import '../models/Notification.dart';
+import '../utils/NotificationProvider.dart';
 import '../utils/universal_methods.dart';
 import 'colors.dart';
 
@@ -301,6 +305,32 @@ class _LoansPageState extends State<LoansPage> {
                   ),
                   OutlinedButton(
                       onPressed: () {
+
+                        final notificationsProvider =
+                        Provider.of<NotificationsProvider>(context, listen: false);
+
+                        // Simulate receiving a new notification
+                        final newNotification = NotificationModel(
+                          title: 'SheLoan',
+                          body: '$message',
+
+                        );
+
+                        // Add the notification to the provider
+                        notificationsProvider.addNotification(newNotification);
+
+                        InAppNotifications.show(
+                            title: "SheLoan",
+                            leading: Image.asset('assets/images/logo.png'),
+                            description: message,
+                            // ending: Icon(Icons.arrow_forward_ios),
+
+
+                            onTap: (){
+                              Navigator.pop(context);
+                            }
+
+                        );
                         Navigator.of(context).pop();
                         // push(MaterialPageRoute(
                         // builder: (context) => Homescreen()));

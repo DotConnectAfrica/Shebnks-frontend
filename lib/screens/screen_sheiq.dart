@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_inapp_notifications/flutter_inapp_notifications.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:she_banks/screens/screen_home.dart';
 import 'package:she_banks/screens/screen_she_funds.dart';
 
 import '../api_services/api_services.dart';
+import '../models/Notification.dart';
+import '../utils/NotificationProvider.dart';
 import '../utils/universal_methods.dart';
 import 'colors.dart';
 
@@ -201,6 +205,28 @@ class _SheIqState extends State<SheIq> {
                   ),
                   OutlinedButton(
                       onPressed: () {
+                        final notificationsProvider =
+                        Provider.of<NotificationsProvider>(context, listen: false);
+
+                        // Simulate receiving a new notification
+                        final newNotification = NotificationModel(
+                          title: 'She IQ',
+                          body: '$message',
+
+                        );
+
+                        // Add the notification to the provider
+                        notificationsProvider.addNotification(newNotification);
+                        InAppNotifications.show(
+                            title: "SheIQ",
+                            leading: Image.asset('assets/images/logo.png'),
+                            description: message,
+                            // ending: Icon(Icons.arrow_forward_ios),
+                            onTap: (){
+                              Navigator.pop(context);
+                            }
+
+                        );
                         Navigator.of(context).pop();
                         // push(MaterialPageRoute(
                         // builder: (context) => Homescreen()));
@@ -317,7 +343,7 @@ class _SheIqState extends State<SheIq> {
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text('2. What is your date of birth *'),
+                                const Text('2. What is your date of birth (DDMMYYYY)*'),
                                 const SizedBox(
                                   height: 8,
                                 ),

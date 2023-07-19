@@ -334,7 +334,7 @@ class _HomescreenState extends State<Homescreen> {
                       style: GoogleFonts.poppins(
                         textStyle: const TextStyle(color: Colors.white),
                       )),
-                  Text('$initAmount ',
+                  Text('$interest ',
                       style: GoogleFonts.poppins(
                         textStyle: const TextStyle(color: Colors.white),
                       )),

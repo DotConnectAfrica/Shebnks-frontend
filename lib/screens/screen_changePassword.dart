@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inapp_notifications/flutter_inapp_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:she_banks/screens/loginPass.dart';
 
 import '../api_services/api_services.dart';
+import '../models/Notification.dart';
+import '../utils/NotificationProvider.dart';
 import '../utils/universal_methods.dart';
 import 'colors.dart';
 
@@ -408,6 +412,30 @@ class _ChangePasswordState extends State<ChangePassword> {
                   ),
                   OutlinedButton(
                       onPressed: () {
+                        final notificationsProvider =
+                        Provider.of<NotificationsProvider>(context, listen: false);
+
+                        // Simulate receiving a new notification
+                        final newNotification = NotificationModel(
+                          title: 'Password Change',
+                          body: '$message',
+
+                        );
+
+                        // Add the notification to the provider
+                        notificationsProvider.addNotification(newNotification);
+                        InAppNotifications.show(
+                          title: "Shebnks",
+                          leading: Image.asset('assets/images/logo.png'),
+                          description: message,
+                            // ending: Icon(Icons.arrow_forward_ios),
+
+
+                            onTap: (){
+                            Navigator.pop(context);
+                          }
+
+                        );
                         Get.offAll(()=>LoginPass());
                       },
                       child: const Text('Ok'))

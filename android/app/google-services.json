@@ -29,6 +29,13 @@
             {
               "client_id": "278910685584-ndfbkcafji60jb13dikvtomo0ful76hh.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "278910685584-of5rsf9b9rv009dml44mgddbqjmvn03g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.dotconnectafrica.shebnks"
+              }
             }
           ]
         }

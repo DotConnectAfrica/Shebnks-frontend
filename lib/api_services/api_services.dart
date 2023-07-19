@@ -39,7 +39,7 @@ class ApiServices {
   // final String base_url = 'https://dca.com/she/api/v1';
   // /she/api/v1/loan/request/:userId
   //test
-  // final String base_url = 'http://192.168.29.238:8080/she/api/v1';
+  // final String base_url = 'http://192.168.84.238:8080/she/api/v1';
 
   // /auth/login';
   // FirebaseAuth auth = FirebaseAuth.instance;
