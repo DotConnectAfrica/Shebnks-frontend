@@ -1,26 +1,41 @@
-
 class SuccessModel {
   String? message;
-  String? status;
+  int? status;
   Data? data;
 
   SuccessModel({this.message, this.status, this.data});
 
-  SuccessModel.fromJson(Map<String, dynamic> json) {
-    message = json['message'];
-    status = json['status'];
-    data = json['data'];
+ factory SuccessModel.fromJson(Map<String, dynamic> json) {
+    return SuccessModel(
+      message: json['message'],
+      status: json['status'],
+      data: Data.fromJson(json['data']),
+
+    );
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['message'] = this.message;
-    data['status'] = this.status;
-    data['data'] = this.data;
-    return data;
-  }
+
+
 
 }
+// class Data {
+//   final Map<String, dynamic> jsonData; // Use a Map to store dynamic data
+
+//   Data({
+//     required this.jsonData,
+//   });
+
+//   factory Data.fromJson(Map<String, dynamic> json) {
+//     return Data(
+//       jsonData: json,
+//     );
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     return jsonData;
+//   }
+// }
+
 class Data {
 
 Data.fromJson(Map<String, dynamic> json) {
@@ -31,3 +46,6 @@ final Map<String, dynamic> data = new Map<String, dynamic>();
 return data;
 }
 }
+
+
+

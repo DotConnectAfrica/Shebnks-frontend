@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:clippy_flutter/arc.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -56,6 +57,7 @@ class _LoginPassState extends State<LoginPass> {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     var phone = _prefs.getString("PhoneNumber");
     _mPhone = phone?.replaceAll('+', '');
+    debugPrint("phone........$phone");
     return _mPhone;
   }
 
@@ -69,29 +71,31 @@ class _LoginPassState extends State<LoginPass> {
     String _lName,
     String _mobile,
     String _token,
-    String _userId,
+    int _userId,
     String _email,
   ) async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
 
     setState(() {
+      debugPrint("Tokeeeeeeeeeen  $_token");
+
       _prefs.setString('token', _token);
       _prefs.setString('fName', _fName);
       _prefs.setString('lName', _lName);
       _prefs.setString('email', _email);
-      _prefs.setString('userId', _userId);
+      _prefs.setInt('userId', _userId);
     });
   }
 
-  storeLoanDetails(double initAmount, double remainingAmount, String status, double amountToPay,
-      String loanId) async {
+  storeLoanDetails(int initAmount, int remainingAmount, String status,
+      int amountToPay) async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     setState(() {
-      _prefs.setDouble('initAmount', initAmount);
-      _prefs.setDouble('remainingAmount', remainingAmount);
+      _prefs.setInt('initAmount', initAmount);
+      _prefs.setInt('remainingAmount', remainingAmount);
       _prefs.setString('status', status);
-      _prefs.setString('loanId', loanId);
-      _prefs.setDouble('amountToPay', amountToPay);
+      // _prefs.setString('loanId', loanId);
+      _prefs.setInt('amountToPay', amountToPay);
     });
   }
 
@@ -106,7 +110,8 @@ class _LoginPassState extends State<LoginPass> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(child:Center(
+        body: SingleChildScrollView(
+            child: Center(
       child: Container(
         margin: const EdgeInsets.only(left: 30, right: 30),
         child: Column(
@@ -207,9 +212,11 @@ class _LoginPassState extends State<LoginPass> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text(''),
-                          InkWell(onTap: () {
-                            _otpRequest(_mPhone);
-                          }, child: const Text('Forgot Password?'))
+                          InkWell(
+                              onTap: () {
+                                _otpRequest(_mPhone);
+                              },
+                              child: const Text('Forgot Password?'))
                         ],
                       )
                     ],
@@ -221,7 +228,7 @@ class _LoginPassState extends State<LoginPass> {
 
   void _otpRequest(String phone) {
     _apiServices.requestOtp(phone).then((value) {
-      if (value.status == 'OK') {
+      if (value.status == 200) {
         Get.to(() => ForgotPassword(_mPhone));
       } else {
         UniversalMethods.show_toast('Unable to Send OTP. Try agin later',
@@ -237,22 +244,29 @@ class _LoginPassState extends State<LoginPass> {
     await _login(_phone, _password);
   }
 
+  getToken() async {
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    return fcmToken;
+  }
+
   Future _login(_phone, _password) async {
     Map newRequestData = {
       'password': "${_password.toString()}",
       'mobile': "${_phone.toString()}",
     };
-    _apiServices.login(newRequestData).then((value) {
+    _apiServices.login(_phone, _password).then((value) {
       debugPrint('loginValue...${value}');
-      if (value.status == 'OK') {
-        _fName = value.data.user.firstName;
-        _lName = value.data.user.lastName;
-        _idNumber = value.data.user.id;
-        _email = value.data.user.email;
-        _mobile = value.data.user.mobile;
-        _userId = value.data.user.userId;
-        _token = value.data.token;
-        encondedLoans = jsonEncode(value.data.loan);
+      if (value.status == 200) {
+        _fName = value.data?.user?.firstName;
+        _lName = value.data?.user?.lastName;
+        _idNumber = value.data?.user?.id;
+        _email = value.data?.user?.email;
+        _mobile = value.data?.user?.mobile;
+        _userId = value.data?.user?.userId;
+        _token = value.data?.token;
+
+        debugPrint("Token sfgyuigs: $_token");
+        encondedLoans = jsonEncode(value.data?.loan);
         // getIQuestions();
         // _encodedLoans= jsonEncode(loans);
 
@@ -265,30 +279,34 @@ class _LoginPassState extends State<LoginPass> {
         // var remainingAmount = value.data.loan.initialAmount;
         // var status = value.data.loan.status;
         // var loanId = value.data.loan.id;
-        var loan = value.data.loan;
+        var loan = value.data?.loan;
         debugPrint('produts.......${loan}');
 
+       
         storeDetails(_fName, _lName, _mobile, _token, _userId, _email
             // initAmount, remainingAmount, status, loanId
             );
 
-        // storeDetails(_fName, _lName, _mobile, _token, _userId, _email, encondedLoans!);
+        // storeDetails(_fName, _lName, _mobile, _token, _userId, _email, encondedLoans?);
         Get.snackbar("", 'Login Successful');
         setState(() {
           _isLoading = false;
         });
-        if (loan != null) {
+        if (loan?.amountToPay != null) {
           setState(() {
             setHasLoan();
 
             print('HasLoan');
-            var initAmount = value.data.loan.initialAmount;
-            var remainingAmount = value.data.loan.amountRemaining;
-            var amountToPay = value.data.loan.amountToPay;
-            var status = value.data.loan.status;
-            var loanId = value.data.loan.id;
-            // Loan loan = value.data.loan;
-            storeLoanDetails(initAmount, remainingAmount, status, loanId, amountToPay);
+            var initAmount = value.data?.loan?.initialAmount;
+            var remainingAmount = value.data?.loan?.amountRemaining;
+            var amountToPay = value.data?.loan?.amountToPay;
+            var status = value.data?.loan?.status;
+            // var loanId = value.data?.loan?.id;
+            Loan? loan = value.data?.loan;
+            
+              storeLoanDetails(
+                  initAmount!, remainingAmount!, status!, amountToPay!);
+            
           });
         } else {
           setState(() {
@@ -307,7 +325,7 @@ class _LoginPassState extends State<LoginPass> {
               email: _email,
               userId: _userId,
             ));
-      } else if (value.status == 'BAD_REQUEST') {
+      } else  {
         setState(() {
           _isLoading = false;
         });

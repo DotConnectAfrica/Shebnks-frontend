@@ -1,6 +1,6 @@
 class Activation {
   String? message;
-  String? status;
+  int? status;
   Data? data;
 
   Activation({this.message, this.status, this.data});

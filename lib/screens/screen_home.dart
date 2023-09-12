@@ -34,12 +34,12 @@ class Homescreen extends StatefulWidget {
 
   const Homescreen(
       {super.key,
-       this.fName,
-       this.lName,
-       this.phone,
-       this.token,
-       this.email,
-       this.userId});
+      this.fName,
+      this.lName,
+      this.phone,
+      this.token,
+      this.email,
+      this.userId});
 
   @override
   State<Homescreen> createState() => _HomescreenState();
@@ -57,10 +57,10 @@ class _HomescreenState extends State<Homescreen> {
   String? _mPhone;
   String? _timeOfDay;
   var _userId;
-  String? loanId;
+  // String? loanId;
   var initAmount;
-  double? amountToPay;
-  double? remainingAmount;
+  int? amountToPay;
+  int? remainingAmount;
   String? status;
   var interest;
   String _itext = '';
@@ -72,13 +72,17 @@ class _HomescreenState extends State<Homescreen> {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
 
     setState(() {
-      loanId = _prefs.getString('loanId');
-      initAmount = _prefs.getDouble('initAmount');
-      remainingAmount = _prefs.getDouble('remainingAmount');
-      status = _prefs.getString('status');
-      amountToPay = _prefs.getDouble('amountToPay');
-      interest = (amountToPay!) - (initAmount);
+      // loanId = _prefs.getString('loanId');
+      initAmount = _prefs.getInt('initAmount');
 
+      status = _prefs.getString('status');
+
+      amountToPay = _prefs.getInt('amountToPay');
+      
+      // interest = 5/100 * initAmount;
+       
+      remainingAmount = (_prefs.getInt('remainingAmount')! + 2500);
+      interest = (remainingAmount!) - (initAmount);
     });
   }
 
@@ -162,7 +166,7 @@ class _HomescreenState extends State<Homescreen> {
             margin: const EdgeInsets.only(right: 8),
             child: InkWell(
               onTap: () {
-                Get.to(()=>NotificationPage());
+                Get.to(() => NotificationPage());
               },
               child: const Icon(
                 Icons.notifications,
@@ -327,7 +331,8 @@ class _HomescreenState extends State<Homescreen> {
               ),
               const SizedBox(
                 height: 10,
-              ),Row(
+              ),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Interest : ',
@@ -362,14 +367,14 @@ class _HomescreenState extends State<Homescreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Loan Status: ',
-                      style: GoogleFonts.poppins(
-                        textStyle: const TextStyle(color: Colors.white),
-                      )),
-                  Text('$status ',
-                      style: GoogleFonts.poppins(
-                        textStyle: const TextStyle(color: Colors.white),
-                      )),
+                  // Text('Loan Status: ',
+                  //     style: GoogleFonts.poppins(
+                  //       textStyle: const TextStyle(color: Colors.white),
+                  //     )),
+                  // Text('$status ',
+                  //     style: GoogleFonts.poppins(
+                  //       textStyle: const TextStyle(color: Colors.white),
+                  //     )),
                 ],
               ),
               const SizedBox(
@@ -378,7 +383,7 @@ class _HomescreenState extends State<Homescreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (status == "APPROVED" || status =="DISBURSED") ...[
+                  if (status == "APPROVED" || status == "DISBURSED") ...[
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xffed39ca)),
@@ -389,8 +394,7 @@ class _HomescreenState extends State<Homescreen> {
                       child: Text('Repay Now',
                           style: GoogleFonts.poppins(
                             textStyle: const TextStyle(color: Colors.white),
-                          )
-                      ),
+                          )),
                     ),
                   ] else
                     ...[]
@@ -429,7 +433,6 @@ class _HomescreenState extends State<Homescreen> {
                       style: GoogleFonts.poppins(
                         textStyle: const TextStyle(color: Colors.black),
                       )),
-
                   TextFormField(
                     controller: _amountController,
                     decoration: InputDecoration(
@@ -442,8 +445,8 @@ class _HomescreenState extends State<Homescreen> {
                     height: 20,
                   ),
                   ElevatedButton(
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Color(0xffed39ca)),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xffed39ca)),
                     onPressed: () {
                       print('Done');
                       var amount = _amountController.text;
@@ -451,7 +454,7 @@ class _HomescreenState extends State<Homescreen> {
                         "mobile": "$_mPhone",
                         "amount": "$amount"
                       };
-                      _apiServices.repayLoan(loanId!, widget.token, data);
+                      // _apiServices.repayLoan(loanId!, widget.token, data);
                     },
                     child: Text('Pay Now',
                         style: GoogleFonts.poppins(
@@ -625,9 +628,11 @@ class _HomescreenState extends State<Homescreen> {
         } else if (index == 3) {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (BuildContext context) => SheIq(token: widget.token,
+              builder: (BuildContext context) => SheIq(
+                token: widget.token,
                 fName: widget.fName,
-                userId: widget.userId,),
+                userId: widget.userId,
+              ),
             ),
           );
         } else if (index == 4) {
@@ -877,10 +882,10 @@ class _HomescreenState extends State<Homescreen> {
         } else if (index == 3) {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  ScreenWebView('About SHEbnks',
-                      // 'https://shebnks.mobi/'
-                  ),
+              builder: (BuildContext context) => ScreenWebView(
+                'About SHEbnks',
+                // 'https://shebnks.mobi/'
+              ),
             ),
           );
         } else if (index == 4) {
@@ -917,124 +922,140 @@ class _HomescreenState extends State<Homescreen> {
     Navigator.of(context).pop();
   }
 
-
-  void showMpesaDialog(){
+  void showMpesaDialog() {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-      return AlertDialog(
-        backgroundColor: Color(0xfff6f6f6),
-        title: const Text('Pay Via MPESA'),
-        content: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              // Image.asset('assets/images/saf.png', height: 100),
-              const SizedBox(height: 10),
-              Form(
-                key: _formKey,
-                child: TextFormField(
-                  controller: _amountController,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please Enter Amount';
-                    }
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                    labelText: 'Enter Amount',
+          return AlertDialog(
+            backgroundColor: Color(0xfff6f6f6),
+            title: const Text('Pay Via MPESA'),
+            content: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  // Image.asset('assets/images/saf.png', height: 100),
+                  const SizedBox(height: 10),
+                  Form(
+                    key: _formKey,
+                    child: TextFormField(
+                      controller: _amountController,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please Enter Amount';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'Enter Amount',
+                      ),
+                    ),
                   ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child:
+                    const Text('Cancel', style: TextStyle(color: Colors.red)),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: const Text(
+                  'Pay Now',
+                  style: TextStyle(color: Colors.green),
                 ),
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    String enteredText = _amountController.text;
+                    print('Entered Text: $enteredText');
+                    var amount = _amountController.text;
+                    Map<String, String> data = {
+                      "mobile": "$_mPhone",
+                      "amount": "$amount"
+                    };
+                    // _apiServices.repayLoan(loanId!, widget.token, data).then((value) {
+                    //   if(value.status=='OK'){
+                    //     _showDialog(value.message.toString());
+                    //   }
+                    //   else{
+                    //     _showFailDialog(value.message.toString());
+                    //   }
+                    // });
+                    Navigator.of(context).pop();
+                    UniversalMethods.show_toast(
+                        'Processing request....Kindly Wait', context);
+                  }
+                },
               ),
             ],
-          ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('Cancel', style: TextStyle(color: Colors.red)),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          TextButton(
-            child: const Text('Pay Now', style: TextStyle(color: Colors.green),),
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                String enteredText = _amountController.text;
-                print('Entered Text: $enteredText');
-                var amount = _amountController.text;
-                Map<String, String> data = {
-                  "mobile": "$_mPhone",
-                  "amount": "$amount"
-                };
-                _apiServices.repayLoan(loanId!, widget.token, data).then((value) {
-                  if(value.status=='OK'){
-                    _showDialog(value.message.toString());
-                  }
-                  else{
-                    _showFailDialog(value.message.toString());
-                  }
-                });
-                Navigator.of(context).pop();
-                UniversalMethods.show_toast('Processing request....Kindly Wait', context);
-              }
-            },
-          ),
-        ],
-      );
-
-
-
-});
+          );
+        });
   }
-  void _showDialog(String message){
-    showDialog(context: context, builder: (BuildContext context){
-      return AlertDialog(
-        content: Container(
-            height: MediaQuery.of(context).size.height*0.23,
 
-            child: Column(
-                children: [
-                  SizedBox(height: 15,),
-
-                  Icon(Icons.check_circle, size: 50, color: Colors.green.shade300,),
-                  SizedBox(height: 15,),
+  void _showDialog(String message) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Container(
+                height: MediaQuery.of(context).size.height * 0.23,
+                child: Column(children: [
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Icon(
+                    Icons.check_circle,
+                    size: 50,
+                    color: Colors.green.shade300,
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
                   Text(message),
-                  SizedBox(height: 15,),
-                  OutlinedButton(onPressed: () {
-                    Navigator.of(context).pop();
-                  },
+                  SizedBox(
+                    height: 15,
+                  ),
+                  OutlinedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
                       child: Text('Ok'))
+                ])),
+          );
+        });
+  }
 
-                ]
-
-            )),
-      );
-
-    });
-  }void _showFailDialog(String message){
-    showDialog(context: context, builder: (BuildContext context){
-      return AlertDialog(
-        content: Container(
-            height: MediaQuery.of(context).size.height*0.23,
-
-            child: Column(
-                children: [
-                  SizedBox(height: 15,),
-
-                  Icon(Icons.warning_amber_rounded, size: 50, color: Colors.red.shade300,),
-                  SizedBox(height: 15,),
+  void _showFailDialog(String message) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Container(
+                height: MediaQuery.of(context).size.height * 0.23,
+                child: Column(children: [
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Icon(
+                    Icons.warning_amber_rounded,
+                    size: 50,
+                    color: Colors.red.shade300,
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
                   Text(message),
-                  SizedBox(height: 15,),
-                  OutlinedButton(onPressed: () {
-                    Navigator.of(context).pop();
-                  },
+                  SizedBox(
+                    height: 15,
+                  ),
+                  OutlinedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
                       child: Text('Ok'))
-
-                ]
-
-            )),
-      );
-
-    });
+                ])),
+          );
+        });
   }
 }

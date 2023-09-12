@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,13 +26,14 @@ class _SplashScreenState extends State<SplashScreen>
   FirebaseAuth auth = FirebaseAuth.instance;
 
   // CollectionReference? users;
-  setUserBool() async{
+  setUserBool() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
-    userExists= _prefs.getBool('userExists');
-
+    userExists = _prefs.getBool('userExists');
+    print(userExists);
   }
-  storeHasLoan() async{
-    SharedPreferences _prefs =await SharedPreferences.getInstance();
+
+  storeHasLoan() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
     _prefs.setBool('hasExistingLoan', false);
   }
 
@@ -61,20 +63,23 @@ class _SplashScreenState extends State<SplashScreen>
   _move_to_next() {
     const duration = 3;
     var user = auth.currentUser;
+    // curentuser is null
+    debugPrint("User.....................$user");
 
     Timer(Duration(seconds: duration), () async {
-      // var user = auth.currentUser;
+      var user = auth.currentUser;
+      // Navigator.of(context).push(MaterialPageRoute(
+      //       builder: (BuildContext context) => AccountLogin()));
 
-      if (userExists == null || userExists==false) {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (BuildContext context) => AccountLogin(),
-            ),
-          );
-
+      if (userExists == null || userExists == false) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (BuildContext context) => AccountLogin(),
+          ),
+        );
       } else {
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (BuildContext context) => const LoginPass()));
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (BuildContext context) => const LoginPass()));
       }
     });
   }

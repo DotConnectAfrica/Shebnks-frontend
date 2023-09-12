@@ -29,14 +29,14 @@ class _VerifyOTPState extends State<VerifyOTP> {
   late Timer timer;
   bool _isLoading = false;
 
-  sanitizePhone(){
+  sanitizePhone() {
     String mPhone = widget.phone;
     setState(() {
       phone = mPhone.replaceAll('+', '');
       debugPrint('phone is>>>>>>>>>>$phone');
-
     });
   }
+
   @override
   void initState() {
     sanitizePhone();
@@ -126,35 +126,40 @@ class _VerifyOTPState extends State<VerifyOTP> {
         SizedBox(
           width: MediaQuery.of(context).size.width,
           height: 42,
-          child: _isLoading? SpinKitCircle(color: Color(0xffed39ca),): OutlinedButton(
-            onPressed: () {
-              verifyOtp(_smsController.text);
-              // phone = _phone_controller.text;
-              setState(() {
-                _isLoading = true;
-              });
-              String code = _smsController.text;
-              if (code.isEmpty) {
-                UniversalMethods.show_toast(
-                    'Enter the verification code sent to your phone', context);
-                return;
-              }
-              // showLoaderDialog(context, 'verifying');
-              // signInWithPhoneNumber();
-            },
-            style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateProperty.all<Color>(MyColors().primaryColor),
-              shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50.0)),
-              ),
-            ),
-            child: const Text(
-              "VERIFY OTP",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
+          child: _isLoading
+              ? SpinKitCircle(
+                  color: Color(0xffed39ca),
+                )
+              : OutlinedButton(
+                  onPressed: () {
+                    verifyOtp(_smsController.text);
+                    // phone = _phone_controller.text;
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    String code = _smsController.text;
+                    if (code.isEmpty) {
+                      UniversalMethods.show_toast(
+                          'Enter the verification code sent to your phone',
+                          context);
+                      return;
+                    }
+                    // showLoaderDialog(context, 'verifying');
+                    // signInWithPhoneNumber();
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        MyColors().primaryColor),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50.0)),
+                    ),
+                  ),
+                  child: const Text(
+                    "VERIFY OTP",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
         ),
         // Container(
         //   child: Row(
@@ -183,16 +188,16 @@ class _VerifyOTPState extends State<VerifyOTP> {
         // ),
 
         SizedBox(height: 20),
-        InkWell(onTap: () {
-          enableResend ? _otpRequest(phone) : null;
-
-        }, child: Text(
-          'Resend code after $secondsRemaining seconds',
-
-        ),)
+        InkWell(
+          onTap: () {
+            enableResend ? _otpRequest(phone) : null;
+          },
+          child: Text(
+            'Resend code after $secondsRemaining seconds',
+          ),
+        )
       ],
     );
-
   }
 
   Widget _reg_code_text() {
@@ -249,7 +254,7 @@ class _VerifyOTPState extends State<VerifyOTP> {
                   const SizedBox(
                     height: 24,
                   ),
-                   Icon(
+                  Icon(
                     Icons.warning_amber_rounded,
                     size: 50,
                     color: Color(0xffed39ca),
@@ -278,48 +283,50 @@ class _VerifyOTPState extends State<VerifyOTP> {
     String finalPhone = snPhone.replaceAll('+', '');
 
     Map<String, String> otp = {"otp": "$text"};
-    _apiServices.verifyOtp(phone, otp).then((value) {
+    _apiServices.verifyOtp(phone, text).then((value) {
       debugPrint('Valueeeeee....${value.toString()}');
-      if (value.status == 'OK') {
+      debugPrint(value.status.toString());
+      if (value.status == 200) {
         setState(() {
-          _isLoading= false;
+          _isLoading = false;
         });
-        debugPrint('User Exist? ....${value.data.user}');
-        if (value.data.user == true) {
+        debugPrint('User Exist? ....${value.data!.user}');
+
+        if (value.data!.user == true) {
+          debugPrint("user");
+          debugPrint(value.data!.user.toString());
+          // Get.off(() => ScreenRegistration());
           Get.off(() => const LoginPass());
         } else {
           Get.off(() => ScreenRegistration());
         }
-      } else if (value.status == 'BAD_REQUEST') {
+      } else if (value.status != 200) {
         _showDialog(value.message.toString());
       } else {
         _showDialog('${value.message.toString()}');
       }
     });
   }
-  void _otpRequest(String phone) {
 
-    _apiServices.requestOtp(phone).then((value){
-      if(value.status=='OK'){
+  void _otpRequest(String phone) {
+    _apiServices.requestOtp(phone).then((value) {
+      if (value.status == 'OK') {
         _showDialog('Otp Resent Successfully');
-        setState((){
+        setState(() {
           secondsRemaining = 60;
           enableResend = false;
         });
-      }else{
+      } else {
         _showDialog(value.message.toString());
-
       }
-
     });
-
   }
+
   void _resendCode() {
     //other code here
-    setState((){
+    setState(() {
       secondsRemaining = 30;
       enableResend = false;
     });
   }
-
 }

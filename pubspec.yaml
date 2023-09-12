@@ -40,6 +40,7 @@ dependencies:
   intl_phone_field: ^3.1.0
   dots_indicator: ^2.0.0
   clippy_flutter: ^2.0.0-nullsafety.1
+  
   cached_network_image: ^3.2.3
   http: ^0.13.3
   flutter_phoenix: ^1.0.0
@@ -71,6 +72,9 @@ dependencies:
   firebase_core: ^2.5.0
   #mpesa
   mpesa_flutter_plugin: ^1.6.1
+  firebase_messaging: ^14.6.7
+  date_field: ^3.0.3
+  google_sign_in: ^6.1.5
 
 dev_dependencies:
   flutter_test:

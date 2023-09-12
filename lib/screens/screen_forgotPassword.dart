@@ -278,10 +278,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     String snPhone = widget.phone;
     String finalPhone = snPhone.replaceAll('+', '');
 
-    Map<String, String> otp = {"otp": "$text"};
-    _apiServices.verifyOtp(phone, otp).then((value) {
+    // Map<String, String> otp = {"otp": "$text"};
+    _apiServices.verifyOtp(phone, text).then((value) {
       debugPrint('Valueeeeee....${value.toString()}');
-      if (value.status == 'OK') {
+      if (value.status == 200) {
         setState(() {
           _isLoading= false;
           Get.to(()=>PasswordForgot(phone: widget.phone));

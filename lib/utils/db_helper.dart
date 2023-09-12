@@ -90,7 +90,6 @@ class DatabaseHelper {
   // inserted row.
   Future<int> insert_row(Map<String, dynamic> row) async {
 
-
     print('Inserting,,,  ${row}');
     Database? DB = await this.database;
     return await DB!.insert(

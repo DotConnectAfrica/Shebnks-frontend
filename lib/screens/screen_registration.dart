@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
@@ -38,7 +39,7 @@ class _ScreenLoginState extends State<ScreenRegistration> {
   final TextEditingController controller_id_number = TextEditingController();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool is_code_sent = false;
-  bool _isLoading= false;
+  bool _isLoading = false;
   String? phone, partPhone;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -50,16 +51,17 @@ class _ScreenLoginState extends State<ScreenRegistration> {
     var mPhone = prefs.getString("PhoneNumber");
     phone = mPhone?.replaceAll('+', '');
   }
-  storeToken(String token) async{
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    _prefs.setString('token', token);
 
+  storeToken(String token) async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    debugPrint("Token during reg  $token");
+    _prefs.setString('token', token);
   }
-  storeUserBool()async{
+
+  storeUserBool() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     _prefs.setBool('userExists', true);
   }
-
 
   @override
   void initState() {
@@ -73,10 +75,7 @@ class _ScreenLoginState extends State<ScreenRegistration> {
       title: const Text('Demo'),
     );
     double app_bar_height = appBar.preferredSize.height;
-    final double statusBarHeight = MediaQuery
-        .of(context)
-        .padding
-        .top;
+    final double statusBarHeight = MediaQuery.of(context).padding.top;
 
     return Scaffold(
       //
@@ -145,7 +144,6 @@ class _ScreenLoginState extends State<ScreenRegistration> {
   }
 
   Widget _phone_input() {
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -411,12 +409,17 @@ class _ScreenLoginState extends State<ScreenRegistration> {
                   //fillColor: Colors.green
                 ),
                 validator: (val) {
-                  if (val!.length == 0) {
-                    return "Password cannot be empty";
-                  } else {
-                    return null;
+                  if (val!.isEmpty) {
+                    return 'New Password is required';
+                  } else if (!containsNumber(val) || !containsLetter(val)) {
+                    return 'Password must include both numbers and letters';
+                  } else if (val.length < 6) {
+                    return 'Password must be more than 6 characters';
                   }
+
+                  return null; // Return null if the input is valid.
                 },
+
                 keyboardType: TextInputType.text,
                 style: const TextStyle(
                   fontFamily: "Poppins",
@@ -458,9 +461,17 @@ class _ScreenLoginState extends State<ScreenRegistration> {
                 ),
                 validator: (val) {
                   if (val!.length == 0) {
-                    return "Password cannot be empty";
-                  } else {
-                    return null;
+                    if (val!.isEmpty) {
+                      return 'New Password is required';
+                    } else if (!containsNumber(val) || !containsLetter(val)) {
+                      return 'Password must include both numbers and letters';
+                    } else if (val.length < 6) {
+                      return 'Password must be more than 6 characters';
+                    }
+                    if (val != passwordController.text) {
+                      return 'Password must be similar';
+                    }
+                    return null; // Return null if the input is valid.
                   }
                 },
                 keyboardType: TextInputType.text,
@@ -475,38 +486,37 @@ class _ScreenLoginState extends State<ScreenRegistration> {
           height: 36,
         ),
         SizedBox(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
+          width: MediaQuery.of(context).size.width,
           height: 42,
-          child:
+          child: _isLoading
+              ? SpinKitCircle(
+                  color: Color(0xffed39ca),
+                )
+              : OutlinedButton(
+                  onPressed: () {
+                    get_user_info();
 
-          _isLoading? SpinKitCircle(color: Color(0xffed39ca),):
-          OutlinedButton(
-            onPressed: () {
-              get_user_info();
-
-              // Get.off(()=>LoginPass());
-              // Navigator.of(context).pushReplacement(
-              //   MaterialPageRoute(
-              //     builder: (BuildContext context) => Homescreen(),
-              //   ),
-              // );
-            },
-            style: ButtonStyle(
-              backgroundColor:
-              MaterialStateProperty.all<Color>(Color(0xffed39ca),),
-              shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50.0)),
-              ),
-            ),
-            child: const Text(
-              "FINISH",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
+                    // Get.off(()=>LoginPass());
+                    // Navigator.of(context).pushReplacement(
+                    //   MaterialPageRoute(
+                    //     builder: (BuildContext context) => Homescreen(),
+                    //   ),
+                    // );
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                      Color(0xffed39ca),
+                    ),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50.0)),
+                    ),
+                  ),
+                  child: const Text(
+                    "FINISH",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
         ),
       ],
     );
@@ -564,46 +574,37 @@ class _ScreenLoginState extends State<ScreenRegistration> {
     // UniversalMethods().showLoaderDialog(context, 'Saving');
     // FocusScope.of(context).unfocus();
 
-    await reqBody(
-        _firstName,
-        _middleName,
-        _lastName,
-        _emailAddress,
-        _idNumber,
-        _password,
-        phone);
+    await reqBody(_firstName, _middleName, _lastName, _emailAddress, _idNumber,
+        _password, phone);
   }
 
   Future reqBody(_firstName, _middleName, _lastName, _emailAddress, _idNumber,
       _password, phone) async {
     // Call the user's CollectionReference to add a new user
-    Map _newRequestData = {
-      'firstName': _firstName,
-      'middleName': _middleName,
-      'lastName': _lastName,
-      'email': _emailAddress,
-      'idNumber': "$_idNumber",
-      'password': "$_password",
-      'mobile': "$phone",
+    Map<String, dynamic> _newRequestData = {
+      "firstName": _firstName,
+      "middleName": _middleName,
+      "lastName": _lastName,
+      "emailAddress": _emailAddress,
+      "idNumber": _idNumber,
+      "password": _password,
+      "mobileNumber": phone,
     };
 
     // ApiServices()
-    _apiServices.sign_up(_newRequestData)
-        .then((value) {
-          setState(() {
-            _isLoading= false;
-          });
-      debugPrint('value is......''$value');
+    _apiServices.sign_up(_newRequestData).then((value) {
+      setState(() {
+        _isLoading = false;
+      });
+      debugPrint('value is......' '$value');
       // var token  = value
-      if (value.status == 'OK') {
+      if (value.status == 200) {
         storeUserBool();
-       Get.offAll(()=>LoginPass());
-       UniversalMethods.show_toast('Registration Successful', context);
-       // Get.snackBar('Successful','Registration');
+        Get.offAll(() => LoginPass());
+        UniversalMethods.show_toast('Registration Successful', context);
+        // Get.snackBar('Successful','Registration');
         debugPrint('tmessage is.......${value.message}');
-      }
-      else if(value.status=='BAD_REQUEST')
-      {
+      } else if (value.status != 200) {
         return showDialog<void>(
             context: context,
             barrierDismissible: true, // user must tap button!
@@ -611,25 +612,31 @@ class _ScreenLoginState extends State<ScreenRegistration> {
               return AlertDialog(
                 title: Text('Alert'),
                 content: Text('${value.message.toString()}'),
-
               );
-      //
-      //         // var error = value['error'];
-      //         // if (error) {
-      //         //   Navigator.pop(context);
-      //         //   UniversalMethods.show_toast(value['message'], context);
-      //         // } else {
-      //         // var response = value.toString();
-      //         // var decoded = jsonDecode(response);
-      //         // var loginResp = Login.fromJson(decoded);
-      //         // var token = loginResp.data?.token;
-      //         // debugPrint('bearer token """"""""""$token');
-      //
-      //
-      //         // }
+              //
+              //         // var error = value['error'];
+              //         // if (error) {
+              //         //   Navigator.pop(context);
+              //         //   UniversalMethods.show_toast(value['message'], context);
+              //         // } else {
+              //         // var response = value.toString();
+              //         // var decoded = jsonDecode(response);
+              //         // var loginResp = Login.fromJson(decoded);
+              //         // var token = loginResp.data?.token;
+              //         // debugPrint('bearer token """"""""""$token');
+              //
+              //
+              //         // }
             });
       }
     });
-    }
   }
 
+  bool containsNumber(String password) {
+    return password.contains(RegExp(r'\d'));
+  }
+
+  bool containsLetter(String password) {
+    return password.contains(RegExp(r'[a-zA-Z]'));
+  }
+}

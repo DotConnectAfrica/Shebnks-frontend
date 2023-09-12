@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:she_banks/api_services/api_services.dart';
+import 'package:she_banks/models/LoanApplicationModel.dart';
 import 'package:she_banks/screens/screen_she_funds_apply.dart';
+
+import '../utils/universal_methods.dart';
+import 'screen_view_progress.dart';
 
 class ScreenSheFunds extends StatefulWidget {
   @override
@@ -19,7 +25,7 @@ class _ScreenSheFundsState extends State<ScreenSheFunds> {
 
     setState(() {
       token = _prefs.getString('token');
-      userId = _prefs.getString('userId');
+      userId = _prefs.getInt('userId');
     });
   }
 
@@ -258,15 +264,48 @@ class _ScreenSheFundsState extends State<ScreenSheFunds> {
                             debugPrint('userId is>>>>>$userId');
 
                             _apiServices
-                                .checkSeedProgress(userId, token)
+                                .checkSeedProgress(userId)
                                 .then((value) {
-                                  debugPrint('SeedProgress Value>>>${value.message.toString()}');
-                                  if(value.status == "OK"){
-                                    _showDialog(value.message.toString());
-                                  }
-                                  else{
-                                    _showDialog(value.message.toString());
-                                  }
+                              debugPrint(
+                                  'SeedProgress Value>>>${value.message.toString()}');
+                              if (value.status == 200) {
+                                debugPrint(
+                                    value.data?.application_id.toString() ??
+                                        "No application ID");
+
+                                Get.off(() => ViewProgressPage(
+                                      progressData: {
+                                        // "About business":
+                                        //     value.data?.bussiness_about,
+                                        "business_founders":
+                                            value.data?.business_founders,
+                                        "proven_traction":
+                                            value.data?.proven_traction,
+                                        "funding_reason":
+                                            value.data?.funding_reason,
+                                        "business_problems":
+                                            value.data?.business_problems,
+                                        "business_impact":
+                                            value.data?.business_impact,
+                                        "bussiness_sectors":
+                                            value.data?.bussiness_sectors,
+                                        "application_received_status": value
+                                            .data?.application_received_status,
+                                        "application_rules_status": value
+                                            .data?.application_rules_status,
+                                        "application_evaluation_status": value
+                                            .data
+                                            ?.application_evaluation_status,
+                                        "application_admin_check_status": value
+                                            .data
+                                            ?.application_admin_check_status,
+                                        "application_status":
+                                            value.data?.application_status,
+                                      },
+                                    ));
+                              } else {
+                                _showDialog(value.message.toString());
+                              }
                             });
                           },
                         ),
@@ -300,30 +339,37 @@ class _ScreenSheFundsState extends State<ScreenSheFunds> {
                 ),
               ));
   }
-  void _showDialog(String message){
-    showDialog(context: context, builder: (BuildContext context){
-      return AlertDialog(
-        content: Container(
-          height: MediaQuery.of(context).size.height*0.27,
 
-        child: Column(
-          children: [
-            SizedBox(height: 24,),
-
-            Icon(Icons.warning_amber_rounded, size: 50, color: Colors.pink.shade300,),
-            SizedBox(height: 24,),
-            Text(message),
-          SizedBox(height: 24,),
-          OutlinedButton(onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text('Ok'))
-
-          ]
-
-        )),
-      );
-
-    });
+  void _showDialog(String message) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Container(
+                height: MediaQuery.of(context).size.height * 0.27,
+                child: Column(children: [
+                  SizedBox(
+                    height: 24,
+                  ),
+                  Icon(
+                    Icons.warning_amber_rounded,
+                    size: 50,
+                    color: Colors.pink.shade300,
+                  ),
+                  SizedBox(
+                    height: 24,
+                  ),
+                  Text(message),
+                  SizedBox(
+                    height: 24,
+                  ),
+                  OutlinedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Ok'))
+                ])),
+          );
+        });
   }
 }

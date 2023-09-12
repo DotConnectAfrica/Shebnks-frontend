@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,6 +16,7 @@ import 'package:she_banks/utils/universal_methods.dart';
 
 import '../api_services/api_services.dart';
 import '../models/model_user.dart';
+import '../widgets/Custom_Card.dart';
 import 'colors.dart';
 
 class AddSeed extends StatefulWidget {
@@ -28,7 +28,7 @@ class AddSeed extends StatefulWidget {
 class _AddSeedState extends State<AddSeed> {
   final _formKey = GlobalKey<FormState>();
   final _formKey1 = GlobalKey<FormState>();
-
+  final _apiServices = ApiServices();
   final aboutController = TextEditingController();
   final sectorsController = TextEditingController();
   final founderController = TextEditingController();
@@ -67,14 +67,16 @@ class _AddSeedState extends State<AddSeed> {
   TextEditingController _controller = TextEditingController();
   var _token;
   var _userId;
-  getTokenUser() async{
+
+  List<String> finalSectors = [];
+  getTokenUser() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
-   setState(() {
-     _token = _prefs.getString('token');
-     _userId= _prefs.getString('userId');
-   });
-
-
+    setState(() {
+      _token = _prefs.getString('token');
+      _userId = _prefs.getInt('userId');
+      // debugPrint("userD" + _userId);
+      // debugPrint("token" + _token);
+    });
   }
 
   @override
@@ -82,6 +84,7 @@ class _AddSeedState extends State<AddSeed> {
     getTokenUser();
     // TODO: implement initState
     super.initState();
+    getTokenUser();
     // Firebase.initializeApp();
     // pr = new ProgressDialog(context,
     //     type: ProgressDialogType.Normal, isDismissible: true);
@@ -101,7 +104,7 @@ class _AddSeedState extends State<AddSeed> {
   List<String> selectedCategories2 = [];
   var isOtherEnabled2 = false;
   var isOtherEnabled = false;
-  bool isLoading= false;
+  bool isLoading = false;
   var isWomanOwned = 1;
   var fundraised = 1;
   var generatingRevenue = 1;
@@ -175,106 +178,26 @@ class _AddSeedState extends State<AddSeed> {
                               ),
                             )),
 
-                        // Card(
-                        //     margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                        //     elevation: 0.9,
-                        //     shape: RoundedRectangleBorder(
-                        //         borderRadius:
-                        //             BorderRadius.all(Radius.circular(10.0))),
-                        //     child: Padding(
-                        //       padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-                        //       child: Center(
-                        //         child: Image(
-                        //             image:
-                        //                 AssetImage('assets/images/0003.jpg')),
-                        //       ),
-                        //     )),
+                        
 
-                        Card(
-                            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            elevation: 0.9,
-                            shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 20, right: 20, top: 30, bottom: 30),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text.rich(
-                                    TextSpan(
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2!
-                                          .copyWith(),
-                                      text:
-                                          "1. Tell us about your organization or Project (Applicant expected to give the name, size, current residence and any other information)",
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                            text: '*',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .subtitle2!
-                                                .copyWith(color: Colors.red)),
-                                      ],
-                                    ),
-                                  ),
-                                  TextFormField(
-                                    controller: aboutController,
-                                    validator: (value) => value!.isEmpty
-                                        ? "This field is required"
-                                        : null,
-                                    decoration: const InputDecoration(
-                                        hintText: "Enter Business about"),
-                                  )
-                                ],
-                              ),
-                            )),
-                        //okay 1
-                        Card(
-                            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            elevation: 0.9,
-                            shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 20, right: 20, top: 30, bottom: 30),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text.rich(
-                                    TextSpan(
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2!
-                                          .copyWith(),
-                                      text:
-                                          "2. Who is the trusted founder(s) or Leader? (Please include phone number and email address and separate eact founder by comma)",
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                            text: '*',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .subtitle2!
-                                                .copyWith(color: Colors.red)),
-                                      ],
-                                    ),
-                                  ),
-                                  TextFormField(
-                                    controller: founderController,
-                                    validator: (value) => value!.isEmpty
-                                        ? "This field is required"
-                                        : null,
-                                    decoration: const InputDecoration(
-                                        hintText:
-                                            " Who is the trusted founder(s) or Leader? (Please include phone number and email address)"),
-                                  )
-                                ],
-                              ),
-                            )),
-                        //okay2
+                        CustomCard(
+                          question:
+                              "1. Tell us about your organization or Project (Applicant expected to give the name, size, current residence and any other information)",
+                          hintText: "Enter Business about",
+                          controller: aboutController,
+                          validator: (value) =>
+                              value!.isEmpty ? "This field is required" : null,
+                        ),
+                        CustomCard(
+                          question:
+                              "2. Who is the trusted founder(s) or Leader? (Please include phone number and email address and separate each founder by comma)",
+                          hintText:
+                              " Who is the trusted founder(s) or Leader? (Please include phone number and email address)",
+                          controller: founderController,
+                          validator: (value) =>
+                              value!.isEmpty ? "This field is required" : null,
+                        ),
+
                         Card(
                             margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                             elevation: 0.9,
@@ -307,32 +230,31 @@ class _AddSeedState extends State<AddSeed> {
                                   ),
                                   CheckboxListTile(
                                     title: const Text('Education'),
-                                    value: selectedCategories
-                                        .contains("Education"),
+                                    value: finalSectors.contains("Education"),
                                     activeColor: const Color(0xffed39ca),
                                     onChanged: (bool? value) {
                                       setState(() {
                                         if (value!) {
-                                          selectedCategories.add("Education");
+                                          finalSectors.add("Education");
                                         } else {
-                                          selectedCategories
-                                              .remove("Education");
+                                          finalSectors.remove("Education");
                                         }
                                       });
                                     },
                                   ),
                                   CheckboxListTile(
-                                    title: const Text('Building and Construction'),
-                                    value: selectedCategories
+                                    title:
+                                        const Text('Building and Construction'),
+                                    value: finalSectors
                                         .contains("Building and Construction"),
                                     activeColor: const Color(0xffed39ca),
                                     onChanged: (bool? value) {
                                       setState(() {
                                         if (value!) {
-                                          selectedCategories
+                                          finalSectors
                                               .add("Building and Construction");
                                         } else {
-                                          selectedCategories.remove(
+                                          finalSectors.remove(
                                               "Building and Construction");
                                         }
                                       });
@@ -340,16 +262,16 @@ class _AddSeedState extends State<AddSeed> {
                                   ),
                                   CheckboxListTile(
                                     title: const Text('Banking and finance'),
-                                    value: selectedCategories
+                                    value: finalSectors
                                         .contains("Banking and finance"),
                                     activeColor: const Color(0xffed39ca),
                                     onChanged: (bool? value) {
                                       setState(() {
                                         if (value!) {
-                                          selectedCategories
+                                          finalSectors
                                               .add("Banking and finance");
                                         } else {
-                                          selectedCategories
+                                          finalSectors
                                               .remove("Banking and finance");
                                         }
                                       });
@@ -357,63 +279,58 @@ class _AddSeedState extends State<AddSeed> {
                                   ),
                                   CheckboxListTile(
                                     title: const Text('Agriculture'),
-                                    value: selectedCategories
-                                        .contains("Agriculture"),
+                                    value: finalSectors.contains("Agriculture"),
                                     activeColor: const Color(0xffed39ca),
                                     onChanged: (bool? value) {
                                       setState(() {
                                         if (value!) {
-                                          selectedCategories.add("Agriculture");
+                                          finalSectors.add("Agriculture");
                                         } else {
-                                          selectedCategories
-                                              .remove("Agriculture");
+                                          finalSectors.remove("Agriculture");
                                         }
                                       });
                                     },
                                   ),
                                   CheckboxListTile(
                                     title: const Text('E-commerce'),
-                                    value: selectedCategories
-                                        .contains("E-commerce"),
+                                    value: finalSectors.contains("E-commerce"),
                                     activeColor: const Color(0xffed39ca),
                                     onChanged: (bool? value) {
                                       setState(() {
                                         if (value!) {
-                                          selectedCategories.add("E-commerce");
+                                          finalSectors.add("E-commerce");
                                         } else {
-                                          selectedCategories
-                                              .remove("E-commerce");
+                                          finalSectors.remove("E-commerce");
                                         }
                                       });
                                     },
                                   ),
                                   CheckboxListTile(
                                     title: const Text('Health'),
-                                    value:
-                                        selectedCategories.contains("Health"),
+                                    value: finalSectors.contains("Health"),
                                     activeColor: const Color(0xffed39ca),
                                     onChanged: (bool? value) {
                                       setState(() {
                                         if (value!) {
-                                          selectedCategories.add("Health");
+                                          finalSectors.add("Health");
                                         } else {
-                                          selectedCategories.remove("Health");
+                                          finalSectors.remove("Health");
                                         }
                                       });
                                     },
                                   ),
                                   CheckboxListTile(
                                     title: const Text('Internet of things'),
-                                    value: selectedCategories
+                                    value: finalSectors
                                         .contains("Internet of things"),
                                     activeColor: const Color(0xffed39ca),
                                     onChanged: (bool? value) {
                                       setState(() {
                                         if (value!) {
-                                          selectedCategories
+                                          finalSectors
                                               .add("Internet of things");
                                         } else {
-                                          selectedCategories
+                                          finalSectors
                                               .remove("Internet of things");
                                         }
                                       });
@@ -421,17 +338,15 @@ class _AddSeedState extends State<AddSeed> {
                                   ),
                                   CheckboxListTile(
                                     title: const Text('Manufacturing'),
-                                    value: selectedCategories
-                                        .contains("Manufacturing"),
+                                    value:
+                                        finalSectors.contains("Manufacturing"),
                                     activeColor: const Color(0xffed39ca),
                                     onChanged: (bool? value) {
                                       setState(() {
                                         if (value!) {
-                                          selectedCategories
-                                              .add("Manufacturing");
+                                          finalSectors.add("Manufacturing");
                                         } else {
-                                          selectedCategories
-                                              .remove("Manufacturing");
+                                          finalSectors.remove("Manufacturing");
                                         }
                                       });
                                     },
@@ -444,9 +359,9 @@ class _AddSeedState extends State<AddSeed> {
                                     onChanged: (bool? value) {
                                       setState(() {
                                         if (value!) {
-                                          selectedCategories.add("Service");
+                                          finalSectors.add("Service");
                                         } else {
-                                          selectedCategories.remove("Service");
+                                          finalSectors.remove("Service");
                                         }
                                       });
                                     },
@@ -464,8 +379,8 @@ class _AddSeedState extends State<AddSeed> {
                                     },
                                   ),
                                   Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 20, right: 20),
+                                      padding: const EdgeInsets.only(
+                                          left: 20, right: 20),
                                       child: TextFormField(
                                         controller: sectorsController,
                                         validator: (value) => isOtherEnabled
@@ -521,7 +436,8 @@ class _AddSeedState extends State<AddSeed> {
                                     ],
                                   ),
                                   ListTile(
-                                    contentPadding: const EdgeInsets.only(left: 0),
+                                    contentPadding:
+                                        const EdgeInsets.only(left: 0),
                                     title: Text(
                                       'Yes',
                                       style:
@@ -561,261 +477,56 @@ class _AddSeedState extends State<AddSeed> {
                               ),
                             )),
                         //okay4
-                        Card(
-                            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            elevation: 0.9,
-                            shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 20, right: 20, top: 30, bottom: 30),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text.rich(
-                                    TextSpan(
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2!
-                                          .copyWith(),
-                                      text:
-                                          "5. How is your business/project involved in bridging the gender gap of women in STEM?",
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                            text: '*',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .subtitle2!
-                                                .copyWith(color: Colors.red)),
-                                      ],
-                                    ),
-                                  ),
-                                  TextFormField(
-                                    controller: bridgingController,
-                                    validator: (value) => value!.isEmpty
-                                        ? "This field is required"
-                                        : null,
-                                    decoration: const InputDecoration(
-                                        hintText: "Enter here"),
-                                  )
-                                ],
-                              ),
-                            )),
-                        //okay5 not complete
-                        Card(
-                            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            elevation: 0.9,
-                            shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 20, right: 20, top: 30, bottom: 30),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          "6. What problem/community need are you addressing?",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .subtitle2!
-                                              .copyWith(),
-                                        ),
-                                      ),
-                                      Text(
-                                        "*",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle2!
-                                            .copyWith(color: Colors.red),
-                                      )
-                                    ],
-                                  ),
-                                  TextFormField(
-                                    controller: problemController,
-                                    validator: (value) => value!.isEmpty
-                                        ? "This field is required"
-                                        : null,
-                                    decoration: const InputDecoration(
-                                        hintText: "Enter here"),
-                                  )
-                                ],
-                              ),
-                            )),
-                        //okay6 not complete
-                        Card(
-                            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            elevation: 0.9,
-                            shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 20, right: 20, top: 30, bottom: 30),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "7. How will you measure impact?",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle2!
-                                            .copyWith(),
-                                      ),
-                                      Text(
-                                        "*",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle2!
-                                            .copyWith(color: Colors.red),
-                                      )
-                                    ],
-                                  ),
-                                  TextFormField(
-                                    controller: impactController,
-                                    validator: (value) => value!.isEmpty
-                                        ? "This field is required"
-                                        : null,
-                                    decoration: const InputDecoration(
-                                        hintText: "Enter here"),
-                                  )
-                                ],
-                              ),
-                            )),
+                        CustomCard(
+                          question:
+                              "5. How is your business/project involved in bridging the gender gap of women in STEM?",
+                          hintText: "Enter here",
+                          controller: bridgingController,
+                          validator: (value) =>
+                              value!.isEmpty ? "This field is required" : null,
+                        ),
+                        CustomCard(
+                          question:
+                              "6. What problem/community need are you addressing?",
+                          hintText: "Enter here",
+                          controller: problemController,
+                          validator: (value) =>
+                              value!.isEmpty ? "This field is required" : null,
+                        ),
+                        CustomCard(
+                          question: "7. How will you measure impact?",
+                          hintText: "Enter here",
+                          controller: impactController,
+                          validator: (value) =>
+                              value!.isEmpty ? "This field is required" : null,
+                        ),
+                        CustomCard(
+                          question:
+                              "8. How does your business/project market or plan to market its products and services?",
+                          hintText: "Enter here",
+                          controller: marketingController,
+                          validator: (value) =>
+                              value!.isEmpty ? "This field is required" : null,
+                        ),
+                        CustomCard(
+                          question:
+                              "9. Any major STEM initiative milestones achieved?",
+                          hintText: "Enter here",
+                          controller: stemInitiativeController,
+                          validator: (value) =>
+                              value!.isEmpty ? "This field is required" : null,
+                        ),
 
-                        Card(
-                            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            elevation: 0.9,
-                            shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 20, right: 20, top: 30, bottom: 30),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text.rich(
-                                    TextSpan(
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2!
-                                          .copyWith(),
-                                      text:
-                                          "8. How does your business/project market or plan to market its products and services?",
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                            text: '*',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .subtitle2!
-                                                .copyWith(color: Colors.red)),
-                                      ],
-                                    ),
-                                  ),
-                                  TextFormField(
-                                    controller: marketingController,
-                                    validator: (value) => value!.isEmpty
-                                        ? "This field is required"
-                                        : null,
-                                    decoration: const InputDecoration(
-                                        hintText: "Enter here"),
-                                  )
-                                ],
-                              ),
-                            )),
-                        //okay9 not complete
-                        Card(
-                            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            elevation: 0.9,
-                            shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 20, right: 20, top: 30, bottom: 30),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          "9. Any major STEM initiative milestones achieved?",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .subtitle2!
-                                              .copyWith(),
-                                        ),
-                                      ),
-                                      Text(
-                                        "*",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle2!
-                                            .copyWith(color: Colors.red),
-                                      )
-                                    ],
-                                  ),
-                                  TextFormField(
-                                    controller: stemInitiativeController,
-                                    validator: (value) => value!.isEmpty
-                                        ? "This field is required"
-                                        : null,
-                                    decoration: const InputDecoration(
-                                        hintText: "Enter here"),
-                                  )
-                                ],
-                              ),
-                            )),
                         //okay10 not complete
-                        Card(
-                            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            elevation: 0.9,
-                            shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 20, right: 20, top: 30, bottom: 30),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text.rich(
-                                    TextSpan(
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2!
-                                          .copyWith(),
-                                      text:
-                                          "10. Do you have a proven traction? (Some customers, generating revenue, app downloads etc)",
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                            text: '*',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .subtitle2!
-                                                .copyWith(color: Colors.red)),
-                                      ],
-                                    ),
-                                  ),
-                                  TextFormField(
-                                    controller: transactonController,
-                                    validator: (value) => value!.isEmpty
-                                        ? "This field is required"
-                                        : null,
-                                    decoration: const InputDecoration(
-                                        hintText: "Enter here"),
-                                  )
-                                ],
-                              ),
-                            )),
+                        CustomCard(
+                          question:
+                              "10. Do you have a proven traction? (Some customers, generating revenue, app downloads etc)",
+                          hintText: "Enter here",
+                          controller: transactonController,
+                          validator: (value) =>
+                              value!.isEmpty ? "This field is required" : null,
+                        ),
+
                         //okay11
                         Card(
                             margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -848,7 +559,8 @@ class _AddSeedState extends State<AddSeed> {
                                     ],
                                   ),
                                   ListTile(
-                                    contentPadding: const EdgeInsets.only(left: 0),
+                                    contentPadding:
+                                        const EdgeInsets.only(left: 0),
                                     title: Text(
                                       'Yes',
                                       style:
@@ -886,41 +598,14 @@ class _AddSeedState extends State<AddSeed> {
                               ),
                             )),
                         //okay12
-                        Card(
-                            margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            elevation: 0.9,
-                            shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 20, right: 20, top: 30, bottom: 30),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "12. Tell us why we should fund you.",
-                                        overflow: TextOverflow.ellipsis,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle2!
-                                            .copyWith(),
-                                      ),
-                                    ],
-                                  ),
-                                  TextFormField(
-                                    validator: (value) => value!.isEmpty
-                                        ? "This field is required"
-                                        : null,
-                                    controller: tellusController,
-                                    decoration: const InputDecoration(
-                                        hintText: "Enter Answer"),
-                                  )
-                                ],
-                              ),
-                            )),
+                        CustomCard(
+                          question: "12. Tell us why we should fund you.",
+                          hintText: "Enter Answer",
+                          controller: tellusController,
+                          validator: (value) =>
+                              value!.isEmpty ? "This field is required" : null,
+                        ),
+
                         Card(
                             margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                             elevation: 0.9,
@@ -934,7 +619,8 @@ class _AddSeedState extends State<AddSeed> {
                                 key: _formKey1,
                                 child: Column(
                                   children: [
-                                    const Text('13. Attach the following documents either as .docx, pdf,  or png'),
+                                    const Text(
+                                        '13. Attach the following documents either as .docx, pdf,  or png'),
                                     // FormBuilderTextField(
                                     //   name: 'businessPlan',
                                     //   decoration: const InputDecoration(labelText: ''),
@@ -942,9 +628,11 @@ class _AddSeedState extends State<AddSeed> {
                                     // ),
                                     FormBuilderFilePicker(
                                       name: 'businessPlan',
-                                      decoration: const InputDecoration(labelText: 'Business plan' ),
+                                      decoration: const InputDecoration(
+                                          labelText: 'Business plan'),
                                       // maxFiles: 3, // Maximum number of attachments allowed
-                                      previewImages: true, // Display image previews
+                                      previewImages:
+                                          true, // Display image previews
                                       onChanged: (value) {
                                         print(value);
                                       },
@@ -957,9 +645,11 @@ class _AddSeedState extends State<AddSeed> {
                                     // ),
                                     FormBuilderFilePicker(
                                       name: 'financialStatement',
-                                      decoration: const InputDecoration(labelText: 'Financial Statement'),
+                                      decoration: const InputDecoration(
+                                          labelText: 'Financial Statement'),
                                       // maxFiles: 3, // Maximum number of attachments allowed
-                                      previewImages: true, // Display image previews
+                                      previewImages:
+                                          true, // Display image previews
                                       onChanged: (value) {
                                         print(value);
                                       },
@@ -972,9 +662,12 @@ class _AddSeedState extends State<AddSeed> {
                                     // ),
                                     FormBuilderFilePicker(
                                       name: 'taxAdminCertificate',
-                                      decoration: const InputDecoration(labelText: 'Tax Compliance Certificate'),
+                                      decoration: const InputDecoration(
+                                          labelText:
+                                              'Tax Compliance Certificate'),
                                       // maxFiles: 3, // Maximum number of attachments allowed
-                                      previewImages: true, // Display image previews
+                                      previewImages:
+                                          true, // Display image previews
                                       onChanged: (value) {
                                         print(value);
                                       },
@@ -987,72 +680,22 @@ class _AddSeedState extends State<AddSeed> {
                                     // ),
                                     FormBuilderFilePicker(
                                       name: 'applicantCoinvestorStmt',
-                                      decoration: const InputDecoration(labelText: 'Applicant Coinvester Statement'),
+                                      decoration: const InputDecoration(
+                                          labelText:
+                                              'Applicant Coinvester Statement'),
                                       // maxFiles: 3, // Maximum number of attachments allowed
-                                      previewImages: true, // Display image previews
+                                      previewImages:
+                                          true, // Display image previews
                                       onChanged: (value) {
                                         print(value);
                                       },
                                       // selectorButtonOnErrorText: 'Add attachments',
                                     ),
-                                    // SizedBox(height: 20),
-                                    // ElevatedButton(
-                                    //   onPressed: () {
-                                    //     if (_formKey.currentState!.saveAndValidate()) {
-                                    //       final formData = _formKey.currentState!.value;
-                                    //       // Process the form data here
-                                    //       print(formData);
-                                    //     }
-                                    //   },
-                                    //   child: Text('Submit'),
-                                    // ),
                                   ],
                                 ),
                               ),
                             )),
-                        // Card(
-                        //     margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                        //     elevation: 0.9,
-                        //     shape: const RoundedRectangleBorder(
-                        //         borderRadius:
-                        //             BorderRadius.all(Radius.circular(10.0))),
-                        //     child: Padding(
-                        //       padding: const EdgeInsets.only(
-                        //           left: 20, right: 20, top: 30, bottom: 30),
-                        //       child: FormBuilder(
-                        //         key: _formKey1,
-                        //         child: Column(
-                        //           children: [
-                        //             FormBuilderTextField(
-                        //               name: 'Financial Statement',
-                        //               decoration: InputDecoration(labelText: 'Name'),
-                        //               // validator: FormBuilderValidators.required(context),
-                        //             ),
-                        //             FormBuilderFilePicker(
-                        //               name: 'fStatement',
-                        //               decoration: InputDecoration(labelText: 'Attachments'),
-                        //               maxFiles: 3, // Maximum number of attachments allowed
-                        //               previewImages: true, // Display image previews
-                        //               onChanged: (value) {
-                        //                 print(value);
-                        //               },
-                        //               // selectorButtonOnErrorText: 'Add attachments',
-                        //             ),
-                        //             // SizedBox(height: 20),
-                        //             // ElevatedButton(
-                        //             //   onPressed: () {
-                        //             //     if (_formKey.currentState!.saveAndValidate()) {
-                        //             //       final formData = _formKey.currentState!.value;
-                        //             //       // Process the form data here
-                        //             //       print(formData);
-                        //             //     }
-                        //             //   },
-                        //             //   child: Text('Submit'),
-                        //             // ),
-                        //           ],
-                        //         ),
-                        //       ),
-                        //     )),
+
                         Card(
                             margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                             elevation: 0.9,
@@ -1089,66 +732,72 @@ class _AddSeedState extends State<AddSeed> {
                     )),
                 GestureDetector(
                   onTap: () async {
-                    _successDialog('Your Shefund Application has been submitted Successfully');
+                    // _successDialog(
+                    //     'Your Shefund Application has been submitted Successfully');
 
-                    UniversalMethods.show_toast('Submitted Successfully', context);
+                    // UniversalMethods.show_toast(
+                    //     'Submitted Successfully', context);
 
-                    // final form =
-                    //
-                    //
-                    // _formKey.currentState!;
-                    // // if (form.validate()) {
-                    // //   form.save();
-                    //
-                    //   FocusScope.of(context).unfocus();
-                    //   List<String> finalSectors = [];
-                    //   List<String> finalTarget = [];
-                    //   List<String> othersAttachment = [];
-                    //   finalSectors.addAll(transactonController.text.split(','));
-                    //   finalTarget.addAll(anyOtherinfoController.text.split(','));
-                    //   finalTarget.addAll(selectedCategories2);
-                    //   finalSectors.addAll(selectedCategories);
-                    //
-                    //   final finaData = {
-                    //     // "username": email,
-                    //     // "name": myController1.text,
-                    //     "about": aboutController.text,
-                    //     "impact": impactController.text,
-                    //     "problems": problemController.text,
-                    //     "bridging": bridgingController.text,
-                    //     // "email": email,
-                    //     "founders": founderController.text.split(','),
-                    //     // "number": myController4.text,
-                    //     "womanOwned": isWomanOwned == 1,
-                    //     "sectors": finalSectors,
-                    //     "marketing": marketingController.text,
-                    //     "primaryTarget": finalTarget,
-                    //     "provenTransaction": transactonController.text,
-                    //     "reason": tellusController.text,
-                    //     "fundraised": fundraised == 1,
-                    //     "stemInitiative": stemInitiativeController.text,
-                    //     // "attachments": formData['attachments'],
-                    //     "otherInfo": anyOtherinfoController.text
-                    //   };
-                    //   print(finaData.toString());
-                    //
-                    //   ApiServices().applySeedFund(_userId,finaData, _token).then((value) {
-                    //     print('SeedValue>>>>>>${value.toString()}');
-                    //     UniversalMethods.show_toast('${value.message.toString()}', context);
-                    //     if(value.status=="OK"){
-                    //       Get.offAll(()=>ScreenSheFunds());
-                    //     }
-                    //   });
-                    //
-                    //   print(finaData);
-                    //
-                    // // } else {
-                    //   print("The form is invalid");
-                    // UniversalMethods.show_toast('Fill all fields', context);
+                    final form = _formKey.currentState!;
+                    // if (form.validate()) {
+                    //   form.save();
+
+                    FocusScope.of(context).unfocus();
+                    List<String> finalSectors = [];
+                    List<String> finalTarget = [];
+                    List<String> othersAttachment = [];
+                    finalSectors.addAll(transactonController.text.split(','));
+                    finalTarget.addAll(anyOtherinfoController.text.split(','));
+                    finalTarget.addAll(selectedCategories2);
+                    finalSectors.addAll(selectedCategories);
+
+                    final finaData = {
+                      // "username": email,
+                      // "name": myController1.text,
+                      "about": aboutController.text,
+                      "impact": impactController.text,
+                      "problems": problemController.text,
+                      "bridging": bridgingController.text,
+                      // "email": email,
+                      "founders": founderController.text.split(','),
+                      // "number": myController4.text,
+                      "womanOwned": isWomanOwned == 1,
+                      "sectors": finalSectors,
+                      "marketing": marketingController.text,
+                      "primaryTarget": finalTarget.first,
+                      "provenTransaction": transactonController.text,
+                      "reason": tellusController.text,
+                      "fundraised": fundraised == 1,
+                      "stemInitiative": stemInitiativeController.text,
+                      // "attachments": formData['attachments'],
+                      "otherInfo": anyOtherinfoController.text,
+                      "userId": _userId
+                    };
+                    print(finaData.toString());
+                    try {
+                      ApiServices().seedFundApplication(finaData).then((value) {
+                        print('SeedValue>>>>>>${value.toString()}');
+                        UniversalMethods.show_toast(
+                            '${value.message.toString()}', context);
+                        if (value.status == 200) {
+                          UniversalMethods.show_toast(
+                              'Your apllication is sucessfull please wait for our response',
+                              context);
+                          Get.offAll(() => ScreenSheFunds());
+                        } else {
+                          UniversalMethods.show_toast(
+                              'Not sucessfull', context);
+                          _showDialog('${value.message.toString()}');
+                        }
+                      });
+                    } catch (e) {
+                      _showDialog('${e.toString()}');
                     }
+                  }
                   //  Navigator.of(context).pop();
                   // },,
-                  ,child: Padding(
+                  ,
+                  child: Padding(
                     padding: const EdgeInsets.fromLTRB(0, 20, 0, 40),
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(20, 30, 20, 20),
@@ -1179,6 +828,42 @@ class _AddSeedState extends State<AddSeed> {
       ),
     );
   }
+
+  void _showDialog(String message) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Container(
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: Column(children: [
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  const Icon(
+                    Icons.warning_amber_rounded,
+                    size: 50,
+                    color: Color(0xffed39ca),
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  Text(message),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  OutlinedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        // push(MaterialPageRoute(
+                        // builder: (context) => Homescreen()));
+                      },
+                      child: const Text('Ok'))
+                ])),
+          );
+        });
+  }
+
   void _successDialog(String message) {
     showDialog(
         context: context,

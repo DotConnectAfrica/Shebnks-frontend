@@ -1,6 +1,6 @@
 class UpdateModel {
   String? message;
-  String? status;
+  dynamic status;
   Data? data;
 
   UpdateModel({this.message, this.status, this.data});

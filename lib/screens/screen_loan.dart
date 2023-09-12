@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:form_builder_file_picker/form_builder_file_picker.dart';
 import 'package:get/get.dart';
@@ -34,10 +35,13 @@ class _LoansPageState extends State<LoansPage> {
   var references = 1;
   var mentor = 1;
   var programs = 1;
-  var existing =1;
-
-
-
+  var existing = 1;
+  var user = "";
+  @override
+  void initState() {
+    super.initState();
+    useUser(); // Call useUser during widget initialization
+  }
 
   bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
@@ -46,6 +50,21 @@ class _LoansPageState extends State<LoansPage> {
   storeHasLoan() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     _prefs.setBool('hasExistingLoan', true);
+  }
+
+  Future<String> getPhone() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var mPhone = prefs.getString("PhoneNumber");
+    user = mPhone!.replaceAll('+', '');
+    return user;
+  }
+
+  void useUser() async {
+    user = await getPhone();
+
+    // Now, you can use the user variable as needed
+
+    // Any code that depends on the user variable should be placed here
   }
 
 // '
@@ -168,55 +187,55 @@ class _LoansPageState extends State<LoansPage> {
       // final training = _trainingController.text;
       // final mentor = _mentorController.text;
       final otherInfo = _otherInfoController.text;
-      // var isWoman//Owned = 1;
-      // var fStatement = 1;
-      // var collateral = 1;
-      // var bPlan = 1;
-      // var womenInit = 1;
-      // var references = 1;
-      // var mentor = 1;
-      // var programs = 1;
-      final loanData = {
-        'amount': amount,
+      final phone = user;
+
+      final loan = {
+        "amount": double.parse(amount),
         "survey": {
-          'womanOwned': isWomanOwned==1,
-          'howLong': howLong,
-          'legal': legal,
-          'industry': finalIndustry,
-          'loanPurpose': loanPurpose,
-          'loanUse': loanUse,
-          'estTime': estTime,
-          'businessOverview': businessOverview,
-          'annualRevenue': annualRevenue,
-          'existingloans': existing==1,
-          'collateral': collateral==1,
-          'previouslyAppplied': previouslyAppplied,
-          'statement': fStatement==1,
-          'employeeNo': employeeNo,
-          'financialChallenges': financialChallenges,
-          'bPlan': bPlan==1,
-          'competitor': competitor,
-          'women': womenInit==1,
-          'marketing': marketing,
-          'reliability': references==1,
-          'training': programs==1,
-          'mentor': mentor==1,
-          'otherInfo': otherInfo,
-        }
+          "womanOwned": isWomanOwned == 1,
+          "howLong": int.parse(howLong),
+          "legal": legal,
+          "industry": finalIndustry.last,
+          "loanPurpose": loanPurpose,
+          "loanUse": loanUse,
+          "estTime": estTime,
+          "businessOverview": businessOverview,
+          "annualRevenue": annualRevenue,
+          "existingLoans": existing == 1,
+          "collateral": collateral == 1,
+          "previouslyApplied": previouslyAppplied,
+          "statement": fStatement == 1,
+          "employeeNo": int.parse(employeeNo),
+          "financialChallenges": financialChallenges,
+          "competitor": competitor,
+          "women": womenInit == 1,
+          "marketing": marketing,
+          "reliability": references == 1,
+          "training": programs == 1,
+          "mentor": mentor == 1,
+          "otherInfo": otherInfo
+        },
+        "user": phone
       };
-      _apiServices
-          .applyloan(loanData, widget.token, widget.userId)
-          .then((value) {
+      _apiServices.applyloan(loan).then((value) {
+        print("applying loan");
+        print(value.status);
         setState(() {
           _isLoading = false;
         });
-        if (value.status == 'OK') {
-          // var
-          // storeHasLoan();
-          _successDialog('Loan Application Submitted Successfully');
-          debugPrint('tmessage is.......${value.message.toString()}');
-        } else if (value.status == 'BAD_REQUEST') {
-          _showDialog('${value.message.toString()}');
+        try {
+          if (value.status == 200) {
+            // var
+            // storeHasLoan();
+            _successDialog('Loan Application Submitted Successfully');
+            debugPrint('tmessage is.......${value.message.toString()}');
+          } else if (value.status != 200) {
+            _showDialog('${value.message.toString()}');
+          } else {
+            _showDialog('${value.message.toString()}');
+          }
+        } catch (e) {
+          _showDialog('An error occurred: $e');
         }
       });
 
@@ -301,7 +320,6 @@ class _LoansPageState extends State<LoansPage> {
           title: const Text('Apply SheLoan'),
         ),
         backgroundColor: const Color(0xfff6e0e0),
-
         body: SingleChildScrollView(
             padding: const EdgeInsets.only(left: 16, right: 16),
             child: Column(children: <Widget>[
@@ -319,8 +337,8 @@ class _LoansPageState extends State<LoansPage> {
                         margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0))),
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
@@ -334,14 +352,12 @@ class _LoansPageState extends State<LoansPage> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Flexible(
-                                  // height: 60,
                                   child: TextFormField(
                                     controller: _amountController,
                                     decoration: InputDecoration(
                                       hintText: 'Amount',
                                       contentPadding: const EdgeInsets.fromLTRB(
                                           16.0, 0, 16.0, 0),
-
                                       hintStyle: const TextStyle(
                                           fontSize: 13, color: Colors.grey),
                                       focusedBorder: OutlineInputBorder(
@@ -359,16 +375,23 @@ class _LoansPageState extends State<LoansPage> {
                                           width: 1.0,
                                         ),
                                       ),
-                                      //fillColor: Colors.green
+                                      // fillColor: Colors.green
                                     ),
                                     validator: (val) {
-                                      if (val!.length == 0) {
+                                      if (val!.isEmpty) {
                                         return "Amount cannot be empty";
-                                      } else {
-                                        return null;
                                       }
+                                      // Convert the input to a numeric value and check the limit
+                                      final numericValue = double.tryParse(val);
+                                      if (numericValue == null ||
+                                          numericValue <= 0 ||
+                                          numericValue > 50000) {
+                                        return "Enter a valid amount between 1 and 50,000 KES";
+                                      }
+                                      return null;
                                     },
-                                    keyboardType: TextInputType.text,
+                                    keyboardType: TextInputType
+                                        .number, // Use TextInputType.number to show a numeric keyboard
                                     style: const TextStyle(
                                       fontFamily: "Poppins",
                                     ),
@@ -384,7 +407,7 @@ class _LoansPageState extends State<LoansPage> {
                           elevation: 0.9,
                           shape: const RoundedRectangleBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
+                                  BorderRadius.all(Radius.circular(10.0))),
                           child: Padding(
                             padding: const EdgeInsets.only(
                                 left: 20, right: 20, top: 30, bottom: 30),
@@ -410,18 +433,19 @@ class _LoansPageState extends State<LoansPage> {
                                   ],
                                 ),
                                 ListTile(
-                                  contentPadding: const EdgeInsets.only(left: 0),
+                                  contentPadding:
+                                      const EdgeInsets.only(left: 0),
                                   title: Text(
                                     'Yes',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 1,
                                     groupValue: isWomanOwned,
                                     onChanged: (int? value) {
                                       setState(
-                                            () {
+                                        () {
                                           isWomanOwned = value!;
                                         },
                                       );
@@ -430,11 +454,11 @@ class _LoansPageState extends State<LoansPage> {
                                 ),
                                 ListTile(
                                   contentPadding:
-                                  const EdgeInsets.only(left: 0, top: 0),
+                                      const EdgeInsets.only(left: 0, top: 0),
                                   title: Text(
                                     'No',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 0,
@@ -513,14 +537,14 @@ class _LoansPageState extends State<LoansPage> {
                         margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
                           child: Column(children: [
                             const Text(
-                                '3. How long have you been operating your business?'),
+                                '3. How long have you been operating your business (In months)?'),
                             const SizedBox(
                               height: 8,
                             ),
@@ -529,10 +553,10 @@ class _LoansPageState extends State<LoansPage> {
                                 child: TextFormField(
                                   controller: _howLongController,
                                   decoration: InputDecoration(
-                                    hintText: 'Operations of the business',
-                                    contentPadding:
-                                    const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-
+                                    hintText:
+                                        'Operations of the business (in months)',
+                                    contentPadding: const EdgeInsets.fromLTRB(
+                                        16.0, 0, 16.0, 0),
                                     hintStyle: const TextStyle(
                                         fontSize: 13, color: Colors.grey),
                                     focusedBorder: OutlineInputBorder(
@@ -548,16 +572,22 @@ class _LoansPageState extends State<LoansPage> {
                                         width: 1.0,
                                       ),
                                     ),
-                                    //fillColor: Colors.green
+                                    // fillColor: Colors.green
                                   ),
                                   validator: (val) {
-                                    if (val!.length == 0) {
+                                    if (val!.isEmpty) {
                                       return "Field cannot be empty";
-                                    } else {
-                                      return null;
                                     }
+                                    // Check if the input is a valid positive integer
+                                    final isValidInput = int.tryParse(val);
+                                    if (isValidInput == null ||
+                                        isValidInput <= 0) {
+                                      return "Enter a valid number of months";
+                                    }
+                                    return null;
                                   },
-                                  keyboardType: TextInputType.text,
+                                  keyboardType: TextInputType
+                                      .number, // Use TextInputType.number to show a numeric keyboard
                                   style: const TextStyle(
                                     fontFamily: "Poppins",
                                   ),
@@ -572,7 +602,7 @@ class _LoansPageState extends State<LoansPage> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
@@ -588,8 +618,8 @@ class _LoansPageState extends State<LoansPage> {
                                   controller: _legalController,
                                   decoration: InputDecoration(
                                     hintText: 'Legal structure',
-                                    contentPadding:
-                                    const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+                                    contentPadding: const EdgeInsets.fromLTRB(
+                                        16.0, 0, 16.0, 0),
 
                                     hintStyle: const TextStyle(
                                         fontSize: 13, color: Colors.grey),
@@ -937,70 +967,13 @@ class _LoansPageState extends State<LoansPage> {
                               ],
                             ),
                           )),
-                      Card(
-                        margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                        elevation: 0.9,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column(children: [
-                            const Text(
-                                '6. What is the legal structure of your business (sole proprietorship, partnership, LLC, etc.)?'),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Row(mainAxisSize: MainAxisSize.min, children: [
-                              Flexible(
-                                child: TextFormField(
-                                  controller: _legalController,
-                                  decoration: InputDecoration(
-                                    hintText: 'Legal structure',
-                                    contentPadding:
-                                    const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
 
-                                    hintStyle: const TextStyle(
-                                        fontSize: 13, color: Colors.grey),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      borderSide: const BorderSide(
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      borderSide: const BorderSide(
-                                        color: Colors.grey,
-                                        width: 1.0,
-                                      ),
-                                    ),
-                                    //fillColor: Colors.green
-                                  ),
-                                  validator: (val) {
-                                    if (val!.length == 0) {
-                                      return "Field cannot be empty";
-                                    } else {
-                                      return null;
-                                    }
-                                  },
-                                  keyboardType: TextInputType.text,
-                                  style: const TextStyle(
-                                    fontFamily: "Poppins",
-                                  ),
-                                ),
-                              ),
-                            ]),
-                          ]),
-                        ),
-                      ),
                       Card(
                         margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
@@ -1016,8 +989,8 @@ class _LoansPageState extends State<LoansPage> {
                                   controller: _loanPurposeController,
                                   decoration: InputDecoration(
                                     hintText: 'Loan purpose',
-                                    contentPadding:
-                                    const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+                                    contentPadding: const EdgeInsets.fromLTRB(
+                                        16.0, 0, 16.0, 0),
 
                                     hintStyle: const TextStyle(
                                         fontSize: 13, color: Colors.grey),
@@ -1116,7 +1089,7 @@ class _LoansPageState extends State<LoansPage> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
@@ -1133,8 +1106,8 @@ class _LoansPageState extends State<LoansPage> {
                                   controller: _loanUseController,
                                   decoration: InputDecoration(
                                     hintText: 'Use of the loan',
-                                    contentPadding:
-                                    const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+                                    contentPadding: const EdgeInsets.fromLTRB(
+                                        16.0, 0, 16.0, 0),
 
                                     hintStyle: const TextStyle(
                                         fontSize: 13, color: Colors.grey),
@@ -1175,7 +1148,7 @@ class _LoansPageState extends State<LoansPage> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
@@ -1192,8 +1165,8 @@ class _LoansPageState extends State<LoansPage> {
                                   controller: _businessOverviewController,
                                   decoration: InputDecoration(
                                     hintText: 'Business Overview',
-                                    contentPadding:
-                                    const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+                                    contentPadding: const EdgeInsets.fromLTRB(
+                                        16.0, 0, 16.0, 0),
 
                                     hintStyle: const TextStyle(
                                         fontSize: 13, color: Colors.grey),
@@ -1233,8 +1206,8 @@ class _LoansPageState extends State<LoansPage> {
                         margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
@@ -1251,9 +1224,8 @@ class _LoansPageState extends State<LoansPage> {
                                   controller: _annualRevenueTimeController,
                                   decoration: InputDecoration(
                                     hintText: 'Annual Revenue',
-                                    contentPadding:
-                                    const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-
+                                    contentPadding: const EdgeInsets.fromLTRB(
+                                        16.0, 0, 16.0, 0),
                                     hintStyle: const TextStyle(
                                         fontSize: 13, color: Colors.grey),
                                     focusedBorder: OutlineInputBorder(
@@ -1269,16 +1241,22 @@ class _LoansPageState extends State<LoansPage> {
                                         width: 1.0,
                                       ),
                                     ),
-                                    //fillColor: Colors.green
+                                    // fillColor: Colors.green
                                   ),
                                   validator: (val) {
-                                    if (val!.length == 0) {
+                                    if (val!.isEmpty) {
                                       return "Field cannot be empty";
-                                    } else {
-                                      return null;
                                     }
+                                    // Check if the input is a valid numeric value (e.g., a double or int)
+                                    final numericValue = double.tryParse(val);
+                                    if (numericValue == null ||
+                                        numericValue < 0) {
+                                      return "Enter a valid annual revenue";
+                                    }
+                                    return null;
                                   },
-                                  keyboardType: TextInputType.text,
+                                  keyboardType: TextInputType
+                                      .number, // Use TextInputType.number to show a numeric keyboard
                                   style: const TextStyle(
                                     fontFamily: "Poppins",
                                   ),
@@ -1288,13 +1266,12 @@ class _LoansPageState extends State<LoansPage> {
                           ]),
                         ),
                       ),
-
                       Card(
                           margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                           elevation: 0.9,
                           shape: const RoundedRectangleBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
+                                  BorderRadius.all(Radius.circular(10.0))),
                           child: Padding(
                             padding: const EdgeInsets.only(
                                 left: 20, right: 20, top: 30, bottom: 30),
@@ -1320,18 +1297,19 @@ class _LoansPageState extends State<LoansPage> {
                                   ],
                                 ),
                                 ListTile(
-                                  contentPadding: const EdgeInsets.only(left: 0),
+                                  contentPadding:
+                                      const EdgeInsets.only(left: 0),
                                   title: Text(
                                     'Yes',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 1,
                                     groupValue: existing,
                                     onChanged: (int? value) {
                                       setState(
-                                            () {
+                                        () {
                                           existing = value!;
                                         },
                                       );
@@ -1340,15 +1318,15 @@ class _LoansPageState extends State<LoansPage> {
                                 ),
                                 ListTile(
                                   contentPadding:
-                                  const EdgeInsets.only(left: 0, top: 0),
+                                      const EdgeInsets.only(left: 0, top: 0),
                                   title: Text(
                                     'No',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 0,
-                                    groupValue: collateral,
+                                    groupValue: existing,
                                     onChanged: (int? value) {
                                       setState(() {
                                         collateral = value!;
@@ -1364,7 +1342,7 @@ class _LoansPageState extends State<LoansPage> {
                           elevation: 0.9,
                           shape: const RoundedRectangleBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
+                                  BorderRadius.all(Radius.circular(10.0))),
                           child: Padding(
                             padding: const EdgeInsets.only(
                                 left: 20, right: 20, top: 30, bottom: 30),
@@ -1390,18 +1368,19 @@ class _LoansPageState extends State<LoansPage> {
                                   ],
                                 ),
                                 ListTile(
-                                  contentPadding: const EdgeInsets.only(left: 0),
+                                  contentPadding:
+                                      const EdgeInsets.only(left: 0),
                                   title: Text(
                                     'Yes',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 1,
                                     groupValue: collateral,
                                     onChanged: (int? value) {
                                       setState(
-                                            () {
+                                        () {
                                           collateral = value!;
                                         },
                                       );
@@ -1410,11 +1389,11 @@ class _LoansPageState extends State<LoansPage> {
                                 ),
                                 ListTile(
                                   contentPadding:
-                                  const EdgeInsets.only(left: 0, top: 0),
+                                      const EdgeInsets.only(left: 0, top: 0),
                                   title: Text(
                                     'No',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 0,
@@ -1434,7 +1413,7 @@ class _LoansPageState extends State<LoansPage> {
                           elevation: 0.9,
                           shape: const RoundedRectangleBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
+                                  BorderRadius.all(Radius.circular(10.0))),
                           child: Padding(
                             padding: const EdgeInsets.only(
                                 left: 20, right: 20, top: 30, bottom: 30),
@@ -1460,18 +1439,19 @@ class _LoansPageState extends State<LoansPage> {
                                   ],
                                 ),
                                 ListTile(
-                                  contentPadding: const EdgeInsets.only(left: 0),
+                                  contentPadding:
+                                      const EdgeInsets.only(left: 0),
                                   title: Text(
                                     'Yes',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 1,
                                     groupValue: isWomanOwned,
                                     onChanged: (int? value) {
                                       setState(
-                                            () {
+                                        () {
                                           isWomanOwned = value!;
                                         },
                                       );
@@ -1480,11 +1460,11 @@ class _LoansPageState extends State<LoansPage> {
                                 ),
                                 ListTile(
                                   contentPadding:
-                                  const EdgeInsets.only(left: 0, top: 0),
+                                      const EdgeInsets.only(left: 0, top: 0),
                                   title: Text(
                                     'No',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 0,
@@ -1504,7 +1484,7 @@ class _LoansPageState extends State<LoansPage> {
                           elevation: 0.9,
                           shape: const RoundedRectangleBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
+                                  BorderRadius.all(Radius.circular(10.0))),
                           child: Padding(
                             padding: const EdgeInsets.only(
                                 left: 20, right: 20, top: 30, bottom: 30),
@@ -1530,18 +1510,19 @@ class _LoansPageState extends State<LoansPage> {
                                   ],
                                 ),
                                 ListTile(
-                                  contentPadding: const EdgeInsets.only(left: 0),
+                                  contentPadding:
+                                      const EdgeInsets.only(left: 0),
                                   title: Text(
                                     'Yes',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 1,
                                     groupValue: fStatement,
                                     onChanged: (int? value) {
                                       setState(
-                                            () {
+                                        () {
                                           fStatement = value!;
                                         },
                                       );
@@ -1550,11 +1531,11 @@ class _LoansPageState extends State<LoansPage> {
                                 ),
                                 ListTile(
                                   contentPadding:
-                                  const EdgeInsets.only(left: 0, top: 0),
+                                      const EdgeInsets.only(left: 0, top: 0),
                                   title: Text(
                                     'No',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 0,
@@ -1569,12 +1550,13 @@ class _LoansPageState extends State<LoansPage> {
                               ],
                             ),
                           )),
+
                       Card(
                         margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
@@ -1591,9 +1573,8 @@ class _LoansPageState extends State<LoansPage> {
                                   controller: _employeeNoController,
                                   decoration: InputDecoration(
                                     hintText: 'Number of Employees',
-                                    contentPadding:
-                                    const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-
+                                    contentPadding: const EdgeInsets.fromLTRB(
+                                        16.0, 0, 16.0, 0),
                                     hintStyle: const TextStyle(
                                         fontSize: 13, color: Colors.grey),
                                     focusedBorder: OutlineInputBorder(
@@ -1609,16 +1590,20 @@ class _LoansPageState extends State<LoansPage> {
                                         width: 1.0,
                                       ),
                                     ),
-                                    //fillColor: Colors.green
+                                    // fillColor: Colors.green
                                   ),
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  ],
                                   validator: (val) {
-                                    if (val!.length == 0) {
+                                    if (val!.isEmpty) {
                                       return "Field cannot be empty";
                                     } else {
                                       return null;
                                     }
                                   },
-                                  keyboardType: TextInputType.text,
+                                  keyboardType: TextInputType
+                                      .number, // Use TextInputType.number to show a numeric keyboard
                                   style: const TextStyle(
                                     fontFamily: "Poppins",
                                   ),
@@ -1633,7 +1618,7 @@ class _LoansPageState extends State<LoansPage> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
@@ -1650,8 +1635,8 @@ class _LoansPageState extends State<LoansPage> {
                                   controller: _financialChallengesController,
                                   decoration: InputDecoration(
                                     hintText: 'Any financil challenges',
-                                    contentPadding:
-                                    const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+                                    contentPadding: const EdgeInsets.fromLTRB(
+                                        16.0, 0, 16.0, 0),
 
                                     hintStyle: const TextStyle(
                                         fontSize: 13, color: Colors.grey),
@@ -1692,7 +1677,7 @@ class _LoansPageState extends State<LoansPage> {
                           elevation: 0.9,
                           shape: const RoundedRectangleBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
+                                  BorderRadius.all(Radius.circular(10.0))),
                           child: Padding(
                             padding: const EdgeInsets.only(
                                 left: 20, right: 20, top: 30, bottom: 30),
@@ -1718,18 +1703,19 @@ class _LoansPageState extends State<LoansPage> {
                                   ],
                                 ),
                                 ListTile(
-                                  contentPadding: const EdgeInsets.only(left: 0),
+                                  contentPadding:
+                                      const EdgeInsets.only(left: 0),
                                   title: Text(
                                     'Yes',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 1,
                                     groupValue: bPlan,
                                     onChanged: (int? value) {
                                       setState(
-                                            () {
+                                        () {
                                           bPlan = value!;
                                         },
                                       );
@@ -1738,11 +1724,11 @@ class _LoansPageState extends State<LoansPage> {
                                 ),
                                 ListTile(
                                   contentPadding:
-                                  const EdgeInsets.only(left: 0, top: 0),
+                                      const EdgeInsets.only(left: 0, top: 0),
                                   title: Text(
                                     'No',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 0,
@@ -1762,7 +1748,7 @@ class _LoansPageState extends State<LoansPage> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
@@ -1779,8 +1765,8 @@ class _LoansPageState extends State<LoansPage> {
                                   controller: _competitorController,
                                   decoration: InputDecoration(
                                     hintText: 'Competitor Strategy',
-                                    contentPadding:
-                                    const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+                                    contentPadding: const EdgeInsets.fromLTRB(
+                                        16.0, 0, 16.0, 0),
 
                                     hintStyle: const TextStyle(
                                         fontSize: 13, color: Colors.grey),
@@ -1821,7 +1807,7 @@ class _LoansPageState extends State<LoansPage> {
                           elevation: 0.9,
                           shape: const RoundedRectangleBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
+                                  BorderRadius.all(Radius.circular(10.0))),
                           child: Padding(
                             padding: const EdgeInsets.only(
                                 left: 20, right: 20, top: 30, bottom: 30),
@@ -1847,18 +1833,19 @@ class _LoansPageState extends State<LoansPage> {
                                   ],
                                 ),
                                 ListTile(
-                                  contentPadding: const EdgeInsets.only(left: 0),
+                                  contentPadding:
+                                      const EdgeInsets.only(left: 0),
                                   title: Text(
                                     'Yes',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 1,
                                     groupValue: womenInit,
                                     onChanged: (int? value) {
                                       setState(
-                                            () {
+                                        () {
                                           womenInit = value!;
                                         },
                                       );
@@ -1867,11 +1854,11 @@ class _LoansPageState extends State<LoansPage> {
                                 ),
                                 ListTile(
                                   contentPadding:
-                                  const EdgeInsets.only(left: 0, top: 0),
+                                      const EdgeInsets.only(left: 0, top: 0),
                                   title: Text(
                                     'No',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 0,
@@ -1891,7 +1878,7 @@ class _LoansPageState extends State<LoansPage> {
                           elevation: 0.9,
                           shape: const RoundedRectangleBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
+                                  BorderRadius.all(Radius.circular(10.0))),
                           child: Padding(
                             padding: const EdgeInsets.only(
                                 left: 20, right: 20, top: 30, bottom: 30),
@@ -1917,18 +1904,19 @@ class _LoansPageState extends State<LoansPage> {
                                   ],
                                 ),
                                 ListTile(
-                                  contentPadding: const EdgeInsets.only(left: 0),
+                                  contentPadding:
+                                      const EdgeInsets.only(left: 0),
                                   title: Text(
                                     'Yes',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 1,
                                     groupValue: references,
                                     onChanged: (int? value) {
                                       setState(
-                                            () {
+                                        () {
                                           references = value!;
                                         },
                                       );
@@ -1937,11 +1925,11 @@ class _LoansPageState extends State<LoansPage> {
                                 ),
                                 ListTile(
                                   contentPadding:
-                                  const EdgeInsets.only(left: 0, top: 0),
+                                      const EdgeInsets.only(left: 0, top: 0),
                                   title: Text(
                                     'No',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 0,
@@ -1961,11 +1949,12 @@ class _LoansPageState extends State<LoansPage> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
                                     "21. Have you participated in any business or entrepreneurship training programs?"),
@@ -1973,18 +1962,19 @@ class _LoansPageState extends State<LoansPage> {
                                   height: 8,
                                 ),
                                 ListTile(
-                                  contentPadding: const EdgeInsets.only(left: 0),
+                                  contentPadding:
+                                      const EdgeInsets.only(left: 0),
                                   title: Text(
                                     'Yes',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 1,
                                     groupValue: programs,
                                     onChanged: (int? value) {
                                       setState(
-                                            () {
+                                        () {
                                           programs = value!;
                                         },
                                       );
@@ -1993,11 +1983,11 @@ class _LoansPageState extends State<LoansPage> {
                                 ),
                                 ListTile(
                                   contentPadding:
-                                  const EdgeInsets.only(left: 0, top: 0),
+                                      const EdgeInsets.only(left: 0, top: 0),
                                   title: Text(
                                     'No',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 0,
@@ -2017,7 +2007,7 @@ class _LoansPageState extends State<LoansPage> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
@@ -2034,8 +2024,8 @@ class _LoansPageState extends State<LoansPage> {
                                   controller: _marketingController,
                                   decoration: InputDecoration(
                                     hintText: 'Marketing Strategy',
-                                    contentPadding:
-                                    const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+                                    contentPadding: const EdgeInsets.fromLTRB(
+                                        16.0, 0, 16.0, 0),
 
                                     hintStyle: const TextStyle(
                                         fontSize: 13, color: Colors.grey),
@@ -2076,11 +2066,12 @@ class _LoansPageState extends State<LoansPage> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
                                     "23. Are you willing to work with a business mentor or advisor, if offered?"),
@@ -2088,18 +2079,19 @@ class _LoansPageState extends State<LoansPage> {
                                   height: 8,
                                 ),
                                 ListTile(
-                                  contentPadding: const EdgeInsets.only(left: 0),
+                                  contentPadding:
+                                      const EdgeInsets.only(left: 0),
                                   title: Text(
                                     'Yes',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 1,
                                     groupValue: mentor,
                                     onChanged: (int? value) {
                                       setState(
-                                            () {
+                                        () {
                                           mentor = value!;
                                         },
                                       );
@@ -2108,11 +2100,11 @@ class _LoansPageState extends State<LoansPage> {
                                 ),
                                 ListTile(
                                   contentPadding:
-                                  const EdgeInsets.only(left: 0, top: 0),
+                                      const EdgeInsets.only(left: 0, top: 0),
                                   title: Text(
                                     'No',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 0,
@@ -2132,7 +2124,7 @@ class _LoansPageState extends State<LoansPage> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
@@ -2149,8 +2141,8 @@ class _LoansPageState extends State<LoansPage> {
                                   controller: _otherInfoController,
                                   decoration: InputDecoration(
                                     hintText: 'Other Info',
-                                    contentPadding:
-                                    const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+                                    contentPadding: const EdgeInsets.fromLTRB(
+                                        16.0, 0, 16.0, 0),
 
                                     hintStyle: const TextStyle(
                                         fontSize: 13, color: Colors.grey),
@@ -2178,8 +2170,8 @@ class _LoansPageState extends State<LoansPage> {
                                   },
                                   keyboardType: TextInputType.text,
                                   style: const TextStyle(
-                                    // fontFamily: "Poppins",
-                                  ),
+                                      // fontFamily: "Poppins",
+                                      ),
                                 ),
                               ),
                             ]),
@@ -2191,13 +2183,14 @@ class _LoansPageState extends State<LoansPage> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
                           child: Column(
                             children: [
-                              const Text('25. Attach the following documents either as .docx, pdf,  or png'),
+                              const Text(
+                                  '25. Attach the following documents either as .docx, pdf,  or png'),
 
                               FormBuilderFilePicker(
                                 name: 'businessPlan',
@@ -2213,7 +2206,8 @@ class _LoansPageState extends State<LoansPage> {
 
                               FormBuilderFilePicker(
                                 name: 'financialStatement',
-                                decoration: const InputDecoration(labelText: 'Financial Statement'),
+                                decoration: const InputDecoration(
+                                    labelText: 'Financial Statement'),
                                 // maxFiles: 3, // Maximum number of attachments allowed
                                 previewImages: true, // Display image previews
                                 onChanged: (value) {
@@ -2224,7 +2218,8 @@ class _LoansPageState extends State<LoansPage> {
 
                               FormBuilderFilePicker(
                                 name: 'taxAdminCertificate',
-                                decoration: const InputDecoration(labelText: 'Tax Compliance Certificate'),
+                                decoration: const InputDecoration(
+                                    labelText: 'Tax Compliance Certificate'),
                                 // maxFiles: 3, // Maximum number of attachments allowed
                                 previewImages: true, // Display image previews
                                 onChanged: (value) {
@@ -2235,7 +2230,9 @@ class _LoansPageState extends State<LoansPage> {
 
                               FormBuilderFilePicker(
                                 name: 'applicantCoinvestorStmt',
-                                decoration: const InputDecoration(labelText: 'Applicant Coinvester Statement'),
+                                decoration: const InputDecoration(
+                                    labelText:
+                                        'Applicant Coinvester Statement'),
                                 // maxFiles: 3, // Maximum number of attachments allowed
                                 previewImages: true, // Display image previews
                                 onChanged: (value) {
@@ -2258,8 +2255,6 @@ class _LoansPageState extends State<LoansPage> {
                           ),
                         ),
                       ),
-
-
 
                       const SizedBox(height: 16.0),
 
@@ -2289,7 +2284,8 @@ class _LoansPageState extends State<LoansPage> {
                                   ),
                                 ),
                                 // style: ,
-                                child: const Text('Apply Loan', style:TextStyle(color: Colors.white)),
+                                child: const Text('Apply Loan',
+                                    style: TextStyle(color: Colors.white)),
                               ),
                       ),
                       const SizedBox(

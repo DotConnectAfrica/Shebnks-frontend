@@ -34,6 +34,11 @@ class _SheIqState extends State<SheIq> {
   var isHavingInsurancePolicy = 0;
   var isHavingBusiness = 1;
 
+  List<String> fromWhoWasLoanTakenList = [];
+  List<String> typeOfLoanList = [];
+  List<String> industry = [];
+  List<String> businessTypeList = [];
+
   storeHasLoan() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     _prefs.setBool('hasExistingLoan', true);
@@ -42,22 +47,24 @@ class _SheIqState extends State<SheIq> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _dateOfBirthController = TextEditingController();
   TextEditingController _nationalityController = TextEditingController();
-  TextEditingController _identificationNumberController = TextEditingController();
+  TextEditingController _identificationNumberController =
+      TextEditingController();
   TextEditingController _residentialAddressController = TextEditingController();
   TextEditingController _phoneNumberController = TextEditingController();
   TextEditingController _emailAddressController = TextEditingController();
   TextEditingController _employmentStatusController = TextEditingController();
   TextEditingController _loansTakenBeforeController = TextEditingController();
-  TextEditingController _purposeOfLoanTakenBeforeController = TextEditingController();
-  TextEditingController _whoTookLoanLoanTakenBeforeController = TextEditingController();
-  TextEditingController _fromWhoTookLoanLoanTakenBeforeController = TextEditingController();
+  TextEditingController _purposeOfLoanTakenBeforeController =
+      TextEditingController();
+  TextEditingController _whoTookLoanLoanTakenBeforeController =
+      TextEditingController();
+  TextEditingController _fromWhoTookLoanLoanTakenBeforeController =
+      TextEditingController();
   TextEditingController _whenLoanTakenController = TextEditingController();
   TextEditingController _typeOfBusinessController = TextEditingController();
   TextEditingController _businessOperationController = TextEditingController();
   TextEditingController _fieldOfBuinessController = TextEditingController();
   TextEditingController _typeofLoanController = TextEditingController();
-
-
 
   @override
   void dispose() {
@@ -80,8 +87,13 @@ class _SheIqState extends State<SheIq> {
     _fieldOfBuinessController.dispose();
     _typeofLoanController.dispose();
 
-
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    debugPrint(widget.userId.toString());
   }
 
   void _submitForm() {
@@ -101,13 +113,14 @@ class _SheIqState extends State<SheIq> {
       final loansTakenBefore = _loansTakenBeforeController.text;
       final purposeOfLoanTakenBefore = _purposeOfLoanTakenBeforeController.text;
       final whoTookLoanBefore = _whoTookLoanLoanTakenBeforeController.text;
-      final fromWhoWasLoanTaken = _fromWhoTookLoanLoanTakenBeforeController.text;
+      final fromWhoWasLoanTaken =
+          _fromWhoTookLoanLoanTakenBeforeController.text;
+      // final fromWhoWasLoanTaken = [];
       final whenWasLoanTaken = _whenLoanTakenController.text;
       final typeOfBusiness = _typeOfBusinessController.text;
       final businessOperation = _businessOperationController.text;
       final fieldOfBusiness = _fieldOfBuinessController.text;
       final typeOfLoan = _typeofLoanController.text;
-
 
       // var isWoman//Owned = 1;
       // var fStatement = 1;
@@ -117,43 +130,50 @@ class _SheIqState extends State<SheIq> {
       // var references = 1;
       // var mentor = 1;
       // var programs = 1;
-      final sheIqData = {
-        'Name': name,
-        "survey": {
-          'DatefBirth': birthDate,
-          'Nationality': nationality,
-          'ID': identity,
-          'ResidentailAddress': residentialAddress,
-          'PhoneNumber': phoneNumber,
-          'EmploymentStatus': employmentStatus,
-          'loansTakenBefore': loansTakenBefore,
-          'purposeOfLoanTakenBefore': purposeOfLoanTakenBefore,
-          'whoTookLoanBefore': whoTookLoanBefore,
-          'fromWhoWasLoanTaken': fromWhoWasLoanTaken,
-          'AnyOneWithBankAccount': isAnyoneHavingBankAccount==1,
-          'AnyOneHavingAtmInTheHouse': isHavingAtmCard==1,
-          'HavingInsurance': isHavingInsurancePolicy==1,
-          'isHavingBusiness': isHavingBusiness ==1,
-          'whenWasLoanTaken': whenWasLoanTaken,
-          'typeOfBusiness': typeOfBusiness,
-          'businessOperation': businessOperation,
-          'fieldOfBusiness': fieldOfBusiness,
-          'typeOfLoan': typeOfLoan
-        }
+      
+      final sheIqdata = {
+        "name": name,
+        "DateOfBirth": birthDate,
+        "Nationality": nationality,
+        "ID": identity,
+        "ResidentialAddress": residentialAddress,
+        "PhoneNumber": phoneNumber,
+        "emailAddress": _emailAddressController.text,
+        "EmploymentStatus": employmentStatus,
+        "loansTakenBefore": loansTakenBefore,
+        "purposeOfLoanTakenBefore": purposeOfLoanTakenBefore,
+        "whoTookLoanBefore": fromWhoWasLoanTakenList,
+        "fromWhoWasLoanTaken": fromWhoWasLoanTaken,
+        "AnyOneWithBankAccount": isAnyoneHavingBankAccount == 1,
+        "AnyOneHavingAtmInTheHouse": isHavingAtmCard == 1,
+        "HavingInsurance": isHavingInsurancePolicy == 1,
+        "isHavingBusiness": isHavingBusiness == 1,
+        "whenWasLoanTaken": whenWasLoanTaken,
+        "typeOfBusiness": businessTypeList,
+        "businessOperation": businessOperation,
+        "fieldOfBusiness": industry,
+        'typeOfLoan': typeOfLoanList,
+        "userId": widget.userId
       };
-      _apiServices
-          .applysheIq(sheIqData as String, widget.token, widget.userId)
-          .then((value) {
+
+      _apiServices.submit_iq(sheIqdata).then((value) {
         setState(() {
           _isLoading = false;
         });
-        if (value.status == 'OK') {
-          // var
-          // storeHasLoan();
-          _successDialog('SheIQ Submitted Successfully');
-          debugPrint('tmessage is.......${value.message.toString()}');
-        } else if (value.status == 'BAD_REQUEST') {
-          _showDialog('${value.message.toString()}');
+        try {
+          if (value.status == 200) {
+            // var
+            // storeHasLoan();
+            _successDialog('SheIQ Submitted Successfully');
+            debugPrint('tmessage is.......${value.message.toString()}');
+          } else if (value.status == 400) {
+            _showDialog('${value.message.toString()}');
+          }
+           else if (value.status == 404) {
+            _showDialog('${value.message.toString()}');
+          }
+        } catch (e) {
+          _showDialog('${e.toString()}');
         }
       });
 
@@ -238,7 +258,6 @@ class _SheIqState extends State<SheIq> {
           title: const Text('SheIQ'),
         ),
         backgroundColor: const Color(0xfff6e0e0),
-
         body: SingleChildScrollView(
             padding: const EdgeInsets.only(left: 16, right: 16),
             child: Column(children: <Widget>[
@@ -257,65 +276,65 @@ class _SheIqState extends State<SheIq> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                            const Text(
-                                '1. What is your name*'),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(
-                                  // height: 60,
-                                  child: TextFormField(
-                                    controller: _nameController,
-                                    decoration: InputDecoration(
-                                      hintText: 'Answer',
-                                      contentPadding: const EdgeInsets.fromLTRB(
-                                          16.0, 0, 16.0, 0),
-
-                                      hintStyle: const TextStyle(
-                                          fontSize: 13, color: Colors.grey),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(8.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(8.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.grey,
-                                          width: 1.0,
-                                        ),
-                                      ),
-                                      //fillColor: Colors.green
-                                    ),
-                                    validator: (val) {
-                                      if (val!.length == 0) {
-                                        return "Field cannot be empty";
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                    keyboardType: TextInputType.text,
-                                    style: const TextStyle(
-                                      fontFamily: "Poppins",
-                                    ),
-                                  ),
+                                const Text('1. What is your name*'),
+                                const SizedBox(
+                                  height: 8,
                                 ),
-                              ],
-                            ),
-                          ]),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Flexible(
+                                      // height: 60,
+                                      child: TextFormField(
+                                        controller: _nameController,
+                                        decoration: InputDecoration(
+                                          hintText: 'Answer',
+                                          contentPadding:
+                                              const EdgeInsets.fromLTRB(
+                                                  16.0, 0, 16.0, 0),
+
+                                          hintStyle: const TextStyle(
+                                              fontSize: 13, color: Colors.grey),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            ),
+                                          ),
+                                          //fillColor: Colors.green
+                                        ),
+                                        validator: (val) {
+                                          if (val!.length == 0) {
+                                            return "Field cannot be empty";
+                                          } else {
+                                            return null;
+                                          }
+                                        },
+                                        keyboardType: TextInputType.text,
+                                        style: const TextStyle(
+                                          fontFamily: "Poppins",
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ]),
                         ),
                       ),
                       Card(
@@ -323,64 +342,65 @@ class _SheIqState extends State<SheIq> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column( crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                            const Text(
-                                '2. What is your date of birth *'),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(
-                                  // height: 60,
-                                  child: TextFormField(
-                                    controller: _dateOfBirthController,
-                                    decoration: InputDecoration(
-                                      hintText: 'Answer',
-                                      contentPadding: const EdgeInsets.fromLTRB(
-                                          16.0, 0, 16.0, 0),
-
-                                      hintStyle: const TextStyle(
-                                          fontSize: 13, color: Colors.grey),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(8.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(8.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.grey,
-                                          width: 1.0,
-                                        ),
-                                      ),
-                                      //fillColor: Colors.green
-                                    ),
-                                    validator: (val) {
-                                      if (val!.length == 0) {
-                                        return "Field cannot be empty";
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                    keyboardType: TextInputType.text,
-                                    style: const TextStyle(
-                                      fontFamily: "Poppins",
-                                    ),
-                                  ),
+                                const Text('2. What is your date of birth *'),
+                                const SizedBox(
+                                  height: 8,
                                 ),
-                              ],
-                            ),
-                          ]),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Flexible(
+                                      // height: 60,
+                                      child: TextFormField(
+                                        controller: _dateOfBirthController,
+                                        decoration: InputDecoration(
+                                          hintText: 'Answer',
+                                          contentPadding:
+                                              const EdgeInsets.fromLTRB(
+                                                  16.0, 0, 16.0, 0),
+
+                                          hintStyle: const TextStyle(
+                                              fontSize: 13, color: Colors.grey),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            ),
+                                          ),
+                                          //fillColor: Colors.green
+                                        ),
+                                        validator: (val) {
+                                          if (val!.length == 0) {
+                                            return "Field cannot be empty";
+                                          } else {
+                                            return null;
+                                          }
+                                        },
+                                        keyboardType: TextInputType.text,
+                                        style: const TextStyle(
+                                          fontFamily: "Poppins",
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ]),
                         ),
                       ),
                       Card(
@@ -388,64 +408,65 @@ class _SheIqState extends State<SheIq> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column( crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                            const Text(
-                                '3. What is your Nationality*'),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(
-                                  // height: 60,
-                                  child: TextFormField(
-                                    controller: _nationalityController,
-                                    decoration: InputDecoration(
-                                      hintText: 'Answer',
-                                      contentPadding: const EdgeInsets.fromLTRB(
-                                          16.0, 0, 16.0, 0),
-
-                                      hintStyle: const TextStyle(
-                                          fontSize: 13, color: Colors.grey),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(8.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(8.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.grey,
-                                          width: 1.0,
-                                        ),
-                                      ),
-                                      //fillColor: Colors.green
-                                    ),
-                                    validator: (val) {
-                                      if (val!.length == 0) {
-                                        return "Field cannot be empty";
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                    keyboardType: TextInputType.text,
-                                    style: const TextStyle(
-                                      fontFamily: "Poppins",
-                                    ),
-                                  ),
+                                const Text('3. What is your Nationality*'),
+                                const SizedBox(
+                                  height: 8,
                                 ),
-                              ],
-                            ),
-                          ]),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Flexible(
+                                      // height: 60,
+                                      child: TextFormField(
+                                        controller: _nationalityController,
+                                        decoration: InputDecoration(
+                                          hintText: 'Answer',
+                                          contentPadding:
+                                              const EdgeInsets.fromLTRB(
+                                                  16.0, 0, 16.0, 0),
+
+                                          hintStyle: const TextStyle(
+                                              fontSize: 13, color: Colors.grey),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            ),
+                                          ),
+                                          //fillColor: Colors.green
+                                        ),
+                                        validator: (val) {
+                                          if (val!.length == 0) {
+                                            return "Field cannot be empty";
+                                          } else {
+                                            return null;
+                                          }
+                                        },
+                                        keyboardType: TextInputType.text,
+                                        style: const TextStyle(
+                                          fontFamily: "Poppins",
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ]),
                         ),
                       ),
                       Card(
@@ -453,64 +474,67 @@ class _SheIqState extends State<SheIq> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column( crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                            const Text(
-                                '4. What is your Identification Number, eg passport, or ID card Number*'),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(
-                                  // height: 60,
-                                  child: TextFormField(
-                                    controller: _identificationNumberController,
-                                    decoration: InputDecoration(
-                                      hintText: 'Answer',
-                                      contentPadding: const EdgeInsets.fromLTRB(
-                                          16.0, 0, 16.0, 0),
-
-                                      hintStyle: const TextStyle(
-                                          fontSize: 13, color: Colors.grey),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(8.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(8.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.grey,
-                                          width: 1.0,
-                                        ),
-                                      ),
-                                      //fillColor: Colors.green
-                                    ),
-                                    validator: (val) {
-                                      if (val!.length == 0) {
-                                        return "Field cannot be empty";
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                    keyboardType: TextInputType.text,
-                                    style: const TextStyle(
-                                      fontFamily: "Poppins",
-                                    ),
-                                  ),
+                                const Text(
+                                    '4. What is your Identification Number, eg passport, or ID card Number*'),
+                                const SizedBox(
+                                  height: 8,
                                 ),
-                              ],
-                            ),
-                          ]),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Flexible(
+                                      // height: 60,
+                                      child: TextFormField(
+                                        controller:
+                                            _identificationNumberController,
+                                        decoration: InputDecoration(
+                                          hintText: 'Answer',
+                                          contentPadding:
+                                              const EdgeInsets.fromLTRB(
+                                                  16.0, 0, 16.0, 0),
+
+                                          hintStyle: const TextStyle(
+                                              fontSize: 13, color: Colors.grey),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            ),
+                                          ),
+                                          //fillColor: Colors.green
+                                        ),
+                                        validator: (val) {
+                                          if (val!.length == 0) {
+                                            return "Field cannot be empty";
+                                          } else {
+                                            return null;
+                                          }
+                                        },
+                                        keyboardType: TextInputType.text,
+                                        style: const TextStyle(
+                                          fontFamily: "Poppins",
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ]),
                         ),
                       ),
                       Card(
@@ -518,64 +542,67 @@ class _SheIqState extends State<SheIq> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column( crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                            const Text(
-                                '5. What is your Residential Address?*'),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(
-                                  // height: 60,
-                                  child: TextFormField(
-                                    controller: _residentialAddressController,
-                                    decoration: InputDecoration(
-                                      hintText: 'Answer',
-                                      contentPadding: const EdgeInsets.fromLTRB(
-                                          16.0, 0, 16.0, 0),
-
-                                      hintStyle: const TextStyle(
-                                          fontSize: 13, color: Colors.grey),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(8.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(8.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.grey,
-                                          width: 1.0,
-                                        ),
-                                      ),
-                                      //fillColor: Colors.green
-                                    ),
-                                    validator: (val) {
-                                      if (val!.length == 0) {
-                                        return "Field cannot be empty";
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                    keyboardType: TextInputType.text,
-                                    style: const TextStyle(
-                                      fontFamily: "Poppins",
-                                    ),
-                                  ),
+                                const Text(
+                                    '5. What is your Residential Address?*'),
+                                const SizedBox(
+                                  height: 8,
                                 ),
-                              ],
-                            ),
-                          ]),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Flexible(
+                                      // height: 60,
+                                      child: TextFormField(
+                                        controller:
+                                            _residentialAddressController,
+                                        decoration: InputDecoration(
+                                          hintText: 'Answer',
+                                          contentPadding:
+                                              const EdgeInsets.fromLTRB(
+                                                  16.0, 0, 16.0, 0),
+
+                                          hintStyle: const TextStyle(
+                                              fontSize: 13, color: Colors.grey),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            ),
+                                          ),
+                                          //fillColor: Colors.green
+                                        ),
+                                        validator: (val) {
+                                          if (val!.length == 0) {
+                                            return "Field cannot be empty";
+                                          } else {
+                                            return null;
+                                          }
+                                        },
+                                        keyboardType: TextInputType.text,
+                                        style: const TextStyle(
+                                          fontFamily: "Poppins",
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ]),
                         ),
                       ),
                       Card(
@@ -583,64 +610,65 @@ class _SheIqState extends State<SheIq> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column( crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                            const Text(
-                                '6. Your Phone Number*'),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(
-                                  // height: 60,
-                                  child: TextFormField(
-                                    controller: _phoneNumberController,
-                                    decoration: InputDecoration(
-                                      hintText: 'Answer',
-                                      contentPadding: const EdgeInsets.fromLTRB(
-                                          16.0, 0, 16.0, 0),
-
-                                      hintStyle: const TextStyle(
-                                          fontSize: 13, color: Colors.grey),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(8.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(8.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.grey,
-                                          width: 1.0,
-                                        ),
-                                      ),
-                                      //fillColor: Colors.green
-                                    ),
-                                    validator: (val) {
-                                      if (val!.length == 0) {
-                                        return "Field cannot be empty";
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                    keyboardType: TextInputType.text,
-                                    style: const TextStyle(
-                                      fontFamily: "Poppins",
-                                    ),
-                                  ),
+                                const Text('6. Your Phone Number*'),
+                                const SizedBox(
+                                  height: 8,
                                 ),
-                              ],
-                            ),
-                          ]),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Flexible(
+                                      // height: 60,
+                                      child: TextFormField(
+                                        controller: _phoneNumberController,
+                                        decoration: InputDecoration(
+                                          hintText: 'Answer',
+                                          contentPadding:
+                                              const EdgeInsets.fromLTRB(
+                                                  16.0, 0, 16.0, 0),
+
+                                          hintStyle: const TextStyle(
+                                              fontSize: 13, color: Colors.grey),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            ),
+                                          ),
+                                          //fillColor: Colors.green
+                                        ),
+                                        validator: (val) {
+                                          if (val!.length == 0) {
+                                            return "Field cannot be empty";
+                                          } else {
+                                            return null;
+                                          }
+                                        },
+                                        keyboardType: TextInputType.text,
+                                        style: const TextStyle(
+                                          fontFamily: "Poppins",
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ]),
                         ),
                       ),
                       Card(
@@ -648,64 +676,65 @@ class _SheIqState extends State<SheIq> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column( crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                            const Text(
-                                '7. What is your email Address? *'),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(
-                                  // height: 60,
-                                  child: TextFormField(
-                                    controller: _emailAddressController,
-                                    decoration: InputDecoration(
-                                      hintText: 'Answer',
-                                      contentPadding: const EdgeInsets.fromLTRB(
-                                          16.0, 0, 16.0, 0),
-
-                                      hintStyle: const TextStyle(
-                                          fontSize: 13, color: Colors.grey),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(8.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(8.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.grey,
-                                          width: 1.0,
-                                        ),
-                                      ),
-                                      //fillColor: Colors.green
-                                    ),
-                                    validator: (val) {
-                                      if (val!.length == 0) {
-                                        return "Field cannot be empty";
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                    keyboardType: TextInputType.text,
-                                    style: const TextStyle(
-                                      fontFamily: "Poppins",
-                                    ),
-                                  ),
+                                const Text('7. What is your email Address? *'),
+                                const SizedBox(
+                                  height: 8,
                                 ),
-                              ],
-                            ),
-                          ]),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Flexible(
+                                      // height: 60,
+                                      child: TextFormField(
+                                        controller: _emailAddressController,
+                                        decoration: InputDecoration(
+                                          hintText: 'Answer',
+                                          contentPadding:
+                                              const EdgeInsets.fromLTRB(
+                                                  16.0, 0, 16.0, 0),
+
+                                          hintStyle: const TextStyle(
+                                              fontSize: 13, color: Colors.grey),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            ),
+                                          ),
+                                          //fillColor: Colors.green
+                                        ),
+                                        validator: (val) {
+                                          if (val!.length == 0) {
+                                            return "Field cannot be empty";
+                                          } else {
+                                            return null;
+                                          }
+                                        },
+                                        keyboardType: TextInputType.text,
+                                        style: const TextStyle(
+                                          fontFamily: "Poppins",
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ]),
                         ),
                       ),
                       Card(
@@ -713,64 +742,66 @@ class _SheIqState extends State<SheIq> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column( crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                            const Text(
-                                '8. What is your Employment Status*'),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(
-                                  // height: 60,
-                                  child: TextFormField(
-                                    controller: _employmentStatusController,
-                                    decoration: InputDecoration(
-                                      hintText: 'Answer',
-                                      contentPadding: const EdgeInsets.fromLTRB(
-                                          16.0, 0, 16.0, 0),
-
-                                      hintStyle: const TextStyle(
-                                          fontSize: 13, color: Colors.grey),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(8.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(8.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.grey,
-                                          width: 1.0,
-                                        ),
-                                      ),
-                                      //fillColor: Colors.green
-                                    ),
-                                    validator: (val) {
-                                      if (val!.length == 0) {
-                                        return "Field cannot be empty";
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                    keyboardType: TextInputType.text,
-                                    style: const TextStyle(
-                                      fontFamily: "Poppins",
-                                    ),
-                                  ),
+                                const Text(
+                                    '8. What is your Employment Status*'),
+                                const SizedBox(
+                                  height: 8,
                                 ),
-                              ],
-                            ),
-                          ]),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Flexible(
+                                      // height: 60,
+                                      child: TextFormField(
+                                        controller: _employmentStatusController,
+                                        decoration: InputDecoration(
+                                          hintText: 'Answer',
+                                          contentPadding:
+                                              const EdgeInsets.fromLTRB(
+                                                  16.0, 0, 16.0, 0),
+
+                                          hintStyle: const TextStyle(
+                                              fontSize: 13, color: Colors.grey),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            ),
+                                          ),
+                                          //fillColor: Colors.green
+                                        ),
+                                        validator: (val) {
+                                          if (val!.length == 0) {
+                                            return "Field cannot be empty";
+                                          } else {
+                                            return null;
+                                          }
+                                        },
+                                        keyboardType: TextInputType.text,
+                                        style: const TextStyle(
+                                          fontFamily: "Poppins",
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ]),
                         ),
                       ),
                       Card(
@@ -778,64 +809,66 @@ class _SheIqState extends State<SheIq> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column( crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                            const Text(
-                                '9. In the last year, how many loans has your household taken ?*'),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(
-                                  // height: 60,
-                                  child: TextFormField(
-                                    controller: _loansTakenBeforeController,
-                                    decoration: InputDecoration(
-                                      hintText: 'Answer',
-                                      contentPadding: const EdgeInsets.fromLTRB(
-                                          16.0, 0, 16.0, 0),
-
-                                      hintStyle: const TextStyle(
-                                          fontSize: 13, color: Colors.grey),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(8.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(8.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.grey,
-                                          width: 1.0,
-                                        ),
-                                      ),
-                                      //fillColor: Colors.green
-                                    ),
-                                    validator: (val) {
-                                      if (val!.length == 0) {
-                                        return "Field cannot be empty";
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                    keyboardType: TextInputType.text,
-                                    style: const TextStyle(
-                                      fontFamily: "Poppins",
-                                    ),
-                                  ),
+                                const Text(
+                                    '9. In the last year, how many loans has your household taken ?*'),
+                                const SizedBox(
+                                  height: 8,
                                 ),
-                              ],
-                            ),
-                          ]),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Flexible(
+                                      // height: 60,
+                                      child: TextFormField(
+                                        controller: _loansTakenBeforeController,
+                                        decoration: InputDecoration(
+                                          hintText: 'Answer',
+                                          contentPadding:
+                                              const EdgeInsets.fromLTRB(
+                                                  16.0, 0, 16.0, 0),
+
+                                          hintStyle: const TextStyle(
+                                              fontSize: 13, color: Colors.grey),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            ),
+                                          ),
+                                          //fillColor: Colors.green
+                                        ),
+                                        validator: (val) {
+                                          if (val!.length == 0) {
+                                            return "Field cannot be empty";
+                                          } else {
+                                            return null;
+                                          }
+                                        },
+                                        keyboardType: TextInputType.text,
+                                        style: const TextStyle(
+                                          fontFamily: "Poppins",
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ]),
                         ),
                       ),
                       Card(
@@ -843,64 +876,67 @@ class _SheIqState extends State<SheIq> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column( crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                            const Text(
-                                '10. For what purpose was the loan taken?'),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Flexible(
-                                  // height: 60,
-                                  child: TextFormField(
-                                    controller: _purposeOfLoanTakenBeforeController,
-                                    decoration: InputDecoration(
-                                      hintText: 'Answer',
-                                      contentPadding: const EdgeInsets.fromLTRB(
-                                          16.0, 0, 16.0, 0),
-
-                                      hintStyle: const TextStyle(
-                                          fontSize: 13, color: Colors.grey),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(8.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(8.0),
-                                        borderSide: const BorderSide(
-                                          color: Colors.grey,
-                                          width: 1.0,
-                                        ),
-                                      ),
-                                      //fillColor: Colors.green
-                                    ),
-                                    validator: (val) {
-                                      if (val!.length == 0) {
-                                        return "Field cannot be empty";
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                    keyboardType: TextInputType.text,
-                                    style: const TextStyle(
-                                      fontFamily: "Poppins",
-                                    ),
-                                  ),
+                                const Text(
+                                    '10. For what purpose was the loan taken?'),
+                                const SizedBox(
+                                  height: 8,
                                 ),
-                              ],
-                            ),
-                          ]),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Flexible(
+                                      // height: 60,
+                                      child: TextFormField(
+                                        controller:
+                                            _purposeOfLoanTakenBeforeController,
+                                        decoration: InputDecoration(
+                                          hintText: 'Answer',
+                                          contentPadding:
+                                              const EdgeInsets.fromLTRB(
+                                                  16.0, 0, 16.0, 0),
+
+                                          hintStyle: const TextStyle(
+                                              fontSize: 13, color: Colors.grey),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            ),
+                                          ),
+                                          //fillColor: Colors.green
+                                        ),
+                                        validator: (val) {
+                                          if (val!.length == 0) {
+                                            return "Field cannot be empty";
+                                          } else {
+                                            return null;
+                                          }
+                                        },
+                                        keyboardType: TextInputType.text,
+                                        style: const TextStyle(
+                                          fontFamily: "Poppins",
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ]),
                         ),
                       ),
                       Card(
@@ -908,7 +944,7 @@ class _SheIqState extends State<SheIq> {
                           elevation: 0.9,
                           shape: const RoundedRectangleBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
+                                  BorderRadius.all(Radius.circular(10.0))),
                           child: Padding(
                             padding: const EdgeInsets.only(
                                 left: 20, right: 20, top: 30, bottom: 30),
@@ -922,7 +958,7 @@ class _SheIqState extends State<SheIq> {
                                         .subtitle2!
                                         .copyWith(),
                                     text:
-                                    "11. From who was the loan taken From ?",
+                                        "11. From who was the loan taken From ?",
                                     children: <TextSpan>[
                                       TextSpan(
                                           text: '*',
@@ -935,15 +971,16 @@ class _SheIqState extends State<SheIq> {
                                 ),
                                 CheckboxListTile(
                                   title: const Text('Family Member'),
-                                  value: selectedCategories2
+                                  value: fromWhoWasLoanTakenList
                                       .contains("Family Member"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
-                                        selectedCategories2.add("Family Member");
+                                        fromWhoWasLoanTakenList
+                                            .add("Family Member");
                                       } else {
-                                        selectedCategories2
+                                        fromWhoWasLoanTakenList
                                             .remove("Family Member");
                                       }
                                     });
@@ -951,15 +988,16 @@ class _SheIqState extends State<SheIq> {
                                 ),
                                 CheckboxListTile(
                                   title: const Text('Commercial Bank'),
-                                  value: selectedCategories2
+                                  value: fromWhoWasLoanTakenList
                                       .contains("Commercial Bank"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
-                                        selectedCategories2.add("Commercial Bank");
+                                        fromWhoWasLoanTakenList
+                                            .add("Commercial Bank");
                                       } else {
-                                        selectedCategories2
+                                        fromWhoWasLoanTakenList
                                             .remove("Commercial Bank");
                                       }
                                     });
@@ -967,17 +1005,17 @@ class _SheIqState extends State<SheIq> {
                                 ),
                                 CheckboxListTile(
                                   title:
-                                  const Text('Micro Finance Institutions'),
-                                  value: selectedCategories2
+                                      const Text('Micro Finance Institutions'),
+                                  value: fromWhoWasLoanTakenList
                                       .contains("Micro Finance Institutions"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
-                                        selectedCategories2
+                                        fromWhoWasLoanTakenList
                                             .add("Micro Finance Institutions");
                                       } else {
-                                        selectedCategories2.remove(
+                                        fromWhoWasLoanTakenList.remove(
                                             "Micro Finance Institutions");
                                       }
                                     });
@@ -985,16 +1023,16 @@ class _SheIqState extends State<SheIq> {
                                 ),
                                 CheckboxListTile(
                                   title: const Text('Cooperative'),
-                                  value: selectedCategories2
+                                  value: fromWhoWasLoanTakenList
                                       .contains("Cooperative"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
-                                        selectedCategories2
+                                        fromWhoWasLoanTakenList
                                             .add("Cooperative");
                                       } else {
-                                        selectedCategories2
+                                        fromWhoWasLoanTakenList
                                             .remove("Cooperative");
                                       }
                                     });
@@ -1002,103 +1040,97 @@ class _SheIqState extends State<SheIq> {
                                 ),
                                 CheckboxListTile(
                                   title: const Text('Self Help group'),
-                                  value: selectedCategories2
+                                  value: fromWhoWasLoanTakenList
                                       .contains("Self Help group"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
-                                        selectedCategories2
+                                        fromWhoWasLoanTakenList
                                             .add("Self Help group");
                                       } else {
-                                        selectedCategories2
+                                        fromWhoWasLoanTakenList
                                             .remove("Self Help group");
                                       }
                                     });
                                   },
                                 ),
                                 CheckboxListTile(
-                                  title:
-                                  const Text('Finance Company'),
-                                  value: selectedCategories2
+                                  title: const Text('Finance Company'),
+                                  value: fromWhoWasLoanTakenList
                                       .contains("Finance Company"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
-                                        selectedCategories2
+                                        fromWhoWasLoanTakenList
                                             .add("Finance Company");
                                       } else {
-                                        selectedCategories2.remove(
-                                            "Finance Company");
+                                        fromWhoWasLoanTakenList
+                                            .remove("Finance Company");
                                       }
                                     });
                                   },
                                 ),
                                 CheckboxListTile(
-                                  title:
-                                  const Text('Friend'),
-                                  value: selectedCategories2
+                                  title: const Text('Friend'),
+                                  value: fromWhoWasLoanTakenList
                                       .contains("Friend"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
-                                        selectedCategories2
-                                            .add("Friend");
+                                        fromWhoWasLoanTakenList.add("Friend");
                                       } else {
-                                        selectedCategories2.remove(
-                                            "Friend");
+                                        fromWhoWasLoanTakenList
+                                            .remove("Friend");
                                       }
                                     });
                                   },
                                 ),
                                 CheckboxListTile(
-                                  title: const Text(
-                                      'Provident Fund'),
-                                  value: selectedCategories2.contains(
-                                      "Provident Fund"),
+                                  title: const Text('Provident Fund'),
+                                  value: fromWhoWasLoanTakenList
+                                      .contains("Provident Fund"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
-                                        selectedCategories2.add(
-                                            "Provident Fund");
+                                        fromWhoWasLoanTakenList
+                                            .add("Provident Fund");
                                       } else {
-                                        selectedCategories2.remove(
-                                            "Provident Fund");
+                                        fromWhoWasLoanTakenList
+                                            .remove("Provident Fund");
                                       }
                                     });
                                   },
                                 ),
                                 CheckboxListTile(
-                                  title: const Text(
-                                      'Others'),
-                                  value: selectedCategories2.contains(
-                                      "Other"),
+                                  title: const Text('Others'),
+                                  value: fromWhoWasLoanTakenList
+                                      .contains("Others"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
-                                        selectedCategories2.add(
-                                            "Other");
+                                        fromWhoWasLoanTakenList.add("Others");
                                       } else {
-                                        selectedCategories2.remove(
-                                            "Other");
+                                        fromWhoWasLoanTakenList
+                                            .remove("Others");
                                       }
                                     });
                                   },
                                 ),
-
                                 Padding(
                                     padding: const EdgeInsets.only(
                                         left: 20, right: 20),
                                     child: TextFormField(
-                                      controller: _fromWhoTookLoanLoanTakenBeforeController,
+                                      controller:
+                                          _fromWhoTookLoanLoanTakenBeforeController,
                                       validator: (value) => isOtherEnabled2
                                           ? value!.isEmpty
-                                          ? "this field is required"
-                                          : null
+                                              ? "this field is required"
+                                              : null
                                           : null,
                                       enabled: isOtherEnabled,
                                       decoration: const InputDecoration(
@@ -1120,11 +1152,12 @@ class _SheIqState extends State<SheIq> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
                                     '12. Who in the household decided to take this loan? *'),
@@ -1137,24 +1170,26 @@ class _SheIqState extends State<SheIq> {
                                     Flexible(
                                       // height: 60,
                                       child: TextFormField(
-                                        controller: _whoTookLoanLoanTakenBeforeController,
+                                        controller:
+                                            _whoTookLoanLoanTakenBeforeController,
                                         decoration: InputDecoration(
                                           hintText: 'Answer',
-                                          contentPadding: const EdgeInsets.fromLTRB(
-                                              16.0, 0, 16.0, 0),
+                                          contentPadding:
+                                              const EdgeInsets.fromLTRB(
+                                                  16.0, 0, 16.0, 0),
 
                                           hintStyle: const TextStyle(
                                               fontSize: 13, color: Colors.grey),
                                           focusedBorder: OutlineInputBorder(
                                             borderRadius:
-                                            BorderRadius.circular(8.0),
+                                                BorderRadius.circular(8.0),
                                             borderSide: const BorderSide(
                                               color: Colors.grey,
                                             ),
                                           ),
                                           enabledBorder: OutlineInputBorder(
                                             borderRadius:
-                                            BorderRadius.circular(8.0),
+                                                BorderRadius.circular(8.0),
                                             borderSide: const BorderSide(
                                               color: Colors.grey,
                                               width: 1.0,
@@ -1185,11 +1220,12 @@ class _SheIqState extends State<SheIq> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
                                     '13. How long ago was the loan taken out. (In hours, days, months or year)? *'),
@@ -1205,21 +1241,22 @@ class _SheIqState extends State<SheIq> {
                                         controller: _whenLoanTakenController,
                                         decoration: InputDecoration(
                                           hintText: 'Answer',
-                                          contentPadding: const EdgeInsets.fromLTRB(
-                                              16.0, 0, 16.0, 0),
+                                          contentPadding:
+                                              const EdgeInsets.fromLTRB(
+                                                  16.0, 0, 16.0, 0),
 
                                           hintStyle: const TextStyle(
                                               fontSize: 13, color: Colors.grey),
                                           focusedBorder: OutlineInputBorder(
                                             borderRadius:
-                                            BorderRadius.circular(8.0),
+                                                BorderRadius.circular(8.0),
                                             borderSide: const BorderSide(
                                               color: Colors.grey,
                                             ),
                                           ),
                                           enabledBorder: OutlineInputBorder(
                                             borderRadius:
-                                            BorderRadius.circular(8.0),
+                                                BorderRadius.circular(8.0),
                                             borderSide: const BorderSide(
                                               color: Colors.grey,
                                               width: 1.0,
@@ -1250,30 +1287,32 @@ class _SheIqState extends State<SheIq> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
-                                    '13. Do you or anyone in your household have a bank account ? *'),
+                                    '14. Do you or anyone in your household have a bank account ? *'),
                                 const SizedBox(
                                   height: 8,
                                 ),
                                 ListTile(
-                                  contentPadding: const EdgeInsets.only(left: 0),
+                                  contentPadding:
+                                      const EdgeInsets.only(left: 0),
                                   title: Text(
                                     'Yes',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 1,
                                     groupValue: isAnyoneHavingBankAccount,
                                     onChanged: (int? value) {
                                       setState(
-                                            () {
+                                        () {
                                           isAnyoneHavingBankAccount = value!;
                                         },
                                       );
@@ -1282,11 +1321,11 @@ class _SheIqState extends State<SheIq> {
                                 ),
                                 ListTile(
                                   contentPadding:
-                                  const EdgeInsets.only(left: 0, top: 0),
+                                      const EdgeInsets.only(left: 0, top: 0),
                                   title: Text(
                                     'No',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 0,
@@ -1306,31 +1345,32 @@ class _SheIqState extends State<SheIq> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                    '14. Do you have ATM Card ? *'),
+                                const Text('15. Do you have ATM Card ? *'),
                                 const SizedBox(
                                   height: 8,
                                 ),
                                 ListTile(
-                                  contentPadding: const EdgeInsets.only(left: 0),
+                                  contentPadding:
+                                      const EdgeInsets.only(left: 0),
                                   title: Text(
                                     'Yes',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 1,
                                     groupValue: isHavingAtmCard,
                                     onChanged: (int? value) {
                                       setState(
-                                            () {
-                                              isHavingAtmCard = value!;
+                                        () {
+                                          isHavingAtmCard = value!;
                                         },
                                       );
                                     },
@@ -1338,11 +1378,11 @@ class _SheIqState extends State<SheIq> {
                                 ),
                                 ListTile(
                                   contentPadding:
-                                  const EdgeInsets.only(left: 0, top: 0),
+                                      const EdgeInsets.only(left: 0, top: 0),
                                   title: Text(
                                     'No',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 0,
@@ -1362,11 +1402,12 @@ class _SheIqState extends State<SheIq> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
                                     '15. Do you have insurance policy ? *'),
@@ -1374,19 +1415,20 @@ class _SheIqState extends State<SheIq> {
                                   height: 8,
                                 ),
                                 ListTile(
-                                  contentPadding: const EdgeInsets.only(left: 0),
+                                  contentPadding:
+                                      const EdgeInsets.only(left: 0),
                                   title: Text(
                                     'Yes',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 1,
                                     groupValue: isHavingInsurancePolicy,
                                     onChanged: (int? value) {
                                       setState(
-                                            () {
-                                              isHavingInsurancePolicy = value!;
+                                        () {
+                                          isHavingInsurancePolicy = value!;
                                         },
                                       );
                                     },
@@ -1394,11 +1436,11 @@ class _SheIqState extends State<SheIq> {
                                 ),
                                 ListTile(
                                   contentPadding:
-                                  const EdgeInsets.only(left: 0, top: 0),
+                                      const EdgeInsets.only(left: 0, top: 0),
                                   title: Text(
                                     'No',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 0,
@@ -1418,31 +1460,32 @@ class _SheIqState extends State<SheIq> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                    '16. Do you Have a business ? *'),
+                                const Text('16. Do you Have a business ? *'),
                                 const SizedBox(
                                   height: 8,
                                 ),
                                 ListTile(
-                                  contentPadding: const EdgeInsets.only(left: 0),
+                                  contentPadding:
+                                      const EdgeInsets.only(left: 0),
                                   title: Text(
                                     'Yes',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 1,
                                     groupValue: isHavingBusiness,
                                     onChanged: (int? value) {
                                       setState(
-                                            () {
-                                              isHavingBusiness = value!;
+                                        () {
+                                          isHavingBusiness = value!;
                                         },
                                       );
                                     },
@@ -1450,11 +1493,11 @@ class _SheIqState extends State<SheIq> {
                                 ),
                                 ListTile(
                                   contentPadding:
-                                  const EdgeInsets.only(left: 0, top: 0),
+                                      const EdgeInsets.only(left: 0, top: 0),
                                   title: Text(
                                     'No',
                                     style:
-                                    Theme.of(context).textTheme.subtitle1,
+                                        Theme.of(context).textTheme.subtitle1,
                                   ),
                                   leading: Radio(
                                     value: 0,
@@ -1474,7 +1517,7 @@ class _SheIqState extends State<SheIq> {
                           elevation: 0.9,
                           shape: const RoundedRectangleBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
+                                  BorderRadius.all(Radius.circular(10.0))),
                           child: Padding(
                             padding: const EdgeInsets.only(
                                 left: 20, right: 20, top: 30, bottom: 30),
@@ -1488,7 +1531,7 @@ class _SheIqState extends State<SheIq> {
                                         .subtitle2!
                                         .copyWith(),
                                     text:
-                                    "17. What type of business do you have ?",
+                                        "17. What type of business do you have ?",
                                     children: <TextSpan>[
                                       TextSpan(
                                           text: '*',
@@ -1503,17 +1546,19 @@ class _SheIqState extends State<SheIq> {
                                   height: 7,
                                 ),
                                 CheckboxListTile(
-                                  title: const Text('Start a completely new enterprise'),
-                                  value: selectedCategories2
-                                      .contains("Start a completely new enterprise"),
+                                  title: const Text(
+                                      'Start a completely new enterprise'),
+                                  value: businessTypeList.contains(
+                                      "Start a completely new enterprise"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
-                                        selectedCategories2.add("Start a completely new enterprise");
+                                        businessTypeList.add(
+                                            "Start a completely new enterprise");
                                       } else {
-                                        selectedCategories2
-                                            .remove("Start a completely new enterprise");
+                                        businessTypeList.remove(
+                                            "Start a completely new enterprise");
                                       }
                                     });
                                   },
@@ -1522,17 +1567,19 @@ class _SheIqState extends State<SheIq> {
                                   height: 7,
                                 ),
                                 CheckboxListTile(
-                                  title: const Text('Creation by an existing enterprise (affiliate)'),
-                                  value: selectedCategories2
-                                      .contains("Creation by an existing enterprise (affiliate)"),
+                                  title: const Text(
+                                      'Creation by an existing enterprise (affiliate)'),
+                                  value: businessTypeList.contains(
+                                      "Creation by an existing enterprise (affiliate)"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
-                                        selectedCategories2.add("Creation by an existing enterprise (affiliate)");
+                                        businessTypeList.add(
+                                            "Creation by an existing enterprise (affiliate)");
                                       } else {
-                                        selectedCategories2
-                                            .remove("Creation by an existing enterprise (affiliate)");
+                                        businessTypeList.remove(
+                                            "Creation by an existing enterprise (affiliate)");
                                       }
                                     });
                                   },
@@ -1541,18 +1588,18 @@ class _SheIqState extends State<SheIq> {
                                   height: 7,
                                 ),
                                 CheckboxListTile(
-                                  title:
-                                  const Text('Restart a business after dormancy of over 2 years'),
-                                  value: selectedCategories2
-                                      .contains("Restart a business after dormancy of over 2 years"),
+                                  title: const Text(
+                                      'Restart a business after dormancy of over 2 years'),
+                                  value: businessTypeList.contains(
+                                      "Restart a business after dormancy of over 2 years"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
-                                        selectedCategories2
-                                            .add("Restart a business after dormancy of over 2 years");
+                                        businessTypeList.add(
+                                            "Restart a business after dormancy of over 2 years");
                                       } else {
-                                        selectedCategories2.remove(
+                                        businessTypeList.remove(
                                             "Restart a business after dormancy of over 2 years");
                                       }
                                     });
@@ -1562,18 +1609,19 @@ class _SheIqState extends State<SheIq> {
                                   height: 7,
                                 ),
                                 CheckboxListTile(
-                                  title: const Text('Take-over a purchase of another enterprise'),
-                                  value: selectedCategories2
-                                      .contains("Take-over a purchase of another enterprise"),
+                                  title: const Text(
+                                      'Take-over a purchase of another enterprise'),
+                                  value: selectedCategories2.contains(
+                                      "Take-over a purchase of another enterprise"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
-                                        selectedCategories2
-                                            .add("Take-over a purchase of another enterprise");
+                                        selectedCategories2.add(
+                                            "Take-over a purchase of another enterprise");
                                       } else {
-                                        selectedCategories2
-                                            .remove("Take-over a purchase of another enterprise");
+                                        selectedCategories2.remove(
+                                            "Take-over a purchase of another enterprise");
                                       }
                                     });
                                   },
@@ -1586,11 +1634,12 @@ class _SheIqState extends State<SheIq> {
                         elevation: 0.9,
                         shape: const RoundedRectangleBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(10.0))),
+                                BorderRadius.all(Radius.circular(10.0))),
                         child: Padding(
                           padding: const EdgeInsets.only(
                               left: 20, right: 20, top: 30, bottom: 30),
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
                                     '18. How long has your business been in operation? *'),
@@ -1603,24 +1652,26 @@ class _SheIqState extends State<SheIq> {
                                     Flexible(
                                       // height: 60,
                                       child: TextFormField(
-                                        controller: _businessOperationController,
+                                        controller:
+                                            _businessOperationController,
                                         decoration: InputDecoration(
                                           hintText: 'Answer',
-                                          contentPadding: const EdgeInsets.fromLTRB(
-                                              16.0, 0, 16.0, 0),
+                                          contentPadding:
+                                              const EdgeInsets.fromLTRB(
+                                                  16.0, 0, 16.0, 0),
 
                                           hintStyle: const TextStyle(
                                               fontSize: 13, color: Colors.grey),
                                           focusedBorder: OutlineInputBorder(
                                             borderRadius:
-                                            BorderRadius.circular(8.0),
+                                                BorderRadius.circular(8.0),
                                             borderSide: const BorderSide(
                                               color: Colors.grey,
                                             ),
                                           ),
                                           enabledBorder: OutlineInputBorder(
                                             borderRadius:
-                                            BorderRadius.circular(8.0),
+                                                BorderRadius.circular(8.0),
                                             borderSide: const BorderSide(
                                               color: Colors.grey,
                                               width: 1.0,
@@ -1651,7 +1702,7 @@ class _SheIqState extends State<SheIq> {
                           elevation: 0.9,
                           shape: const RoundedRectangleBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
+                                  BorderRadius.all(Radius.circular(10.0))),
                           child: Padding(
                             padding: const EdgeInsets.only(
                                 left: 20, right: 20, top: 30, bottom: 30),
@@ -1665,7 +1716,7 @@ class _SheIqState extends State<SheIq> {
                                         .subtitle2!
                                         .copyWith(),
                                     text:
-                                    "19. What industry is your business in ?",
+                                        "19. What industry is your business in ?",
                                     children: <TextSpan>[
                                       TextSpan(
                                           text: '*',
@@ -1678,302 +1729,292 @@ class _SheIqState extends State<SheIq> {
                                 ),
                                 CheckboxListTile(
                                   title: const Text('Agribusiness'),
-                                  value: selectedCategories2
-                                      .contains("Agribusiness"),
+                                  value: industry.contains("Agribusiness"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
-                                        selectedCategories2.add("Agribusiness");
+                                        industry.add("Agribusiness");
                                       } else {
-                                        selectedCategories2
-                                            .remove("Agribusiness");
+                                        industry.remove("Agribusiness");
                                       }
                                     });
                                   },
                                 ),
                                 CheckboxListTile(
                                   title: const Text('Beauty'),
-                                  value: selectedCategories2
-                                      .contains("Beauty"),
+                                  value: industry.contains("Beauty"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
-                                        selectedCategories2.add("Beauty");
+                                        industry.add("Beauty");
                                       } else {
-                                        selectedCategories2
-                                            .remove("Beauty");
+                                        industry.remove("Beauty");
                                       }
                                     });
                                   },
                                 ),
                                 CheckboxListTile(
                                   title: const Text('ICT and communications'),
-                                  value: selectedCategories2
+                                  value: industry
                                       .contains("ICT and communications"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
-                                        selectedCategories2.add("ICT and communications");
+                                        industry.add("ICT and communications");
                                       } else {
-                                        selectedCategories2
+                                        industry
                                             .remove("ICT and communications");
                                       }
                                     });
                                   },
                                 ),
                                 CheckboxListTile(
-                                  title: const Text('construction'),
-                                  value: selectedCategories2
-                                      .contains("construction"),
+                                  title: const Text('Construction'),
+                                  value: industry.contains("Construction"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
-                                        selectedCategories2.add("construction");
+                                        industry.add("Construction");
                                       } else {
-                                        selectedCategories2
-                                            .remove("construction");
+                                        industry.remove("Construction");
                                       }
                                     });
                                   },
                                 ),
                                 CheckboxListTile(
                                   title: const Text('Energy'),
-                                  value: selectedCategories2
-                                      .contains("Energy"),
+                                  value: industry.contains("Energy"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
-                                        selectedCategories2.add("Energy");
+                                        industry.add("Energy");
                                       } else {
-                                        selectedCategories2
-                                            .remove("Energy");
+                                        industry.remove("Energy");
                                       }
                                     });
                                   },
                                 ),
                                 CheckboxListTile(
                                   title: const Text('Financial services'),
-                                  value: selectedCategories2
-                                      .contains("Financial services"),
+                                  value:
+                                      industry.contains("Financial services"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
-                                        selectedCategories2.add("Financial services");
+                                        industry.add("Financial services");
                                       } else {
-                                        selectedCategories2
-                                            .remove("Financial services");
+                                        industry.remove("Financial services");
                                       }
                                     });
                                   },
                                 ),
                                 CheckboxListTile(
                                   title: const Text('Media and marketing'),
-                                  value: selectedCategories2
-                                      .contains("Media and marketing"),
+                                  value:
+                                      industry.contains("Media and marketing"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
-                                        selectedCategories2.add("Media and marketing");
+                                        industry.add("Media and marketing");
                                       } else {
-                                        selectedCategories2
-                                            .remove("Media and marketing");
+                                        industry.remove("Media and marketing");
                                       }
                                     });
                                   },
                                 ),
                                 CheckboxListTile(
                                   title: const Text('Non-profit'),
-                                  value: selectedCategories2
-                                      .contains("Non-profit"),
+                                  value: industry.contains("Non-profit"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
-                                        selectedCategories2.add("Non-profit");
+                                        industry.add("Non-profit");
                                       } else {
-                                        selectedCategories2
-                                            .remove("Non-profit");
+                                        industry.remove("Non-profit");
                                       }
                                     });
                                   },
                                 ),
                                 CheckboxListTile(
                                   title: const Text('Property'),
-                                  value: selectedCategories2
-                                      .contains("Property"),
+                                  value: industry.contains("Property"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
-                                        selectedCategories2.add("Property");
+                                        industry.add("Property");
                                       } else {
-                                        selectedCategories2
-                                            .remove("Property");
+                                        industry.remove("Property");
                                       }
                                     });
                                   },
                                 ),
                                 CheckboxListTile(
                                   title: const Text('Retail'),
-                                  value: selectedCategories2
-                                      .contains("Retail"),
+                                  value: industry.contains("Retail"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
-                                        selectedCategories2.add("Retail");
+                                        industry.add("Retail");
                                       } else {
-                                        selectedCategories2
-                                            .remove("Retail");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('others'),
-                                  value: selectedCategories2
-                                      .contains("others"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("others");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("others");
-                                      }
-                                    });
-                                  },
-                                ),
-
-                              ],
-                            ),
-                          )),
-                      Card(
-                          margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                          elevation: 0.9,
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(10.0))),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 20, right: 20, top: 30, bottom: 30),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text.rich(
-                                  TextSpan(
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .subtitle2!
-                                        .copyWith(),
-                                    text:
-                                    "20. What type of loans do you have for your business ?",
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                          text: '*',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .subtitle2!
-                                              .copyWith(color: Colors.red)),
-                                    ],
-                                  ),
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Working capital'),
-                                  value: selectedCategories2
-                                      .contains("Working capital"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("Working capital");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("Working capital");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Overdraft'),
-                                  value: selectedCategories2
-                                      .contains("Overdraft"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("Overdraft");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("Overdraft");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Equipment Leasing'),
-                                  value: selectedCategories2
-                                      .contains("Equipment Leasing"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("Equipment Leasing");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("Equipment Leasing");
-                                      }
-                                    });
-                                  },
-                                ),
-                                CheckboxListTile(
-                                  title: const Text('Commercial Mortgage'),
-                                  value: selectedCategories2
-                                      .contains("Commercial Mortgage"),
-                                  activeColor: const Color(0xffed39ca),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      if (value!) {
-                                        selectedCategories2.add("Commercial Mortgage");
-                                      } else {
-                                        selectedCategories2
-                                            .remove("Commercial Mortgage");
+                                        industry.remove("Retail");
                                       }
                                     });
                                   },
                                 ),
                                 CheckboxListTile(
                                   title: const Text('Others'),
-                                  value: selectedCategories2
-                                      .contains("Others"),
+                                  value: industry.contains("Others"),
                                   activeColor: const Color(0xffed39ca),
                                   onChanged: (bool? value) {
                                     setState(() {
                                       if (value!) {
-                                        selectedCategories2.add("Others");
+                                        industry.add("Others");
                                       } else {
-                                        selectedCategories2
-                                            .remove("Others");
+                                        industry.remove("Others");
                                       }
                                     });
                                   },
                                 ),
+                                Card(
+                                  margin:
+                                      const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                  elevation: 0.9,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10.0)),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 20,
+                                      right: 20,
+                                      top: 30,
+                                      bottom: 30,
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text.rich(
+                                          TextSpan(
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .subtitle2!
+                                                .copyWith(),
+                                            text:
+                                                "20. What type of loans do you have for your business ?",
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: '*',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .subtitle2!
+                                                    .copyWith(
+                                                        color: Colors.red),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        CheckboxListTile(
+                                          title: const Text('Working capital'),
+                                          value: typeOfLoanList
+                                              .contains("Working capital"),
+                                          activeColor: const Color(0xffed39ca),
+                                          onChanged: (bool? value) {
+                                            setState(() {
+                                              if (value!) {
+                                                typeOfLoanList
+                                                    .add("Working capital");
+                                              } else {
+                                                typeOfLoanList
+                                                    .remove("Working capital");
+                                              }
+                                            });
+                                          },
+                                        ),
+                                        CheckboxListTile(
+                                          title: const Text('Overdraft'),
+                                          value: typeOfLoanList
+                                              .contains("Overdraft"),
+                                          activeColor: const Color(0xffed39ca),
+                                          onChanged: (bool? value) {
+                                            setState(() {
+                                              if (value!) {
+                                                typeOfLoanList.add("Overdraft");
+                                              } else {
+                                                typeOfLoanList
+                                                    .remove("Overdraft");
+                                              }
+                                            });
+                                          },
+                                        ),
+                                        CheckboxListTile(
+                                          title:
+                                              const Text('Equipment Leasing'),
+                                          value: typeOfLoanList
+                                              .contains("Equipment Leasing"),
+                                          activeColor: const Color(0xffed39ca),
+                                          onChanged: (bool? value) {
+                                            setState(() {
+                                              if (value!) {
+                                                typeOfLoanList
+                                                    .add("Equipment Leasing");
+                                              } else {
+                                                typeOfLoanList.remove(
+                                                    "Equipment Leasing");
+                                              }
+                                            });
+                                          },
+                                        ),
+                                        CheckboxListTile(
+                                          title:
+                                              const Text('Commercial Mortgage'),
+                                          value: typeOfLoanList
+                                              .contains("Commercial Mortgage"),
+                                          activeColor: const Color(0xffed39ca),
+                                          onChanged: (bool? value) {
+                                            setState(() {
+                                              if (value!) {
+                                                typeOfLoanList
+                                                    .add("Commercial Mortgage");
+                                              } else {
+                                                typeOfLoanList.remove(
+                                                    "Commercial Mortgage");
+                                              }
+                                            });
+                                          },
+                                        ),
+                                        CheckboxListTile(
+                                          title: const Text('Others'),
+                                          value:
+                                              typeOfLoanList.contains("Others"),
+                                          activeColor: const Color(0xffed39ca),
+                                          onChanged: (bool? value) {
+                                            setState(() {
+                                              if (value!) {
+                                                typeOfLoanList.add("Others");
+                                              } else {
+                                                typeOfLoanList.remove("Others");
+                                              }
+                                            });
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           )),
-
-
-
-
-
                       const SizedBox(height: 16.0),
                       Container(
                         width: MediaQuery.of(context).size.width,
@@ -1983,25 +2024,26 @@ class _SheIqState extends State<SheIq> {
                         // right: MediaQuery.of(context).size.width * 0.3),
                         child: _isLoading
                             ? SpinKitCircle(
-                          color: Color(0xffed39ca),
-                        )
+                                color: Color(0xffed39ca),
+                              )
                             : OutlinedButton(
-                          onPressed: () {
-                            _submitForm();
-                          },
-                          style: ButtonStyle(
-                            backgroundColor:
-                            MaterialStateProperty.all<Color>(
-                                Color(0xffed39ca)),
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(50.0)),
-                            ),
-                          ),
-                          // style: ,
-                          child: const Text('Submit', style:TextStyle(color: Colors.white)),
-                        ),
+                                onPressed: () {
+                                  _submitForm();
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Color(0xffed39ca)),
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(50.0)),
+                                  ),
+                                ),
+                                // style: ,
+                                child: const Text('Submit',
+                                    style: TextStyle(color: Colors.white)),
+                              ),
                       ),
                       const SizedBox(
                         height: 16,

@@ -49,6 +49,7 @@ class _ScreenLoginState extends State<AccountLogin> {
   adddPhoneNumber(String mPhone) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("PhoneNumber", mPhone);
+    print(mPhone);
   }
 
   @override
@@ -204,7 +205,6 @@ class _ScreenLoginState extends State<AccountLogin> {
               controller: _phone_controller,
               decoration: const InputDecoration(
                 hintStyle: TextStyle(fontSize: 13, color: Colors.grey),
-
               ),
               validator: (val) {
                 if (val!.length == 0) {
@@ -270,8 +270,9 @@ class _ScreenLoginState extends State<AccountLogin> {
               // );
             },
             style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateProperty.all<Color>(Color(0xffed39ca),),
+              backgroundColor: MaterialStateProperty.all<Color>(
+                Color(0xffed39ca),
+              ),
               shape: MaterialStateProperty.all(
                 RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50.0)),
@@ -564,16 +565,14 @@ class _ScreenLoginState extends State<AccountLogin> {
       ),
     );
   }
+
   void _showDialog(String message) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             content: Container(
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.27,
+                height: MediaQuery.of(context).size.height * 0.27,
                 child: Column(children: [
                   const SizedBox(
                     height: 24,
@@ -603,15 +602,23 @@ class _ScreenLoginState extends State<AccountLogin> {
   }
 
   void _otpRequest(String phone) {
-    _apiServices.requestOtp(phone).then((value){
-      if(value.status=='OK'){
-        Get.off(()=> VerifyOTP(phone));
-      }else{
-        _showDialog(value.message.toString());
+    try {
+      _apiServices.requestOtp(phone).then((value) {
+        debugPrint("valueeeeeeeee${value.message}");
+        debugPrint("valueeeeeeeee${value.status}");
 
-      }
-
-    });
-
+        try {
+          if (value.status == 200) {
+            Get.off(() => VerifyOTP(phone));
+          } else {
+            _showDialog(value.message.toString());
+          }
+        } catch (e) {
+          _showDialog(e.toString());
+        }
+      });
+    } catch (e) {
+      _showDialog(e.toString());
+    }
   }
 }

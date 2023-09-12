@@ -1,8 +1,8 @@
 class ErrorP {
   var error;
-  String? status;
-  int? timestamp;
-  String? message;
+  dynamic status;
+  dynamic timestamp;
+  dynamic message;
 
   ErrorP({this.error, this.status, this.timestamp, this.message});
 

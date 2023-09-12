@@ -1,6 +1,6 @@
 class LoginModel {
   String? message;
-  String? status;
+  int? status;
   Data? data;
 
   LoginModel({this.message, this.status, this.data});
@@ -53,8 +53,8 @@ class Loan {
   String? appliedOn;
   int? initialAmount;
   int? amountRemaining;
-  String? id;
-  Null? disbursedOn;
+  int? id;
+  dynamic disbursedOn;
   String? status;
 
   Loan(
@@ -94,8 +94,8 @@ class User {
   String? lastName;
   String? mobile;
   String? middleName;
-  String? id;
-  String? userId;
+  dynamic id;
+  dynamic userId;
   String? email;
 
   User(

@@ -368,18 +368,18 @@ class _ChangePasswordState extends State<ChangePassword> {
     // await addUser(first_name, second_name, last_name, email);
 
 
-    Map data = { "oldPass": "$old", "newPass": "$newPass"};
-    _apiServices.changePin(widget.userId, token, data).then((value) {
-      if(value.status == "OK"){
-        _successDialog(value.message.toString());
+    // Map data = { "oldPass": "$old", "newPass": "$newPass"};
+    // _apiServices.changePin(widget.userId, token, data).then((value) {
+    //   if(value.status == "OK"){
+    //     _successDialog(value.message.toString());
 
 
-      }
-      else{
-        UniversalMethods.show_toast(value.message.toString(), context);
-      }
+    //   }
+    //   else{
+    //     UniversalMethods.show_toast(value.message.toString(), context);
+    //   }
 
-    });
+    // });
 
 
   }

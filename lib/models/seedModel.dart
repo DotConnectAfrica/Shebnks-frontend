@@ -1,14 +1,14 @@
 class SeedFundModel {
   String? message;
-  String? status;
-  Data? data;
+  dynamic status;
+  SeedFundModel? data;
 
   SeedFundModel({this.message, this.status, this.data});
 
   SeedFundModel.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     status = json['status'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? SeedFundModel.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {

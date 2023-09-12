@@ -28,6 +28,7 @@ class ScreenEditProfile extends StatefulWidget {
   final userId;
 
   final mobile;
+  final secondName;
 
   const ScreenEditProfile(
       {super.key,
@@ -35,7 +36,8 @@ class ScreenEditProfile extends StatefulWidget {
       required this.lName,
       required this.email,
       required this.userId,
-      required this.mobile});
+      required this.mobile,
+      this.secondName});
 
   @override
   State<ScreenEditProfile> createState() => _MyAccountState();
@@ -48,6 +50,9 @@ class _MyAccountState extends State<ScreenEditProfile> {
   final TextEditingController controller_last_name = TextEditingController();
   final TextEditingController controller_email = TextEditingController();
   final TextEditingController controller_id_number = TextEditingController();
+
+  final TextEditingController controller_mobile_number =
+      TextEditingController();
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -65,15 +70,24 @@ class _MyAccountState extends State<ScreenEditProfile> {
     getToken();
     super.initState();
     // user = widget.user;
-    // controller_first_name.text = user!.firstName;
+
     // controller_second_name.text = user!.middleName;
     // controller_last_name.text = user!.lastName;
     // controller_email.text = user!.emailAddress;
     // controller_id_number.text = user!.idNumber;
+      controller_first_name.text = widget.fName;
+    controller_last_name.text = widget.lName;
+    controller_email.text = widget.email;
+    controller_second_name.text = widget.secondName;
   }
 
   @override
   Widget build(BuildContext context) {
+    // controller_first_name.text = widget.fName;
+    // controller_last_name.text = widget.lName;
+    // controller_email.text = widget.email;
+    // controller_second_name.text = widget.secondName;
+
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -340,52 +354,7 @@ class _MyAccountState extends State<ScreenEditProfile> {
             ),
           ],
         ),
-        // SizedBox(
-        //   height: 32,
-        // ),
-        // Row(
-        //   mainAxisSize: MainAxisSize.min,
-        //   children: [
-        //     Flexible(
-        //       child: TextFormField(
-        //         maxLength: 10,
-        //         controller: controller_id_number,
-        //         decoration: new InputDecoration(
-        //           hintText: 'ID number',
-        //           contentPadding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-        //
-        //           hintStyle: TextStyle(fontSize: 13, color: Colors.grey),
-        //           focusedBorder: OutlineInputBorder(
-        //             borderRadius: BorderRadius.circular(8.0),
-        //             borderSide: BorderSide(
-        //               color: Colors.grey,
-        //             ),
-        //           ),
-        //           enabledBorder: OutlineInputBorder(
-        //             borderRadius: BorderRadius.circular(8.0),
-        //             borderSide: BorderSide(
-        //               color: Colors.grey,
-        //               width: 1.0,
-        //             ),
-        //           ),
-        //           //fillColor: Colors.green
-        //         ),
-        //         validator: (val) {
-        //           if (val!.length == 0) {
-        //             return "Phone number be empty";
-        //           } else {
-        //             return null;
-        //           }
-        //         },
-        //         keyboardType: TextInputType.number,
-        //         style: new TextStyle(
-        //           fontFamily: "Poppins",
-        //         ),
-        //       ),
-        //     ),
-        //   ],
-        // ),
-        SizedBox(
+      SizedBox(
           height: 36,
         ),
         SizedBox(
@@ -415,7 +384,7 @@ class _MyAccountState extends State<ScreenEditProfile> {
 
   get_user_info() async {
     var first_name = controller_first_name.text;
-    var second_name = controller_second_name.text ?? '';
+    var second_name = controller_second_name.text;
     var last_name = controller_last_name.text;
     var email = controller_email.text;
     // var id_number = controller_id_number.text;
@@ -437,47 +406,46 @@ class _MyAccountState extends State<ScreenEditProfile> {
       return;
     }
 
-    // if (id_number.isEmpty) {
-    //   FocusScope.of(context).unfocus();
-    //   UniversalMethods.show_toast('ID number is required', context);
-    //   return;
-    // }
-
-    // UniversalMethods().showLoaderDialog(context, 'Saving');
-    // FocusScope.of(context).unfocus();
-
     await addUser(first_name, second_name, last_name, email);
   }
 
   Future addUser(first_name, second_name, last_name, email) async {
     var userId = widget.userId;
     debugPrint('email is $email');
-    Map signup_data = {
-      'firstName': first_name,
-      'middleName': second_name,
-      'lastName': last_name,
-      'email': email,
+    Map<String, dynamic> signup_data = {
+      "firstName": first_name,
+      "lastName": last_name,
+      "middleName": second_name,
+
+      "email": email,
       // 'idNumber': id_number,
       // 'mobileNumber': widget.mobile,
       // John Doe
     };
-
-    ApiServices().update_data(signup_data, userId, token).then((value) {
-      if (value.status == "OK") {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('${value.message.toString()}')));
-        // Get.to(()=)
-      } else if (value.status == "BAD_REQUEST") {
+    ApiServices().update_data(signup_data, userId).then((value) {
+      if (value.status == 200) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Update Details'),
+                content: Text('${value.message.toString()}'),
+              );
+            });
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('${value.message.toString()}')));
+      } else if(value.status==400){
         showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
                 title: Text('Alert'),
-                content: Text('${value.message.toString()}'),
+                content: Text('Bad request'),
               );
             });
-      } else {
-        return Text('An error occured');
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Oops an error occured')));
       }
     });
   }

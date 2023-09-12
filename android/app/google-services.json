@@ -1,34 +1,41 @@
 {
   "project_info": {
-    "project_number": "865239668665",
-    "project_id": "shebanks-d375c",
-    "storage_bucket": "shebanks-d375c.appspot.com"
+    "project_number": "278910685584",
+    "project_id": "shebanks-mobile-app",
+    "storage_bucket": "shebanks-mobile-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:865239668665:android:60717000cc72b682480868",
+        "mobilesdk_app_id": "1:278910685584:android:f4ceca9674a5e055a5e315",
         "android_client_info": {
           "package_name": "org.dotconnectafrica.shebnks"
         }
       },
       "oauth_client": [
         {
-          "client_id": "865239668665-6eclgt1435ra2qbbok1gfdt20v84kh1d.apps.googleusercontent.com",
+          "client_id": "278910685584-jj5kg89s707d5pr7a1alocprpgbt21ka.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAME47KafkhVo9SsT27lghyq6yG1u1P_9o"
+          "current_key": "AIzaSyDOZb1JZqao6pSbuFToPAgVlpvmeQWBeHg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "865239668665-6eclgt1435ra2qbbok1gfdt20v84kh1d.apps.googleusercontent.com",
+              "client_id": "278910685584-jj5kg89s707d5pr7a1alocprpgbt21ka.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "278910685584-of5rsf9b9rv009dml44mgddbqjmvn03g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.dotconnectafrica.shebnks"
+              }
             }
           ]
         }

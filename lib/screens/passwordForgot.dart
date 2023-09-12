@@ -320,11 +320,10 @@ class _PasswordForgotState extends State<PasswordForgot> {
 
 
     Map data = { "password": "$newPass"};
-    _apiServices.forgotPassword(widget.phone, data).then((value) {
-      if(value.status == "OK"){
+   
+    _apiServices.forgotPassword(newPass,widget.phone).then((value) {
+      if(value.status == 200){
         _successDialog(value.message.toString());
-
-
       }
       else{
         UniversalMethods.show_toast(value.message.toString(), context);

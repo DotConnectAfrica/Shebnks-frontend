@@ -201,18 +201,28 @@ class _MyAccountState extends State<ScreenMyAccount> {
                           margin: const EdgeInsets.only(top: 8, bottom: 8),
                           child: InkWell(
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ScreenEditProfile(
-                                    fName: widget.fName,
-                                    lName: widget.lName,
-                                    email: widget.email,
-                                    userId: widget.userId,
-                                    mobile: widget.phone,
-                                  ),
-                                ),
-                              );
+                              ApiServices()
+                                  .getUserDetail(widget.phone)
+                                  .then((value) => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ScreenEditProfile(
+                                                 secondName:value.body?.middleName,
+                                            fName: value
+                                                .body?.firstName,
+                                            lName: value
+                                                .body?.lastName,
+                                            email: value
+                                                .body?.emailAddress,
+                                            userId: value
+                                                .body.userId,
+                                            mobile: value
+                                                .body?.mobileNumber,
+                                               
+                                          ),
+                                        ),
+                                      ));
                             },
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
@@ -253,7 +263,7 @@ class _MyAccountState extends State<ScreenMyAccount> {
                               //   ),
                               // );
                             },
-                            child:  Row(
+                            child: Row(
                               children: [
                                 SizedBox(
                                   width: 8,
@@ -289,7 +299,7 @@ class _MyAccountState extends State<ScreenMyAccount> {
                                 ),
                               );
                             },
-                            child:  Row(
+                            child: Row(
                               children: [
                                 SizedBox(
                                   width: 8,
@@ -324,7 +334,7 @@ class _MyAccountState extends State<ScreenMyAccount> {
                                 ),
                               );
                             },
-                            child:  Row(
+                            child: Row(
                               children: [
                                 SizedBox(
                                   width: 8,
@@ -353,9 +363,13 @@ class _MyAccountState extends State<ScreenMyAccount> {
                           margin: const EdgeInsets.only(top: 8, bottom: 8),
                           child: InkWell(
                             onTap: () {
-                              Get.to(()=>ChangePassword(fName: widget.fName, email: widget.email, lName: widget.lName, userId: widget.userId));
+                              Get.to(() => ChangePassword(
+                                  fName: widget.fName,
+                                  email: widget.email,
+                                  lName: widget.lName,
+                                  userId: widget.userId));
                             },
-                            child:  Row(
+                            child: Row(
                               children: [
                                 SizedBox(
                                   width: 8,
@@ -387,7 +401,7 @@ class _MyAccountState extends State<ScreenMyAccount> {
                             onTap: () {
                               _log_out(context);
                             },
-                            child:  Row(
+                            child: Row(
                               children: [
                                 SizedBox(
                                   width: 8,
