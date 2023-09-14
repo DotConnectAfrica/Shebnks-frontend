@@ -21,6 +21,7 @@ import 'package:get/get.dart';
 
 import 'api_services/AuthService.dart';
 import 'firebase_options.dart';
+import 'screens/screen_registration.dart';
 
 final dbHelper = DatabaseHelper(); //firebase
 
@@ -59,8 +60,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         primarySwatch: Colors.green,
       ),
-      home:SignInDemo(),
-      // home: SplashScreen(),
+      // home:SignInDemo(),
+      home: UrlApplication(),
       debugShowCheckedModeBanner: false,
     );
     //   ),

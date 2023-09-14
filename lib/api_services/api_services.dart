@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:she_banks/models/Activation.dart';
@@ -21,6 +22,7 @@ import '../models/FirebaseModel.dart';
 import 'package:dio/dio.dart';
 
 import '../models/LoanApplicationModel.dart';
+import '../models/PaymentResponse.dart';
 import '../models/SeedFund.dart';
 import '../models/UserAccountResponse.dart';
 import '../models/model_loan_status.dart';
@@ -31,6 +33,44 @@ final dio = Dio();
 class ApiServices {
   // late String base_url;
   bool test = false;
+  static const List<String> scopes = <String>[
+    'email',
+    'https://www.googleapis.com/auth/contacts.readonly',
+  ];
+  Future<void> handleSignIn() async {
+    try {
+      await googleSignIn.signIn();
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  GoogleSignIn googleSignIn = GoogleSignIn(
+    // Optional clientId
+    // clientId: 'your-client_id.apps.googleusercontent.com',
+    scopes: scopes,
+  );
+
+  Future<UserCredential?> signInWithGoogle() async {
+    // Create an instance of the firebase auth and google signin
+    FirebaseAuth auth = FirebaseAuth.instance;
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    //Triger the authentication flow
+    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+    //Obtain the auth details from the request
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser!.authentication;
+    //Create a new credentials
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    //Sign in the user with the credentials
+    final UserCredential userCredential =
+        await auth.signInWithCredential(credential);
+    return null;
+  }
 
   // if(test) {
   // fibase_url= '192.168.137.202:8080/she/api/v1';
@@ -159,6 +199,29 @@ class ApiServices {
     }
   }
 
+  Future<LoginModel> loginWithGmail(String email) async {
+    final String url = 'https://shebnks.com/otp/loginMail/${email}';
+
+    Map<String, String> headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+    };
+
+    final response = await http.get(Uri.parse(url), headers: headers);
+    print(response.body);
+    print(response.statusCode);
+    debugPrint("try to login with gmail");
+
+    if (response.statusCode == 200) {
+      debugPrint(response.body);
+      debugPrint("logged");
+      return LoginModel.fromJson(jsonDecode(response.body));
+    } else {
+      debugPrint("failed");
+      throw Exception('Email does not exists');
+    }
+  }
+
   Future sign_up(Map data) async {
     final Map<String, String> header = {
       'Content-type': 'application/json',
@@ -200,12 +263,10 @@ class ApiServices {
   Future update_data(Map data, int _userId) async {
     // String url = base_url + '/user/profile/update/${_userId}';
     String url = "https://shebnks.com/api/profile/update-user-data/${_userId}";
-   print(jsonEncode(data));
+    print(jsonEncode(data));
     //  String jsonData = jsonEncode(datas); // Encode the data as JSON
 
-    final response = await http.put(Uri.parse(url),
-       
-        body: data);
+    final response = await http.put(Uri.parse(url), body: data);
     debugPrint('response is...................${response.body}');
     if (response.statusCode == 200) {
       debugPrint('response is...................${response.body}');
@@ -277,32 +338,34 @@ class ApiServices {
     print(jsonEncode(_data));
     print(_data);
     debugPrint(response.body);
-    if (response.statusCode == 200) {
+    debugPrint(response.statusCode.toString());
+    if (response.statusCode == 201) {
       // If the server did return a 201 CREATED response,
       // then parse the JSON.
       debugPrint("response$response.body");
       return LoanApplicationModel.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception('Invalid loan Request');
+      debugPrint("invalid loan request");
+      return LoanApplicationModel.fromJson(jsonDecode(response.body));
     }
   }
 
-  Future repayLoan(String _loanId, String _token, Map _data) async {
-    String url = base_url + '/loan/payment/ctb/${_loanId}';
-    Map<String, String> headers = {
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer ${_token}',
-    };
-    debugPrint('Loan repayment Request is>>>>${_data}' + '$_loanId}');
+  Future repayLoan(Map _data) async {
+    String url = "https://shebnks.com/mobile-money/stk-transaction-request";
+    // Map<String, String> headers = {
+    //   'Content-type': 'application/json',
+    //   'Accept': 'application/json',
+    //   // 'Authorization': 'Bearer ${_token}',
+    // };
+    debugPrint('Loan repayment Request is>>>>${_data}');
 
-    final response = await http.post(Uri.parse(url),
-        headers: headers, body: jsonEncode(_data));
+    final response = await http.post(Uri.parse(url), body: _data);
 
     debugPrint('Loan Response is>>>>${response.body}');
+    debugPrint('Loan Response is>>>>${response.statusCode}');
 
     if (response.statusCode == 200) {
-      return SuccessModel.fromJson(jsonDecode(response.body));
+      return PaymentResponse.fromJson(jsonDecode(response.body));
     } else {
       return Exception('EEEEEE>>>>>>${response.body}');
     }
@@ -317,9 +380,11 @@ class ApiServices {
 
     final response = await http.get(Uri.parse(url), headers: headers);
     if (response.statusCode == 200) {
+      debugPrint(jsonDecode(response.body).toString());
       return SeedFund.fromJson(jsonDecode(response.body));
     } else {
-      return Exception('Errorrrr>>>${response.body}');
+      return SeedFund.fromJson(jsonDecode(response.body));
+      // return Exception('Errorrrr>>>${response.body}');
     }
   }
 

@@ -272,39 +272,63 @@ class _ScreenSheFundsState extends State<ScreenSheFunds> {
                                 debugPrint(
                                     value.data?.application_id.toString() ??
                                         "No application ID");
+                                debugPrint(
+                                    value.data?.bussinessAbout.toString() ??
+                                        "No application ID");
+
+                                debugPrint(
+                                    value.data?.provenTraction.toString() ??
+                                        "No application ID");
+
+                                debugPrint(value.data.toString());
+                                debugPrint(value.data?.fundingReason);
+                                debugPrint(value.data?.businessProblems);
+                                debugPrint(value.data?.businessImpact);
+                                debugPrint(value.data?.bussinessSectors);
+                                debugPrint(
+                                    value.data?.applicationReceivedStatus.toString());
+                                debugPrint(value.data?.applicationRulesStatus.toString());
+                                debugPrint(
+                                    value.data?.applicationEvaluationStatus.toString());
+                                debugPrint(
+                                    value.data?.applicationAdminCheckStatus.toString());
+                                debugPrint(value.data?.applicationStatus.toString()??
+                                        "No data");
 
                                 Get.off(() => ViewProgressPage(
                                       progressData: {
                                         // "About business":
-                                        //     value.data?.bussiness_about,
-                                        "business_founders":
-                                            value.data?.business_founders,
-                                        "proven_traction":
-                                            value.data?.proven_traction,
-                                        "funding_reason":
-                                            value.data?.funding_reason,
-                                        "business_problems":
-                                            value.data?.business_problems,
-                                        "business_impact":
-                                            value.data?.business_impact,
-                                        "bussiness_sectors":
-                                            value.data?.bussiness_sectors,
-                                        "application_received_status": value
-                                            .data?.application_received_status,
-                                        "application_rules_status": value
-                                            .data?.application_rules_status,
-                                        "application_evaluation_status": value
-                                            .data
-                                            ?.application_evaluation_status,
-                                        "application_admin_check_status": value
-                                            .data
-                                            ?.application_admin_check_status,
-                                        "application_status":
-                                            value.data?.application_status,
+                                        //     value.data?.bussinessAbout,
+                                        // "business_founders":
+                                        //     value.data?.businessFounders,
+                                        // "proven_traction":
+                                        //     value.data?.provenTraction,
+                                        //  "funding_reason":
+                                        //   value.data?.fundingReason,
+                                        //  "business_problems":
+                                        //     value.data?.businessProblems,
+                                        // "business_impact":
+                                        //     value.data?.businessImpact,
+                                        // "bussiness_sectors":
+                                        //     value.data?.bussinessSectors,
+                                        // "application_received_status": value
+                                        //     .data?.applicationReceivedStatus,
+                                        // "application_rules_status": value
+                                        //     .data?.applicationRulesStatus,
+                                        // "application_evaluation_status": value
+                                        //     .data
+                                        //     ?.applicationEvaluationStatus,
+                                        // "application_admin_check_status": value
+                                        //     .data
+                                        //     ?.applicationAdminCheckStatus,
+                                        // "application_status":
+                                        //     value.data?.applicationStatus,
                                       },
                                     ));
-                              } else {
+                              } else if (value.status == 404) {
                                 _showDialog(value.message.toString());
+                              } else {
+                                _showDialog("An error occured");
                               }
                             });
                           },

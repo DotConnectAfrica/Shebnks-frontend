@@ -1,5 +1,6 @@
 import 'dart:convert';
-
+import 'package:flutter/foundation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -22,6 +23,7 @@ import 'package:flutter/services.dart';
 
 import '../models/FirebaseModel.dart';
 import '../models/model_user.dart';
+
 
 class ScreenRegistration extends StatefulWidget {
   @override
@@ -63,9 +65,12 @@ class _ScreenLoginState extends State<ScreenRegistration> {
     _prefs.setBool('userExists', true);
   }
 
+
   @override
   void initState() {
     getPhone();
+    super.initState();
+
     super.initState();
   }
 
@@ -77,8 +82,8 @@ class _ScreenLoginState extends State<ScreenRegistration> {
     double app_bar_height = appBar.preferredSize.height;
     final double statusBarHeight = MediaQuery.of(context).padding.top;
 
+   
     return Scaffold(
-      //
       key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -105,24 +110,6 @@ class _ScreenLoginState extends State<ScreenRegistration> {
               const SizedBox(
                 height: 32,
               ),
-              // CircleAvatar(
-              //   backgroundColor: Colors.black,
-              //   radius: 30,
-              //   child: CircleAvatar(
-              //     radius: 30,
-              //     backgroundImage: AssetImage('assets/images/logo.png'),
-              //   ),
-              // ),
-              // SizedBox(
-              //   height: 8,
-              // ),
-              // Text(
-              //   'Make women financially strong and independent',
-              //   style: TextStyle(fontSize: 13),
-              // ),
-              // SizedBox(
-              //   height: 16,
-              // ),
               const Text(
                 'Fill in the following details to proceed',
                 style: TextStyle(
@@ -133,6 +120,8 @@ class _ScreenLoginState extends State<ScreenRegistration> {
                 height: 32,
               ),
               _phone_input(),
+             
+             
               const SizedBox(
                 height: 64,
               ),

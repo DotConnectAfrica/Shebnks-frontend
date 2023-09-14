@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "278910685584-a6j33rptshbl83huo2souqqvdnnnnkor.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.dotconnectafrica.shebnks",
+            "certificate_hash": "5ce9c4c235f13baad3012b3896555330c279d28f"
+          }
+        },
+        {
           "client_id": "278910685584-jj5kg89s707d5pr7a1alocprpgbt21ka.apps.googleusercontent.com",
           "client_type": 3
         }

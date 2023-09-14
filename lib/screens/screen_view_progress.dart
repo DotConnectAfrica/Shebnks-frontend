@@ -63,6 +63,7 @@ class _ViewProgressPageState extends State<ViewProgressPage> {
       videoLoading = false;
   @override
   Widget build(BuildContext context) {
+    debugPrint(widget.progressData["bussiness_founders"]);
     return Scaffold(
       appBar: AppBar(
         title: Text('Progress Details'),
@@ -79,7 +80,7 @@ class _ViewProgressPageState extends State<ViewProgressPage> {
                 child: Text(
                   widget.progressData["application_status"] == 0
                       ? "Application is under review"
-                      : "Congratulations, your application has been approved",
+                      :widget.progressData["application_status"] == 1? "oops, your application has been denied,try again next time":"Congratulations, your application has been approved",
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -92,24 +93,24 @@ class _ViewProgressPageState extends State<ViewProgressPage> {
             //   question: "1. Tell us about your organization or Project (Applicant expected to give the name, size, current residence and any other information)",
             //   answer: widget.progressData["bussiness_about"],
             // ),
-            CustomResponse(
-              question:
-                  "1. Who is the trusted founder(s) or Leader? (Please include phone number and email address and separate each founder by comma)",
-              answer: widget.progressData["proven_traction"],
-            ),
-            CustomResponse(
-              question: "2. Tell us why we should fund you.",
-              answer: widget.progressData["funding_reason"],
-            ),
-            CustomResponse(
-              question: "3. What problem/community need are you addressing?",
-              answer: widget.progressData["business_problems"],
-            ),
-            CustomResponse(
-              question:
-                  "4. Which sector does your business operate in(Please fill multiple if necessary) ?",
-              answer: widget.progressData["bussiness_sectors"],
-            ),
+            // CustomResponse(
+            //   question:
+            //       "1. Who is the trusted founder(s) or Leader? (Please include phone number and email address and separate each founder by comma)",
+            //   answer: widget.progressData["proven_traction"],
+            // ),
+            // CustomResponse(
+            //   question: "2. Tell us why we should fund you.",
+            //   answer: widget.progressData["funding_reason"],
+            // ),
+            // CustomResponse(
+            //   question: "3. What problem/community need are you addressing?",
+            //   answer: widget.progressData["business_founders"],
+            // ),
+            // CustomResponse(
+            //   question:
+            //       "4. Which sector does your business operate in(Please fill multiple if necessary) ?",
+            //   answer: widget.progressData["bussiness_sectors"],
+            // ),
           ],
         ),
       ),

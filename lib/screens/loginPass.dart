@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:clippy_flutter/arc.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:she_banks/api_services/api_services.dart';
 import 'package:she_banks/models/IQ.dart';
@@ -16,6 +18,17 @@ import 'package:she_banks/screens/screen_home.dart';
 import 'package:she_banks/screens/screen_registration.dart';
 import 'package:she_banks/screens/screen_sheiq.dart';
 import 'package:she_banks/utils/universal_methods.dart';
+
+const List<String> scopes = <String>[
+  'email',
+  'https://www.googleapis.com/auth/contacts.readonly',
+];
+
+GoogleSignIn _googleSignIn = GoogleSignIn(
+  // Optional clientId
+  // clientId: 'your-client_id.apps.googleusercontent.com',
+  scopes: scopes,
+);
 
 class LoginPass extends StatefulWidget {
   const LoginPass({Key? key}) : super(key: key);
@@ -40,7 +53,9 @@ class _LoginPassState extends State<LoginPass> {
   var _userId;
   String? encondedLoans;
   List<Question> questions = [];
-
+  GoogleSignInAccount? _currentUser;
+  bool _isAuthorized = false; // has granted permissions?
+  String _contactText = '';
   // List<Loans> loans =[];
   // List<String> _encodedLoans=[];
   setHasNLoan() async {
@@ -87,14 +102,14 @@ class _LoginPassState extends State<LoginPass> {
     });
   }
 
-  storeLoanDetails(int initAmount, int remainingAmount, String status,
+  storeLoanDetails(int initAmount, int remainingAmount, String status, int id,
       int amountToPay) async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     setState(() {
       _prefs.setInt('initAmount', initAmount);
       _prefs.setInt('remainingAmount', remainingAmount);
       _prefs.setString('status', status);
-      // _prefs.setString('loanId', loanId);
+      _prefs.setInt('loanId', id);
       _prefs.setInt('amountToPay', amountToPay);
     });
   }
@@ -104,11 +119,39 @@ class _LoginPassState extends State<LoginPass> {
     setLoginState();
     getPhone();
     // getIQuestions();
+
+    _googleSignIn.onCurrentUserChanged
+        .listen((GoogleSignInAccount? account) async {
+      // In mobile, being authenticated means being authorized...
+      bool isAuthorized = account != null;
+      // However, in the web...
+      if (kIsWeb && account != null) {
+        isAuthorized = await _googleSignIn.canAccessScopes(scopes);
+      }
+
+      setState(() {
+        _currentUser = account;
+        _isAuthorized = isAuthorized;
+      });
+    });
+
+    _googleSignIn.signInSilently();
     super.initState();
   }
 
+  Future<void> _handleSignIn() async {
+    try {
+      await _googleSignIn.signIn();
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  Future<void> _handleSignOut() => _googleSignIn.disconnect();
+
   @override
   Widget build(BuildContext context) {
+    final GoogleSignInAccount? user = _currentUser;
     return Scaffold(
         body: SingleChildScrollView(
             child: Center(
@@ -206,7 +249,7 @@ class _LoginPassState extends State<LoginPass> {
                                     style: TextStyle(color: Colors.white),
                                   ))),
                       const SizedBox(
-                        height: 20,
+                        height: 2,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -218,7 +261,21 @@ class _LoginPassState extends State<LoginPass> {
                               },
                               child: const Text('Forgot Password?'))
                         ],
-                      )
+                      ),
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xffed39ca)),
+                          onPressed: () {
+                            setState(() {
+                              _isLoading = true;
+                            });
+                            // getLoginWithGmail(user!.email);
+                            getLoginWithGmail(user);
+                          },
+                          child: const Text(
+                            'Login with Google',
+                            style: TextStyle(color: Colors.white),
+                          )),
                     ],
                   ))
             ]),
@@ -231,7 +288,7 @@ class _LoginPassState extends State<LoginPass> {
       if (value.status == 200) {
         Get.to(() => ForgotPassword(_mPhone));
       } else {
-        UniversalMethods.show_toast('Unable to Send OTP. Try agin later',
+        UniversalMethods.show_toast('Unable to Send OTP. Try again later',
             context); // _showDialog(value.message.toString());
       }
     });
@@ -242,6 +299,107 @@ class _LoginPassState extends State<LoginPass> {
     var _phone = _mPhone;
 
     await _login(_phone, _password);
+  }
+
+  getLoginWithGmail(user) async {
+    // _handleSig
+    _handleSignIn();
+    user != null
+        ? await _loginWithGmail(user.email)
+        : Get.snackbar("Failed", "No google user found");
+  }
+
+  Future _loginWithGmail(String email) async {
+    Map newRequestData = {
+      'email': "${email.toString()}",
+    };
+    _apiServices.loginWithGmail(email).then((value) {
+      debugPrint('loginValue...${value}');
+      if (value.status == 200) {
+        _fName = value.data?.user?.firstName;
+        _lName = value.data?.user?.lastName;
+        _idNumber = value.data?.user?.id;
+        _email = value.data?.user?.email;
+        _mobile = value.data?.user?.mobile;
+        _userId = value.data?.user?.userId;
+        _token = value.data?.token;
+
+        debugPrint("Token sfgyuigs: $_token");
+        encondedLoans = jsonEncode(value.data?.loan);
+        // getIQuestions();
+        // _encodedLoans= jsonEncode(loans);
+
+        debugPrint('Details.......${_fName}');
+        debugPrint('Details.......${_lName}');
+        debugPrint('Details.......${_token}');
+        debugPrint('UserID.......${_userId}');
+        // debugPrint('produts.......${ encondedLoans}');
+        // var initAmount = value.data.loan.initialAmount;
+        // var remainingAmount = value.data.loan.initialAmount;
+        // var status = value.data.loan.status;
+        // var loanId = value.data.loan.id;
+        var loan = value.data?.loan;
+        debugPrint('produts.......${loan}');
+
+        storeDetails(_fName, _lName, _mobile, _token, _userId, _email
+            // initAmount, remainingAmount, status, loanId
+            );
+
+        // storeDetails(_fName, _lName, _mobile, _token, _userId, _email, encondedLoans?);
+        Get.snackbar("", 'Login Successful');
+        setState(() {
+          _isLoading = false;
+        });
+        if (loan?.amountToPay != null) {
+          setState(() {
+            setHasLoan();
+
+            print('HasLoan');
+            var initAmount = value.data?.loan?.initialAmount;
+            var remainingAmount = value.data?.loan?.amountRemaining;
+            var amountToPay = value.data?.loan?.amountToPay;
+            var status = value.data?.loan?.status;
+            var loanId = value.data?.loan?.id;
+            Loan? loan = value.data?.loan;
+
+            storeLoanDetails(
+                initAmount!, remainingAmount!, status!, amountToPay!, loanId!);
+          });
+        } else {
+          setState(() {
+            setHasNLoan();
+          });
+        }
+
+        // ScreenSheIq
+
+        // Get.offAll(()=>ScreenSheIq(_token));
+        Get.offAll(() => Homescreen(
+              fName: _fName,
+              lName: _lName,
+              phone: _mPhone,
+              token: _token,
+              email: _email,
+              userId: _userId,
+            ));
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+        return showDialog<void>(
+            context: context,
+            barrierDismissible: true, // user must tap button!
+            builder: (BuildContext context) {
+              // setState(() {
+              //   _isLoading=false;
+              // });
+              return AlertDialog(
+                title: const Text('Alert'),
+                content: Text('${value.message.toString()}'),
+              );
+            });
+      }
+    });
   }
 
   getToken() async {
@@ -282,7 +440,6 @@ class _LoginPassState extends State<LoginPass> {
         var loan = value.data?.loan;
         debugPrint('produts.......${loan}');
 
-       
         storeDetails(_fName, _lName, _mobile, _token, _userId, _email
             // initAmount, remainingAmount, status, loanId
             );
@@ -301,12 +458,11 @@ class _LoginPassState extends State<LoginPass> {
             var remainingAmount = value.data?.loan?.amountRemaining;
             var amountToPay = value.data?.loan?.amountToPay;
             var status = value.data?.loan?.status;
-            // var loanId = value.data?.loan?.id;
+            var loanId = value.data?.loan?.id;
             Loan? loan = value.data?.loan;
-            
-              storeLoanDetails(
-                  initAmount!, remainingAmount!, status!, amountToPay!);
-            
+
+            storeLoanDetails(
+                initAmount!, remainingAmount!, status!, amountToPay!, loanId!);
           });
         } else {
           setState(() {
@@ -325,7 +481,7 @@ class _LoginPassState extends State<LoginPass> {
               email: _email,
               userId: _userId,
             ));
-      } else  {
+      } else {
         setState(() {
           _isLoading = false;
         });

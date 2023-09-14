@@ -64,6 +64,7 @@ class _HomescreenState extends State<Homescreen> {
   String? status;
   var interest;
   String _itext = '';
+  var loanId;
 
   // String? _lName;
   // String? _email;
@@ -75,12 +76,14 @@ class _HomescreenState extends State<Homescreen> {
       // loanId = _prefs.getString('loanId');
       initAmount = _prefs.getInt('initAmount');
 
+      loanId = _prefs.getInt("loanId");
+
       status = _prefs.getString('status');
 
       amountToPay = _prefs.getInt('amountToPay');
-      
+
       // interest = 5/100 * initAmount;
-       
+
       remainingAmount = (_prefs.getInt('remainingAmount')! + 2500);
       interest = (remainingAmount!) - (initAmount);
     });
@@ -383,21 +386,21 @@ class _HomescreenState extends State<Homescreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (status == "APPROVED" || status == "DISBURSED") ...[
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xffed39ca)),
-                      onPressed: () {
-                        _amountController.clear();
-                        showMpesaDialog();
-                      },
-                      child: Text('Repay Now',
-                          style: GoogleFonts.poppins(
-                            textStyle: const TextStyle(color: Colors.white),
-                          )),
-                    ),
-                  ] else
-                    ...[]
+                  // if (status == "APPROVED" || status == "DISBURSED") ...[
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xffed39ca)),
+                    onPressed: () {
+                      _amountController.clear();
+                      showMpesaDialog();
+                    },
+                    child: Text('Repay Now',
+                        style: GoogleFonts.poppins(
+                          textStyle: const TextStyle(color: Colors.white),
+                        )),
+                  ),
+                  // ] else
+                  // ...[]
 
                   // ElevatedButton(
                   //   style:
@@ -891,7 +894,7 @@ class _HomescreenState extends State<Homescreen> {
         } else if (index == 4) {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (BuildContext context) => const EmailSender(),
+              builder: (BuildContext context) =>  EmailSender(),
             ),
           );
         }
@@ -970,22 +973,27 @@ class _HomescreenState extends State<Homescreen> {
                     String enteredText = _amountController.text;
                     print('Entered Text: $enteredText');
                     var amount = _amountController.text;
-                    Map<String, String> data = {
-                      "mobile": "$_mPhone",
-                      "amount": "$amount"
+                 
+                    Map<String, dynamic> data = {
+                      "PhoneNumber": "$_mPhone",
+                      "Amount": "$amount"
                     };
-                    // _apiServices.repayLoan(loanId!, widget.token, data).then((value) {
-                    //   if(value.status=='OK'){
-                    //     _showDialog(value.message.toString());
-                    //   }
-                    //   else{
-                    //     _showFailDialog(value.message.toString());
-                    //   }
-                    // });
+                
+                    _apiServices
+                        // loanId!, widget.token,
+                        .repayLoan(data)
+                        .then((value) {
+                      if (value.responseCode == '0') {
+                        _showDialog(value.customerMessage.toString());
+                      } else {
+                        _showFailDialog("Something went wrong");
+                      }
+                    });
                     Navigator.of(context).pop();
                     UniversalMethods.show_toast(
                         'Processing request....Kindly Wait', context);
                   }
+                 
                 },
               ),
             ],

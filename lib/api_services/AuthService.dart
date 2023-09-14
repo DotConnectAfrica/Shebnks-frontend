@@ -1,231 +1,235 @@
-// Copyright 2013 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+// // Copyright 2013 The Flutter Authors. All rights reserved.
+// // Use of this source code is governed by a BSD-style license that can be
+// // found in the LICENSE file.
 
-// ignore_for_file: avoid_print
+// // ignore_for_file: public_member_api_docs
 
-import 'dart:async';
-import 'dart:convert' show json;
+// import 'dart:async';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:http/http.dart' as http;
+// import 'package:flutter/material.dart';
+// import 'package:url_launcher/link.dart';
+// import 'package:url_launcher/url_launcher.dart';
 
 
 
-/// The scopes required by this application.
-const List<String> scopes = <String>[
-  'email',
-  'https://www.googleapis.com/auth/contacts.readonly',
-];
+// class UrlApplication extends StatelessWidget {
+//   const UrlApplication({super.key});
 
-GoogleSignIn _googleSignIn = GoogleSignIn(
-  // Optional clientId
-  // clientId: 'your-client_id.apps.googleusercontent.com',
-  scopes: scopes,
-);
-
-// void main() {
-//   runApp(
-//     const MaterialApp(
-//       title: 'Google Sign In',
-//       home: SignInDemo(),
-//     ),
-//   );
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'URL Launcher',
+//       theme: ThemeData(
+//         primarySwatch: Colors.blue,
+//       ),
+//       home: const MyHomePage(title: 'URL Launcher'),
+//     );
+//   }
 // }
 
-/// The SignInDemo app.
-class SignInDemo extends StatefulWidget {
-  ///
-  const SignInDemo({super.key});
+// class MyHomePage extends StatefulWidget {
+//   const MyHomePage({super.key, required this.title});
+//   final String title;
 
-  @override
-  State createState() => _SignInDemoState();
-}
+//   @override
+//   State<MyHomePage> createState() => _MyHomePageState();
+// }
 
-class _SignInDemoState extends State<SignInDemo> {
-  GoogleSignInAccount? _currentUser;
-  bool _isAuthorized = false; // has granted permissions?
-  String _contactText = '';
+// class _MyHomePageState extends State<MyHomePage> {
+//   bool _hasCallSupport = false;
+//   Future<void>? _launched;
+//   String _phone = '';
 
-  @override
-  void initState() {
-    super.initState();
+//   @override
+//   void initState() {
+//     super.initState();
+//     // Check for phone call support.
+//     canLaunchUrl(Uri(scheme: 'tel', path: '123')).then((bool result) {
+//       setState(() {
+//         _hasCallSupport = result;
+//       });
+//     });
+//   }
 
-    _googleSignIn.onCurrentUserChanged
-        .listen((GoogleSignInAccount? account) async {
-      // In mobile, being authenticated means being authorized...
-      bool isAuthorized = account != null;
-      // However, in the web...
-      if (kIsWeb && account != null) {
-        isAuthorized = await _googleSignIn.canAccessScopes(scopes);
-      }
+//   Future<void> _launchInBrowser(Uri url) async {
+//     if (!await launchUrl(
+//       url,
+//       mode: LaunchMode.externalApplication,
+//     )) {
+//       throw Exception('Could not launch $url');
+//     }
+//   }
 
-      setState(() {
-        _currentUser = account;
-        _isAuthorized = isAuthorized;
-      });
+//   Future<void> _launchInWebViewOrVC(Uri url) async {
+//     if (!await launchUrl(url, mode: LaunchMode.inAppWebView)) {
+//       throw Exception('Could not launch $url');
+//     }
+//   }
 
-      // Now that we know that the user can access the required scopes, the app
-      // can call the REST API.
-      if (isAuthorized) {
-        unawaited(_handleGetContact(account!));
-      }
-    });
+//   Future<void> _launchAsInAppWebViewWithCustomHeaders(Uri url) async {
+//     if (!await launchUrl(
+//       url,
+//       mode: LaunchMode.inAppWebView,
+//       webViewConfiguration: const WebViewConfiguration(
+//           headers: <String, String>{'my_header_key': 'my_header_value'}),
+//     )) {
+//       throw Exception('Could not launch $url');
+//     }
+//   }
 
-    // In the web, _googleSignIn.signInSilently() triggers the One Tap UX.
-    //
-    // It is recommended by Google Identity Services to render both the One Tap UX
-    // and the Google Sign In button together to "reduce friction and improve
-    // sign-in rates" ([docs](https://developers.google.com/identity/gsi/web/guides/display-button#html)).
-    _googleSignIn.signInSilently();
-  }
+//   Future<void> _launchInWebViewWithoutJavaScript(Uri url) async {
+//     if (!await launchUrl(
+//       url,
+//       mode: LaunchMode.inAppWebView,
+//       webViewConfiguration: const WebViewConfiguration(enableJavaScript: false),
+//     )) {
+//       throw Exception('Could not launch $url');
+//     }
+//   }
 
-  // Calls the People API REST endpoint for the signed-in user to retrieve information.
-  Future<void> _handleGetContact(GoogleSignInAccount user) async {
-    setState(() {
-      _contactText = 'Loading contact info...';
-    });
-    final http.Response response = await http.get(
-      Uri.parse('https://people.googleapis.com/v1/people/me/connections'
-          '?requestMask.includeField=person.names'),
-      headers: await user.authHeaders,
-    );
-    if (response.statusCode != 200) {
-      setState(() {
-        _contactText = 'People API gave a ${response.statusCode} '
-            'response. Check logs for details.';
-      });
-      print('People API ${response.statusCode} response: ${response.body}');
-      return;
-    }
-    final Map<String, dynamic> data =
-        json.decode(response.body) as Map<String, dynamic>;
-    final String? namedContact = _pickFirstNamedContact(data);
-    setState(() {
-      if (namedContact != null) {
-        _contactText = 'I see you know $namedContact!';
-      } else {
-        _contactText = 'No contacts to display.';
-      }
-    });
-  }
+//   Future<void> _launchInWebViewWithoutDomStorage(Uri url) async {
+//     if (!await launchUrl(
+//       url,
+//       mode: LaunchMode.inAppWebView,
+//       webViewConfiguration: const WebViewConfiguration(enableDomStorage: false),
+//     )) {
+//       throw Exception('Could not launch $url');
+//     }
+//   }
 
-  String? _pickFirstNamedContact(Map<String, dynamic> data) {
-    final List<dynamic>? connections = data['connections'] as List<dynamic>?;
-    final Map<String, dynamic>? contact = connections?.firstWhere(
-      (dynamic contact) => (contact as Map<Object?, dynamic>)['names'] != null,
-      orElse: () => null,
-    ) as Map<String, dynamic>?;
-    if (contact != null) {
-      final List<dynamic> names = contact['names'] as List<dynamic>;
-      final Map<String, dynamic>? name = names.firstWhere(
-        (dynamic name) =>
-            (name as Map<Object?, dynamic>)['displayName'] != null,
-        orElse: () => null,
-      ) as Map<String, dynamic>?;
-      if (name != null) {
-        return name['displayName'] as String?;
-      }
-    }
-    return null;
-  }
+//   Future<void> _launchUniversalLinkIos(Uri url) async {
+//     final bool nativeAppLaunchSucceeded = await launchUrl(
+//       url,
+//       mode: LaunchMode.externalNonBrowserApplication,
+//     );
+//     if (!nativeAppLaunchSucceeded) {
+//       await launchUrl(
+//         url,
+//         mode: LaunchMode.inAppWebView,
+//       );
+//     }
+//   }
 
-  // This is the on-click handler for the Sign In button that is rendered by Flutter.
-  //
-  // On the web, the on-click handler of the Sign In button is owned by the JS
-  // SDK, so this method can be considered mobile only.
-  Future<void> _handleSignIn() async {
-    try {
-      await _googleSignIn.signIn();
-    } catch (error) {
-      print(error);
-    }
-  }
+//   Widget _launchStatus(BuildContext context, AsyncSnapshot<void> snapshot) {
+//     if (snapshot.hasError) {
+//       return Text('Error: ${snapshot.error}');
+//     } else {
+//       return const Text('');
+//     }
+//   }
 
-  // Prompts the user to authorize `scopes`.
-  //
-  // This action is **required** in platforms that don't perform Authentication
-  // and Authorization at the same time (like the web).
-  //
-  // On the web, this must be called from an user interaction (button click).
-  Future<void> _handleAuthorizeScopes() async {
-    final bool isAuthorized = await _googleSignIn.requestScopes(scopes);
-    setState(() {
-      _isAuthorized = isAuthorized;
-    });
-    if (isAuthorized) {
-      unawaited(_handleGetContact(_currentUser!));
-    }
-  }
+//   Future<void> _makePhoneCall(String phoneNumber) async {
+//     final Uri launchUri = Uri(
+//       scheme: 'tel',
+//       path: phoneNumber,
+//     );
+//     await launchUrl(launchUri);
+//   }
 
-  Future<void> _handleSignOut() => _googleSignIn.disconnect();
-
-  Widget _buildBody() {
-    final GoogleSignInAccount? user = _currentUser;
-    if (user != null) {
-      // The user is Authenticated
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          ListTile(
-            leading: GoogleUserCircleAvatar(
-              identity: user,
-            ),
-            title: Text(user.displayName ?? ''),
-            subtitle: Text(user.email),
-          ),
-          const Text('Signed in successfully.'),
-          if (_isAuthorized) ...<Widget>[
-            // The user has Authorized all required scopes
-            Text(_contactText),
-            ElevatedButton(
-              child: const Text('REFRESH'),
-              onPressed: () => _handleGetContact(user),
-            ),
-          ],
-          if (!_isAuthorized) ...<Widget>[
-            // The user has NOT Authorized all required scopes.
-            // (Mobile users may never see this button!)
-            const Text('Additional permissions needed to read your contacts.'),
-            ElevatedButton(
-              onPressed: _handleAuthorizeScopes,
-              child: const Text('REQUEST PERMISSIONS'),
-            ),
-          ],
-          ElevatedButton(
-            onPressed: _handleSignOut,
-            child: const Text('SIGN OUT'),
-          ),
-        ],
-      );
-    } else {
-      // The user is NOT Authenticated
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          const Text('You are not currently signed in.'),
-          // This method is used to separate mobile from web code with conditional exports.
-          // See: src/sign_in_button.dart
-          ElevatedButton(
-            onPressed: _handleSignIn,
-            child:Text("hello")
-          ),
-        ],
-      );
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Google Sign In'),
-        ),
-        body: ConstrainedBox(
-          constraints: const BoxConstraints.expand(),
-          child: _buildBody(),
-        ));
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     // onPressed calls using this URL are not gated on a 'canLaunch' check
+//     // because the assumption is that every device can launch a web URL.
+//     final Uri toLaunch =
+//         Uri(scheme: 'https', host: 'www.cylog.org', path: 'headers/');
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text(widget.title),
+//       ),
+//       body: ListView(
+//         children: <Widget>[
+//           Column(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             children: <Widget>[
+//               Padding(
+//                 padding: const EdgeInsets.all(16.0),
+//                 child: TextField(
+//                     onChanged: (String text) => _phone = text,
+//                     decoration: const InputDecoration(
+//                         hintText: 'Input the phone number to launch')),
+//               ),
+//               ElevatedButton(
+//                 onPressed: _hasCallSupport
+//                     ? () => setState(() {
+//                           _launched = _makePhoneCall(_phone);
+//                         })
+//                     : null,
+//                 child: _hasCallSupport
+//                     ? const Text('Make phone call')
+//                     : const Text('Calling not supported'),
+//               ),
+//               Padding(
+//                 padding: const EdgeInsets.all(16.0),
+//                 child: Text(toLaunch.toString()),
+//               ),
+//               ElevatedButton(
+//                 onPressed: () => setState(() {
+//                   _launched = _launchInBrowser(toLaunch);
+//                 }),
+//                 child: const Text('Launch in browser'),
+//               ),
+//               const Padding(padding: EdgeInsets.all(16.0)),
+//               ElevatedButton(
+//                 onPressed: () => setState(() {
+//                   _launched = _launchInWebViewOrVC(toLaunch);
+//                 }),
+//                 child: const Text('Launch in app'),
+//               ),
+//               ElevatedButton(
+//                 onPressed: () => setState(() {
+//                   _launched = _launchAsInAppWebViewWithCustomHeaders(toLaunch);
+//                 }),
+//                 child: const Text('Launch in app (Custom Headers)'),
+//               ),
+//               ElevatedButton(
+//                 onPressed: () => setState(() {
+//                   _launched = _launchInWebViewWithoutJavaScript(toLaunch);
+//                 }),
+//                 child: const Text('Launch in app (JavaScript OFF)'),
+//               ),
+//               ElevatedButton(
+//                 onPressed: () => setState(() {
+//                   _launched = _launchInWebViewWithoutDomStorage(toLaunch);
+//                 }),
+//                 child: const Text('Launch in app (DOM storage OFF)'),
+//               ),
+//               const Padding(padding: EdgeInsets.all(16.0)),
+//               ElevatedButton(
+//                 onPressed: () => setState(() {
+//                   _launched = _launchUniversalLinkIos(toLaunch);
+//                 }),
+//                 child: const Text(
+//                     'Launch a universal link in a native app, fallback to Safari.(Youtube)'),
+//               ),
+//               const Padding(padding: EdgeInsets.all(16.0)),
+//               ElevatedButton(
+//                 onPressed: () => setState(() {
+//                   _launched = _launchInWebViewOrVC(toLaunch);
+//                   Timer(const Duration(seconds: 5), () {
+//                     closeInAppWebView();
+//                   });
+//                 }),
+//                 child: const Text('Launch in app + close after 5 seconds'),
+//               ),
+//               const Padding(padding: EdgeInsets.all(16.0)),
+//               Link(
+//                 uri: Uri.parse(
+//                     'https://pub.dev/documentation/url_launcher/latest/link/link-library.html'),
+//                 target: LinkTarget.blank,
+//                 builder: (BuildContext ctx, FollowLink? openLink) {
+//                   return TextButton.icon(
+//                     onPressed: openLink,
+//                     label: const Text('Link Widget documentation'),
+//                     icon: const Icon(Icons.read_more),
+//                   );
+//                 },
+//               ),
+//               const Padding(padding: EdgeInsets.all(16.0)),
+//               FutureBuilder<void>(future: _launched, builder: _launchStatus),
+//             ],
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
