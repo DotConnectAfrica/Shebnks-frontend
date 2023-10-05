@@ -61,9 +61,19 @@ class _ViewProgressPageState extends State<ViewProgressPage> {
       financialLoading = false,
       pathsLoading = false,
       videoLoading = false;
+  int appStatus = 0;
+  @override
+  void initState() {
+    // TODO: implement initState
+    appStatus = int.parse(widget.progressData["applicationStatus"]);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    debugPrint(widget.progressData["bussiness_founders"]);
+    debugPrint(widget.progressData["applicationStatus"]);
+    debugPrint("appstatus");
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Progress Details'),
@@ -78,9 +88,11 @@ class _ViewProgressPageState extends State<ViewProgressPage> {
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Text(
-                  widget.progressData["application_status"] == 0
-                      ? "Application is under review"
-                      :widget.progressData["application_status"] == 1? "oops, your application has been denied,try again next time":"Congratulations, your application has been approved",
+                  appStatus == 2
+                      ? "Congratulations, your application has been approved"
+                      : appStatus == 1
+                          ? "oops, your application has been denied,try again next time"
+                          : "Application is still under review",
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,

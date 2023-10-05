@@ -130,7 +130,7 @@ class _SheIqState extends State<SheIq> {
       // var references = 1;
       // var mentor = 1;
       // var programs = 1;
-      
+
       final sheIqdata = {
         "name": name,
         "DateOfBirth": birthDate,
@@ -156,7 +156,7 @@ class _SheIqState extends State<SheIq> {
         "userId": widget.userId
       };
 
-      _apiServices.submit_iq(sheIqdata).then((value) {
+      _apiServices.submit_iq(sheIqdata).then((value) async {
         setState(() {
           _isLoading = false;
         });
@@ -164,12 +164,14 @@ class _SheIqState extends State<SheIq> {
           if (value.status == 200) {
             // var
             // storeHasLoan();
+            SharedPreferences _prefs = await SharedPreferences.getInstance();
             _successDialog('SheIQ Submitted Successfully');
+            _prefs.setBool('hasSheiq',true);
+
             debugPrint('tmessage is.......${value.message.toString()}');
           } else if (value.status == 400) {
             _showDialog('${value.message.toString()}');
-          }
-           else if (value.status == 404) {
+          } else if (value.status == 404) {
             _showDialog('${value.message.toString()}');
           }
         } catch (e) {

@@ -55,16 +55,17 @@ class Loan {
   int? amountRemaining;
   int? id;
   dynamic disbursedOn;
-  String? status;
+  dynamic loanStatus; // Corrected field name
 
-  Loan(
-      {this.amountToPay,
-        this.appliedOn,
-        this.initialAmount,
-        this.amountRemaining,
-        this.id,
-        this.disbursedOn,
-        this.status});
+  Loan({
+    this.amountToPay,
+    this.appliedOn,
+    this.initialAmount,
+    this.amountRemaining,
+    this.id,
+    this.disbursedOn,
+    this.loanStatus, // Corrected field name
+  });
 
   Loan.fromJson(Map<String, dynamic> json) {
     amountToPay = json['amountToPay'];
@@ -73,7 +74,7 @@ class Loan {
     amountRemaining = json['amountRemaining'];
     id = json['id'];
     disbursedOn = json['disbursedOn'];
-    status = json['status'];
+    loanStatus = json['loanStatus']; // Corrected field name
   }
 
   Map<String, dynamic> toJson() {
@@ -84,10 +85,11 @@ class Loan {
     data['amountRemaining'] = this.amountRemaining;
     data['id'] = this.id;
     data['disbursedOn'] = this.disbursedOn;
-    data['status'] = this.status;
+    data['loanStatus'] = this.loanStatus; // Corrected field name
     return data;
   }
 }
+
 
 class User {
   String? firstName;

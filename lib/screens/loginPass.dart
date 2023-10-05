@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_return_type_for_catch_error
+
 import 'dart:convert';
 
 import 'package:clippy_flutter/arc.dart';
@@ -56,6 +58,9 @@ class _LoginPassState extends State<LoginPass> {
   GoogleSignInAccount? _currentUser;
   bool _isAuthorized = false; // has granted permissions?
   String _contactText = '';
+
+  bool _loginMail = false;
+  bool _loginGoogle = false;
   // List<Loans> loans =[];
   // List<String> _encodedLoans=[];
   setHasNLoan() async {
@@ -79,6 +84,7 @@ class _LoginPassState extends State<LoginPass> {
   setLoginState() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     _prefs.setBool('userExists', true);
+    _prefs.setBool('hasSheiq', false);
   }
 
   storeDetails(
@@ -102,13 +108,13 @@ class _LoginPassState extends State<LoginPass> {
     });
   }
 
-  storeLoanDetails(int initAmount, int remainingAmount, String status, int id,
+  storeLoanDetails(int initAmount, int remainingAmount, int status, int id,
       int amountToPay) async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     setState(() {
       _prefs.setInt('initAmount', initAmount);
       _prefs.setInt('remainingAmount', remainingAmount);
-      _prefs.setString('status', status);
+      _prefs.setInt('status', status);
       _prefs.setInt('loanId', id);
       _prefs.setInt('amountToPay', amountToPay);
     });
@@ -118,6 +124,7 @@ class _LoginPassState extends State<LoginPass> {
   void initState() {
     setLoginState();
     getPhone();
+
     // getIQuestions();
 
     _googleSignIn.onCurrentUserChanged
@@ -175,109 +182,153 @@ class _LoginPassState extends State<LoginPass> {
               const SizedBox(
                 height: 40,
               ),
-              const Text(
-                'Enter Password to Continue',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
-              ),
+              if (_loginMail == false)
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xffed39ca),
+                  ),
+                  onPressed: () {
+                    // setState(() {
+                    //   _isLoading = true;
+                    // });
+                    // getLoginWithGmail(user!.email);
+                    getLoginWithGmail(user);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/images/google.png', // Replace with the path to your Google image
+                        height: 24, // Adjust the height as needed
+                        width: 24, // Adjust the width as needed
+                      ),
+                      const SizedBox(
+                          width:
+                              8), // Add some spacing between the image and text
+                      const Text(
+                        'Login with Google',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+              if (_loginMail == false)
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xffed39ca),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _loginMail = true;
+                      _loginGoogle = false;
+                    });
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.lock_outline, size: 24),
+
+                      const SizedBox(
+                          width:
+                              8), // Add some spacing between the image and text
+                      const Text(
+                        'Login with Password',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+              if (_loginMail)
+                const Text(
+                  'Enter Password to Continue',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                ),
               const SizedBox(
                 height: 10,
               ),
-              Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        // maxLength: 10,
-                        controller: _passController,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          // icon: const Icon(CupertinoIcons.lock),
-                          hintText: 'Password',
-                          contentPadding:
-                              const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+              if (_loginMail)
+                Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          // maxLength: 10,
+                          controller: _passController,
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            // icon: const Icon(CupertinoIcons.lock),
+                            hintText: 'Password',
+                            contentPadding:
+                                const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
 
-                          hintStyle:
-                              const TextStyle(fontSize: 13, color: Colors.grey),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            borderSide: const BorderSide(
-                              color: Colors.grey,
+                            hintStyle: const TextStyle(
+                                fontSize: 13, color: Colors.grey),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                              borderSide: const BorderSide(
+                                color: Colors.grey,
+                              ),
                             ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                              borderSide: const BorderSide(
+                                color: Colors.grey,
+                                width: 1.0,
+                              ),
+                            ),
+                            //fillColor: Colors.green
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            borderSide: const BorderSide(
-                              color: Colors.grey,
-                              width: 1.0,
-                            ),
-                          ),
-                          //fillColor: Colors.green
-                        ),
-                        validator: (val) {
-                          if (val!.length == 0) {
-                            return "Pasword cannot be empty";
-                          } else {
-                            return null;
-                          }
-                        },
-                        keyboardType: TextInputType.text,
-                        style: const TextStyle(
-                            // fontFamily: "Poppins",
-                            ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: _isLoading
-                              ? SpinKitCircle(
-                                  color: Color(0xffed39ca),
-                                )
-                              : ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Color(0xffed39ca)),
-                                  onPressed: () {
-                                    setState(() {
-                                      _isLoading = true;
-                                    });
-                                    getLoginData();
-                                    // Get.to(()=>ScreenRegistration());
-                                  },
-                                  child: const Text(
-                                    'Login',
-                                    style: TextStyle(color: Colors.white),
-                                  ))),
-                      const SizedBox(
-                        height: 2,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(''),
-                          InkWell(
-                              onTap: () {
-                                _otpRequest(_mPhone);
-                              },
-                              child: const Text('Forgot Password?'))
-                        ],
-                      ),
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xffed39ca)),
-                          onPressed: () {
-                            setState(() {
-                              _isLoading = true;
-                            });
-                            // getLoginWithGmail(user!.email);
-                            getLoginWithGmail(user);
+                          validator: (val) {
+                            if (val!.length == 0) {
+                              return "Pasword cannot be empty";
+                            } else {
+                              return null;
+                            }
                           },
-                          child: const Text(
-                            'Login with Google',
-                            style: TextStyle(color: Colors.white),
-                          )),
-                    ],
-                  ))
+                          keyboardType: TextInputType.text,
+                          style: const TextStyle(
+                              // fontFamily: "Poppins",
+                              ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                            width: MediaQuery.of(context).size.width,
+                            child: _isLoading
+                                ? SpinKitCircle(
+                                    color: Color(0xffed39ca),
+                                  )
+                                : ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Color(0xffed39ca)),
+                                    onPressed: () {
+                                      setState(() {
+                                        _isLoading = true;
+                                      });
+                                      getLoginData();
+                                      // Get.to(()=>ScreenRegistration());
+                                    },
+                                    child: const Text(
+                                      'Login',
+                                      style: TextStyle(color: Colors.white),
+                                    ))),
+                        const SizedBox(
+                          height: 2,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(''),
+                            InkWell(
+                                onTap: () {
+                                  _otpRequest(_mPhone);
+                                },
+                                child: const Text('Forgot Password?'))
+                          ],
+                        ),
+                      ],
+                    ))
             ]),
       ),
     )));
@@ -302,103 +353,126 @@ class _LoginPassState extends State<LoginPass> {
   }
 
   getLoginWithGmail(user) async {
-    // _handleSig
-    _handleSignIn();
-    user != null
-        ? await _loginWithGmail(user.email)
-        : Get.snackbar("Failed", "No google user found");
+    await _handleSignIn().then((value) => user != null
+        ? _loginWithGmail(user.email)
+        : Get.snackbar("Failed", "No google user found"));
   }
 
   Future _loginWithGmail(String email) async {
     Map newRequestData = {
-      'email': "${email.toString()}",
+      'email': email.toString(),
     };
     _apiServices.loginWithGmail(email).then((value) {
       debugPrint('loginValue...${value}');
-      if (value.status == 200) {
-        _fName = value.data?.user?.firstName;
-        _lName = value.data?.user?.lastName;
-        _idNumber = value.data?.user?.id;
-        _email = value.data?.user?.email;
-        _mobile = value.data?.user?.mobile;
-        _userId = value.data?.user?.userId;
-        _token = value.data?.token;
+      try {
+        if (value.status == 200) {
+          _fName = value.data?.user?.firstName;
+          _lName = value.data?.user?.lastName;
+          _idNumber = value.data?.user?.id;
+          _email = value.data?.user?.email;
+          _mobile = value.data?.user?.mobile;
+          _userId = value.data?.user?.userId;
+          _token = value.data?.token;
 
-        debugPrint("Token sfgyuigs: $_token");
-        encondedLoans = jsonEncode(value.data?.loan);
-        // getIQuestions();
-        // _encodedLoans= jsonEncode(loans);
+          debugPrint("Token sfgyuigs: $_token");
+          encondedLoans = jsonEncode(value.data?.loan);
+          // getIQuestions();
+          // _encodedLoans= jsonEncode(loans);
 
-        debugPrint('Details.......${_fName}');
-        debugPrint('Details.......${_lName}');
-        debugPrint('Details.......${_token}');
-        debugPrint('UserID.......${_userId}');
-        // debugPrint('produts.......${ encondedLoans}');
-        // var initAmount = value.data.loan.initialAmount;
-        // var remainingAmount = value.data.loan.initialAmount;
-        // var status = value.data.loan.status;
-        // var loanId = value.data.loan.id;
-        var loan = value.data?.loan;
-        debugPrint('produts.......${loan}');
+          debugPrint('Details.......${_fName}');
+          debugPrint('Details.......${_lName}');
+          debugPrint('Details.......${_token}');
+          debugPrint('UserID.......${_userId}');
+          // debugPrint('produts.......${ encondedLoans}');
+          // var initAmount = value.data.loan.initialAmount;
+          // var remainingAmount = value.data.loan.initialAmount;
+          // var status = value.data.loan.status;
+          // var loanId = value.data.loan.id;
+          var loan = value.data?.loan;
+          debugPrint('produts.......${loan}');
 
-        storeDetails(_fName, _lName, _mobile, _token, _userId, _email
-            // initAmount, remainingAmount, status, loanId
-            );
+          storeDetails(_fName, _lName, _mobile, _token, _userId, _email
+              // initAmount, remainingAmount, status, loanId
+              );
 
-        // storeDetails(_fName, _lName, _mobile, _token, _userId, _email, encondedLoans?);
-        Get.snackbar("", 'Login Successful');
-        setState(() {
-          _isLoading = false;
-        });
-        if (loan?.amountToPay != null) {
+          // storeDetails(_fName, _lName, _mobile, _token, _userId, _email, encondedLoans?);
+          Get.snackbar("", 'Login Successful');
           setState(() {
-            setHasLoan();
-
-            print('HasLoan');
-            var initAmount = value.data?.loan?.initialAmount;
-            var remainingAmount = value.data?.loan?.amountRemaining;
-            var amountToPay = value.data?.loan?.amountToPay;
-            var status = value.data?.loan?.status;
-            var loanId = value.data?.loan?.id;
-            Loan? loan = value.data?.loan;
-
-            storeLoanDetails(
-                initAmount!, remainingAmount!, status!, amountToPay!, loanId!);
+            _isLoading = false;
           });
+          if (loan?.amountToPay != null) {
+            setState(() {
+              setHasLoan();
+
+              print('HasLoan');
+              var initAmount = value.data?.loan?.initialAmount;
+              var remainingAmount = value.data?.loan?.amountRemaining;
+              var amountToPay = value.data?.loan?.amountToPay;
+              var status = value.data?.loan?.loanStatus;
+              var loanId = value.data?.loan?.id;
+              Loan? loan = value.data?.loan;
+
+              storeLoanDetails(initAmount!, remainingAmount!, status!,
+                  amountToPay!, loanId!);
+            });
+          } else {
+            setState(() {
+              setHasNLoan();
+            });
+          }
+
+          // ScreenSheIq
+
+          // Get.offAll(()=>ScreenSheIq(_token));
+          Get.offAll(() => Homescreen(
+                fName: _fName,
+                lName: _lName,
+                phone: _mPhone,
+                token: _token,
+                email: _email,
+                userId: _userId,
+              ));
         } else {
           setState(() {
-            setHasNLoan();
+            _isLoading = false;
           });
+          return showDialog<void>(
+              context: context,
+              barrierDismissible: true, // user must tap button!
+              builder: (BuildContext context) {
+                // setState(() {
+                //   _isLoading=false;
+                // });
+                return AlertDialog(
+                  title: const Text('Alert'),
+                  content: Text(value.message.toString()),
+                );
+              });
         }
-
-        // ScreenSheIq
-
-        // Get.offAll(()=>ScreenSheIq(_token));
-        Get.offAll(() => Homescreen(
-              fName: _fName,
-              lName: _lName,
-              phone: _mPhone,
-              token: _token,
-              email: _email,
-              userId: _userId,
-            ));
-      } else {
-        setState(() {
-          _isLoading = false;
-        });
+      } catch (e) {
         return showDialog<void>(
             context: context,
             barrierDismissible: true, // user must tap button!
             builder: (BuildContext context) {
-              // setState(() {
-              //   _isLoading=false;
-              // });
+              setState(() {
+                _isLoading = false;
+              });
               return AlertDialog(
                 title: const Text('Alert'),
-                content: Text('${value.message.toString()}'),
+                content: Text(e.toString()),
               );
             });
       }
+    }).catchError((e) {
+      return showDialog<void>(
+          context: context,
+          barrierDismissible: true, // user must tap button!
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Alert'),
+              content: Text(e.toString()),
+            );
+          });
     });
   }
 
@@ -409,79 +483,97 @@ class _LoginPassState extends State<LoginPass> {
 
   Future _login(_phone, _password) async {
     Map newRequestData = {
-      'password': "${_password.toString()}",
-      'mobile': "${_phone.toString()}",
+      'password': _password.toString(),
+      'mobile': _phone.toString(),
     };
     _apiServices.login(_phone, _password).then((value) {
       debugPrint('loginValue...${value}');
-      if (value.status == 200) {
-        _fName = value.data?.user?.firstName;
-        _lName = value.data?.user?.lastName;
-        _idNumber = value.data?.user?.id;
-        _email = value.data?.user?.email;
-        _mobile = value.data?.user?.mobile;
-        _userId = value.data?.user?.userId;
-        _token = value.data?.token;
+      try {
+        if (value.status == 200) {
+          _fName = value.data?.user?.firstName;
+          _lName = value.data?.user?.lastName;
+          _idNumber = value.data?.user?.id;
+          _email = value.data?.user?.email;
+          _mobile = value.data?.user?.mobile;
+          _userId = value.data?.user?.userId;
+          _token = value.data?.token;
 
-        debugPrint("Token sfgyuigs: $_token");
-        encondedLoans = jsonEncode(value.data?.loan);
-        // getIQuestions();
-        // _encodedLoans= jsonEncode(loans);
+          debugPrint("Token sfgyuigs: $_token");
+          encondedLoans = jsonEncode(value.data?.loan);
+          // getIQuestions();
+          // _encodedLoans= jsonEncode(loans);
 
-        debugPrint('Details.......${_fName}');
-        debugPrint('Details.......${_lName}');
-        debugPrint('Details.......${_token}');
-        debugPrint('UserID.......${_userId}');
-        // debugPrint('produts.......${ encondedLoans}');
-        // var initAmount = value.data.loan.initialAmount;
-        // var remainingAmount = value.data.loan.initialAmount;
-        // var status = value.data.loan.status;
-        // var loanId = value.data.loan.id;
-        var loan = value.data?.loan;
-        debugPrint('produts.......${loan}');
+          debugPrint('Details.......${_fName}');
+          debugPrint('Details.......${_lName}');
+          debugPrint('Details.......${_token}');
+          debugPrint('UserID.......${_userId}');
+          // debugPrint('produts.......${ encondedLoans}');
+          // var initAmount = value.data.loan.initialAmount;
+          // var remainingAmount = value.data.loan.initialAmount;
+          // var status = value.data.loan.status;
+          // var loanId = value.data.loan.id;
+          var loan = value.data?.loan;
+          debugPrint('produts.......${loan}');
 
-        storeDetails(_fName, _lName, _mobile, _token, _userId, _email
-            // initAmount, remainingAmount, status, loanId
-            );
+          storeDetails(_fName, _lName, _mobile, _token, _userId, _email
+              // initAmount, remainingAmount, status, loanId
+              );
 
-        // storeDetails(_fName, _lName, _mobile, _token, _userId, _email, encondedLoans?);
-        Get.snackbar("", 'Login Successful');
-        setState(() {
-          _isLoading = false;
-        });
-        if (loan?.amountToPay != null) {
+          // storeDetails(_fName, _lName, _mobile, _token, _userId, _email, encondedLoans?);
+          Get.snackbar("", 'Login Successful');
           setState(() {
-            setHasLoan();
-
-            print('HasLoan');
-            var initAmount = value.data?.loan?.initialAmount;
-            var remainingAmount = value.data?.loan?.amountRemaining;
-            var amountToPay = value.data?.loan?.amountToPay;
-            var status = value.data?.loan?.status;
-            var loanId = value.data?.loan?.id;
-            Loan? loan = value.data?.loan;
-
-            storeLoanDetails(
-                initAmount!, remainingAmount!, status!, amountToPay!, loanId!);
+            _isLoading = false;
           });
+          if (loan?.amountToPay != null) {
+            setState(() {
+              setHasLoan();
+
+              print('HasLoan');
+              var initAmount = value.data?.loan?.initialAmount;
+              var remainingAmount = value.data?.loan?.amountRemaining;
+              var amountToPay = value.data?.loan?.amountToPay;
+              var status = value.data?.loan?.loanStatus;
+              var loanId = value.data?.loan?.id;
+              Loan? loan = value.data?.loan;
+
+              storeLoanDetails(initAmount!, remainingAmount!, status!,
+                  amountToPay!, loanId!);
+            });
+          } else {
+            setState(() {
+              setHasNLoan();
+            });
+          }
+
+          // ScreenSheIq
+
+          // Get.offAll(()=>ScreenSheIq(_token));
+          Get.offAll(() => Homescreen(
+                fName: _fName,
+                lName: _lName,
+                phone: _mPhone,
+                token: _token,
+                email: _email,
+                userId: _userId,
+              ));
         } else {
           setState(() {
-            setHasNLoan();
+            _isLoading = false;
           });
+          return showDialog<void>(
+              context: context,
+              barrierDismissible: true, // user must tap button!
+              builder: (BuildContext context) {
+                // setState(() {
+                //   _isLoading=false;
+                // });
+                return AlertDialog(
+                  title: const Text('Alert'),
+                  content: Text(value.message.toString()),
+                );
+              });
         }
-
-        // ScreenSheIq
-
-        // Get.offAll(()=>ScreenSheIq(_token));
-        Get.offAll(() => Homescreen(
-              fName: _fName,
-              lName: _lName,
-              phone: _mPhone,
-              token: _token,
-              email: _email,
-              userId: _userId,
-            ));
-      } else {
+      } catch (e) {
         setState(() {
           _isLoading = false;
         });
@@ -489,15 +581,27 @@ class _LoginPassState extends State<LoginPass> {
             context: context,
             barrierDismissible: true, // user must tap button!
             builder: (BuildContext context) {
-              // setState(() {
-              //   _isLoading=false;
-              // });
+              // _isLoading = false;
+
               return AlertDialog(
                 title: const Text('Alert'),
-                content: Text('${value.message.toString()}'),
+                content: Text(e.toString()),
               );
             });
       }
+    }).catchError((e) {
+      setState(() {
+        _isLoading = false;
+      });
+      return showDialog<void>(
+          context: context,
+          barrierDismissible: true, // user must tap button!
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Alert'),
+              content: Text(e.toString()),
+            );
+          });
     });
   }
 }

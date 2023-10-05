@@ -61,7 +61,7 @@ class _HomescreenState extends State<Homescreen> {
   var initAmount;
   int? amountToPay;
   int? remainingAmount;
-  String? status;
+  int? status;
   var interest;
   String _itext = '';
   var loanId;
@@ -78,7 +78,7 @@ class _HomescreenState extends State<Homescreen> {
 
       loanId = _prefs.getInt("loanId");
 
-      status = _prefs.getString('status');
+      status = _prefs.getInt('status');
 
       amountToPay = _prefs.getInt('amountToPay');
 
@@ -386,21 +386,22 @@ class _HomescreenState extends State<Homescreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // if (status == "APPROVED" || status == "DISBURSED") ...[
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xffed39ca)),
-                    onPressed: () {
-                      _amountController.clear();
-                      showMpesaDialog();
-                    },
-                    child: Text('Repay Now',
-                        style: GoogleFonts.poppins(
-                          textStyle: const TextStyle(color: Colors.white),
-                        )),
-                  ),
-                  // ] else
-                  // ...[]
+                  // 3 disbursed 2 approved
+                  if (status == 3 || status == 4) ...[
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xffed39ca)),
+                      onPressed: () {
+                        _amountController.clear();
+                        showMpesaDialog();
+                      },
+                      child: Text('Repay Now',
+                          style: GoogleFonts.poppins(
+                            textStyle: const TextStyle(color: Colors.white),
+                          )),
+                    ),
+                  ] else
+                    ...[]
 
                   // ElevatedButton(
                   //   style:
@@ -894,7 +895,7 @@ class _HomescreenState extends State<Homescreen> {
         } else if (index == 4) {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (BuildContext context) =>  EmailSender(),
+              builder: (BuildContext context) => EmailSender(),
             ),
           );
         }
@@ -973,12 +974,12 @@ class _HomescreenState extends State<Homescreen> {
                     String enteredText = _amountController.text;
                     print('Entered Text: $enteredText');
                     var amount = _amountController.text;
-                 
+
                     Map<String, dynamic> data = {
                       "PhoneNumber": "$_mPhone",
                       "Amount": "$amount"
                     };
-                
+
                     _apiServices
                         // loanId!, widget.token,
                         .repayLoan(data)
@@ -993,7 +994,6 @@ class _HomescreenState extends State<Homescreen> {
                     UniversalMethods.show_toast(
                         'Processing request....Kindly Wait', context);
                   }
-                 
                 },
               ),
             ],

@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:she_banks/api_services/api_services.dart';
 import 'package:she_banks/models/LoanApplicationModel.dart';
 import 'package:she_banks/screens/screen_she_funds_apply.dart';
+import 'package:she_banks/screens/screen_sheiq.dart';
 
 import '../utils/universal_methods.dart';
 import 'screen_view_progress.dart';
@@ -19,13 +20,14 @@ class _ScreenSheFundsState extends State<ScreenSheFunds> {
   bool seedFundOpen = true;
   var token;
   var userId;
+  var sheIq;
 
   getTokenUID() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
-
     setState(() {
       token = _prefs.getString('token');
       userId = _prefs.getInt('userId');
+      sheIq = _prefs.getBool('hasSheiq');
     });
   }
 
@@ -33,6 +35,7 @@ class _ScreenSheFundsState extends State<ScreenSheFunds> {
   void initState() {
     getTokenUID();
     // TODO: implement initState
+
     super.initState();
   }
 
@@ -285,18 +288,25 @@ class _ScreenSheFundsState extends State<ScreenSheFunds> {
                                 debugPrint(value.data?.businessProblems);
                                 debugPrint(value.data?.businessImpact);
                                 debugPrint(value.data?.bussinessSectors);
+                                debugPrint(value.data?.applicationReceivedStatus
+                                    .toString());
+                                debugPrint(value.data?.applicationRulesStatus
+                                    .toString());
+                                debugPrint(value
+                                    .data?.applicationEvaluationStatus
+                                    .toString());
+                                debugPrint(value
+                                    .data?.applicationAdminCheckStatus
+                                    .toString());
                                 debugPrint(
-                                    value.data?.applicationReceivedStatus.toString());
-                                debugPrint(value.data?.applicationRulesStatus.toString());
-                                debugPrint(
-                                    value.data?.applicationEvaluationStatus.toString());
-                                debugPrint(
-                                    value.data?.applicationAdminCheckStatus.toString());
-                                debugPrint(value.data?.applicationStatus.toString()??
+                                    value.data?.applicationStatus.toString() ??
                                         "No data");
 
                                 Get.off(() => ViewProgressPage(
                                       progressData: {
+                                        "applicationStatus": value
+                                            .data?.applicationStatus
+                                            .toString()
                                         // "About business":
                                         //     value.data?.bussinessAbout,
                                         // "business_founders":

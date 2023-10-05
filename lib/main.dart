@@ -60,8 +60,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         primarySwatch: Colors.green,
       ),
-      // home:SignInDemo(),
-      home: UrlApplication(),
+      // home:UrlApplication(),
+      home: SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
     //   ),

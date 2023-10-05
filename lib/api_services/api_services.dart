@@ -181,13 +181,13 @@ class ApiServices {
     final String phoneNumber = mobile;
     final String password = pass;
 
-    final Uri url = Uri.parse('https://shebnks.com/otp/login');
+    final Uri url = Uri.parse('https://shebnks.com/otp/login/${phoneNumber}/${pass}');
     final Map<String, String> body = {
       'phoneNumber': phoneNumber,
       'password': password
     };
 
-    final response = await http.post(url, body: body);
+    final response = await http.get(url);
     print(response.body);
     print(response.statusCode);
 
@@ -206,19 +206,22 @@ class ApiServices {
       'Content-type': 'application/json',
       'Accept': 'application/json',
     };
+    try {
+      final response = await http.get(Uri.parse(url), headers: headers);
+      print(response.body);
+      print(response.statusCode);
+      debugPrint("try to login with gmail");
 
-    final response = await http.get(Uri.parse(url), headers: headers);
-    print(response.body);
-    print(response.statusCode);
-    debugPrint("try to login with gmail");
-
-    if (response.statusCode == 200) {
-      debugPrint(response.body);
-      debugPrint("logged");
-      return LoginModel.fromJson(jsonDecode(response.body));
-    } else {
-      debugPrint("failed");
-      throw Exception('Email does not exists');
+      if (response.statusCode == 200) {
+        debugPrint(response.body);
+        debugPrint("logged");
+        return LoginModel.fromJson(jsonDecode(response.body));
+      } else {
+        debugPrint("failed");
+        throw Exception('Email does not exists');
+      }
+    } catch (e) {
+      throw Exception('Somethings wrong');
     }
   }
 
